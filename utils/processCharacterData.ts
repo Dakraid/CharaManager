@@ -38,6 +38,10 @@ function base64ToArrayBuffer(base64: string) {
 }
 
 export default function (content: string | undefined) {
+    if (content === undefined || content.length === 0) {
+        throw "Content is undefined.";
+    }
+
     const array = base64ToArrayBuffer(content.split('base64,')[1]);
     const parsed = JSON.parse(read(array));
     return Cards.parseToV2(parsed);
