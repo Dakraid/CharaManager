@@ -1,9 +1,5 @@
 import type { ChubAiGetRequest } from '~/models/ChubAiGetRequest';
 import { status_failure_chubai_get, status_success_chubai_get } from '~/models/StatusResponses';
-import type { FileUpload } from '~/models/FileUpload';
-import dayjs from 'dayjs';
-
-const API_ENDPOINT_DOWNLOAD = 'https://api.chub.ai/api/characters/download';
 
 export default defineEventHandler(async (event) => {
     const body = await readBody<ChubAiGetRequest>(event);
@@ -14,7 +10,7 @@ export default defineEventHandler(async (event) => {
     const characterPath = body.characterUrl.replace('https://www.chub.ai/characters/', '');
     const fileName = 'main_' + characterPath.split('/')[1] + '_spec_v2.png';
     try {
-        const apiResponse = <Blob>await $fetch(API_ENDPOINT_DOWNLOAD, {
+        const apiResponse = <Blob>await $fetch("https://api.chub.ai/api/characters/download", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
