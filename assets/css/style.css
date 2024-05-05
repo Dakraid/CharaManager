@@ -26,6 +26,12 @@ html.dark input {
     object-fit: cover;
 }
 
+.character-card-chub {
+    width: 100%;
+    max-width: 100%;
+    object-fit: cover;
+}
+
 .character-card-large {
     width: 512px;
     max-width: 512px;

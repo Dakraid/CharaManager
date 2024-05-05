@@ -54,6 +54,7 @@
         "@types/png-chunk-text": "^1.0.3",
         "@types/png-chunks-encode": "^1.0.2",
         "@types/png-chunks-extract": "^1.0.2",
+        "@vee-validate/nuxt": "^4.12.6",
         "better-sqlite3": "^9.6.0",
         "character-card-utils": "^2.0.3",
         "dayjs": "^1.11.11",

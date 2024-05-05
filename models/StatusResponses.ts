@@ -28,3 +28,11 @@ export const status_success_characters_get: StatusResponse = {
 };
 
 export const status_failure_characters_get: StatusResponse = { status: 400, message: 'No characters found.' };
+
+// Chub.ai character download related responses
+export const status_success_chubai_get: StatusResponse = {
+    status: 200,
+    message: 'Character download successful.',
+    content: undefined,
+};
+export const status_failure_chubai_get: StatusResponse = { status: 400, message: 'Failed to download character.', content: undefined };

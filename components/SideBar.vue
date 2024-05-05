@@ -4,6 +4,10 @@ import { useToast } from '~/components/ui/toast';
 import type { FileUpload } from '~/models/FileUpload';
 import { useCharacterStore } from '~/stores/characterStore';
 import { useApplicationStore } from '~/stores/applicationStore';
+import {cn} from "~/lib/utils";
+import type {ChubAiGetRequest} from "~/models/ChubAiGetRequest";
+import type {StatusResponse} from "~/models/StatusResponse";
+
 
 const emit = defineEmits(['update-characters']);
 
@@ -97,6 +101,43 @@ const deleteCharacter = async () => {
 
     emit('update-characters');
 };
+
+const chubAiCharacterUrl = ref('');
+const chubAiCharacter = ref();
+const downloadChubAiCharacter = async () => {
+    if (!chubAiCharacterUrl.value.startsWith("https://www.chub.ai/characters/")) {
+        toast({
+            title: "Wrong Chub.ai URL",
+            description: "The URL you entered is not valid.",
+            variant: 'destructive',
+        });
+        return;
+    }
+
+    const response:StatusResponse = await $fetch('/api/chubai', {
+        method: 'POST',
+        body: {characterUrl: chubAiCharacterUrl.value},
+    });
+
+    if (response) {
+        chubAiCharacter.value = response.content;
+    }
+}
+
+const saveChubAiCharacter = async () => {
+    if (chubAiCharacter.value) {
+        files.value.length = 0;
+        files.value.push(chubAiCharacter.value);
+        await uploadFiles();
+        chubAiCharacterUrl.value = '';
+        chubAiCharacter.value = undefined;
+    }
+}
+
+const clearChubAiCharacter = async () => {
+    chubAiCharacterUrl.value = '';
+    chubAiCharacter.value = undefined;
+}
 </script>
 
 <template>
@@ -123,9 +164,26 @@ const deleteCharacter = async () => {
             <label for="censorNames" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Censor Character Names? </label>
         </div>
         <Separator />
-        <div class="flex items-center pl-6 gap-2 justify-start">
-            <Checkbox id="processing" v-model:checked="applicationStore.processing" />
-            <label for="processing" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Debug: Set Processing </label>
+        <Label class="text-1xl" for="chubai-url">Chub.ai Download</Label>
+        <Input class="min-h-9" id="chubai-url" type="url" placeholder="https://www.chub.ai/characters/..." v-model="chubAiCharacterUrl"/>
+        <Button type="submit" variant="secondary" @click="downloadChubAiCharacter">
+            <span class="sr-only">Download Character</span>
+            <Icon class="h-6 w-6" name="radix-icons:download" />
+        </Button>
+        <div v-if="chubAiCharacter" class="flex flex-col items-center gap-4">
+            <span>{{ chubAiCharacter.name }}</span>
+            <img
+                 :src="chubAiCharacter.content"
+                 :alt="chubAiCharacter.name"
+                 class="character-card-chub rounded-2xl"/>
+            <div class="flex w-full gap-4">
+                <Button type="submit" variant="secondary" class="w-full" @click="saveChubAiCharacter">
+                    <span>Save</span>
+                </Button>
+                <Button type="submit" variant="destructive" class="w-full" @click="clearChubAiCharacter">
+                    <span>Clear</span>
+                </Button>
+            </div>
         </div>
         <Separator />
         <div class="flex-grow h-full"/>
