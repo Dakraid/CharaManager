@@ -4,10 +4,9 @@ import { useToast } from '~/components/ui/toast';
 import type { FileUpload } from '~/models/FileUpload';
 import { useCharacterStore } from '~/stores/characterStore';
 import { useApplicationStore } from '~/stores/applicationStore';
-import {cn} from "~/lib/utils";
-import type {ChubAiGetRequest} from "~/models/ChubAiGetRequest";
-import type {StatusResponse} from "~/models/StatusResponse";
-
+import { cn } from '~/lib/utils';
+import type { ChubAiGetRequest } from '~/models/ChubAiGetRequest';
+import type { StatusResponse } from '~/models/StatusResponse';
 
 const emit = defineEmits(['update-characters']);
 
@@ -105,24 +104,24 @@ const deleteCharacter = async () => {
 const chubAiCharacterUrl = ref('');
 const chubAiCharacter = ref();
 const downloadChubAiCharacter = async () => {
-    if (!chubAiCharacterUrl.value.startsWith("https://www.chub.ai/characters/")) {
+    if (!chubAiCharacterUrl.value.startsWith('https://www.chub.ai/characters/')) {
         toast({
-            title: "Wrong Chub.ai URL",
-            description: "The URL you entered is not valid.",
+            title: 'Wrong Chub.ai URL',
+            description: 'The URL you entered is not valid.',
             variant: 'destructive',
         });
         return;
     }
 
-    const response:StatusResponse = await $fetch('/api/chubai', {
+    const response: StatusResponse = await $fetch('/api/chubai', {
         method: 'POST',
-        body: {characterUrl: chubAiCharacterUrl.value},
+        body: { characterUrl: chubAiCharacterUrl.value },
     });
 
     if (response) {
         chubAiCharacter.value = response.content;
     }
-}
+};
 
 const saveChubAiCharacter = async () => {
     if (chubAiCharacter.value) {
@@ -132,18 +131,18 @@ const saveChubAiCharacter = async () => {
         chubAiCharacterUrl.value = '';
         chubAiCharacter.value = undefined;
     }
-}
+};
 
 const clearChubAiCharacter = async () => {
     chubAiCharacterUrl.value = '';
     chubAiCharacter.value = undefined;
-}
+};
 </script>
 
 <template>
     <div class="flex flex-col md:order-2 w-full max-w-sm gap-4">
         <Label class="text-1xl" for="file-input">Upload</Label>
-        <Input class="min-h-9" id="file-input" ref="fileInput" accept="image/png" multiple name="files[]" type="file" @change="onFileChange" />
+        <Input id="file-input" ref="fileInput" class="min-h-9" accept="image/png" multiple name="files[]" type="file" @change="onFileChange" />
         <Button type="submit" variant="secondary" @click="uploadFiles">
             <span class="sr-only">Upload File(s)</span>
             <Icon class="h-6 w-6" name="radix-icons:upload" />
@@ -165,17 +164,14 @@ const clearChubAiCharacter = async () => {
         </div>
         <Separator />
         <Label class="text-1xl" for="chubai-url">Chub.ai Download</Label>
-        <Input class="min-h-9" id="chubai-url" type="url" placeholder="https://www.chub.ai/characters/..." v-model="chubAiCharacterUrl"/>
+        <Input id="chubai-url" v-model="chubAiCharacterUrl" class="min-h-9" type="url" placeholder="https://www.chub.ai/characters/..." />
         <Button type="submit" variant="secondary" @click="downloadChubAiCharacter">
             <span class="sr-only">Download Character</span>
             <Icon class="h-6 w-6" name="radix-icons:download" />
         </Button>
         <div v-if="chubAiCharacter" class="flex flex-col items-center gap-4">
             <span>{{ chubAiCharacter.name }}</span>
-            <img
-                 :src="chubAiCharacter.content"
-                 :alt="chubAiCharacter.name"
-                 class="character-card-chub rounded-2xl"/>
+            <img :src="chubAiCharacter.content" :alt="chubAiCharacter.name" class="character-card-chub rounded-2xl" />
             <div class="flex w-full gap-4">
                 <Button type="submit" variant="secondary" class="w-full" @click="saveChubAiCharacter">
                     <span>Save</span>
@@ -186,7 +182,7 @@ const clearChubAiCharacter = async () => {
             </div>
         </div>
         <Separator />
-        <div class="flex-grow h-full"/>
+        <div class="flex-grow h-full" />
         <Separator />
         <Label class="text-1xl" for="file-input">Delete All Files</Label>
         <AlertDialog>

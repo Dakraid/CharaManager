@@ -6,7 +6,7 @@ import { Toaster } from '@/components/ui/toast';
 import { cn } from '~/lib/utils';
 import { useCharacterStore } from '~/stores/characterStore';
 import { useApplicationStore } from '~/stores/applicationStore';
-import type {CharacterCard} from "~/models/CharacterCard";
+import type { CharacterCard } from '~/models/CharacterCard';
 
 const { toast } = useToast();
 
@@ -72,18 +72,18 @@ const downloadImage = async (id: number) => {
     document.body.removeChild(anchor);
 };
 
-const showCharacterWindow = ref(false)
-const character = ref()
+const showCharacterWindow = ref(false);
+const characterRef = ref();
 
 const getData = async (characterIn: CharacterCard) => {
-    character.value = characterIn;
+    characterRef.value = characterIn;
     showCharacterWindow.value = true;
 };
 
 const closeCharacterWindow = async () => {
-    character.value = null;
+    characterRef.value = null;
     showCharacterWindow.value = false;
-}
+};
 </script>
 
 <template>
@@ -100,7 +100,7 @@ const closeCharacterWindow = async () => {
                         <Icon class="w-16 h-16 animate-spin" name="radix-icons:reload" />
                     </div>
                     <div v-if="showCharacterWindow" class="absolute backdrop-blur bg-background/80 transition-all w-full h-full inset-0 z-10 p-16 rounded-md flex flex-1 justify-center items-center">
-                        <CharacterDetails :character="character" @close-character="closeCharacterWindow"/>
+                        <CharacterDetails :character="characterRef" @close-character="closeCharacterWindow" />
                     </div>
                     <div v-if="characters === undefined || characters.length === 0" class="flex flex-1 flex-col gap-2 justify-center items-center">
                         <h1 class="font-bold text-2xl">No characters found</h1>

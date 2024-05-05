@@ -37,7 +37,7 @@ function base64ToArrayBuffer(base64: string) {
     return bytes;
 }
 
-export default function (content: string) {
+export default function (content: string | undefined) {
     const array = base64ToArrayBuffer(content.split('base64,')[1]);
     const parsed = JSON.parse(read(array));
     return Cards.parseToV2(parsed);

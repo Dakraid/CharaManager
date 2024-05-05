@@ -69,7 +69,7 @@ export const useCharacterStore = defineStore('characters', {
             const applicationStore = useApplicationStore();
             applicationStore.processing = true;
             const response = await deleteCharacter(applicationStore.deleteOptions);
-            await this.loadCharacters()
+            await this.loadCharacters();
             applicationStore.processing = false;
             return response;
         },
