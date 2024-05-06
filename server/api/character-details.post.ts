@@ -20,6 +20,6 @@ export default defineEventHandler(async (event) => {
     const character = await drizzleDb.select().from(characterDefinitions).where(eq(characterDefinitions.id, body.id));
 
     const response = status_success_character_get;
-    response.content = character;
+    response.content = character[0];
     return response;
 });

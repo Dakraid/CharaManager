@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
 
     try {
         const contentArray = await base64ToArrayBuffer(body.image_content.split('base64,')[1]);
-        const contentString = await convertUint8ArrayImageToString(contentArray);
+        const contentString = await convertUint8ArrayToString(contentArray);
         const content = await cleanCharacterBook(contentString);
         const hash = createHash('sha256').update(content).digest('hex');
         await drizzleDb

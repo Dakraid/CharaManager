@@ -151,75 +151,77 @@ const clearChubAiCharacter = async () => {
 </script>
 
 <template>
-    <div class="flex flex-col md:order-2 w-full max-w-sm gap-4">
-        <Label class="text-1xl" for="file-input">Upload</Label>
-        <Input id="file-input" ref="fileInput" class="min-h-9" accept="image/png" multiple name="files[]" type="file" @change="onFileChange" />
-        <Button type="submit" variant="secondary" @click="uploadFiles">
-            <span class="sr-only">Upload File(s)</span>
-            <Icon class="h-6 w-6" name="radix-icons:upload" />
-        </Button>
-        <Separator />
-        <Label class="text-1xl" for="file-input">Reload Character List</Label>
-        <Button type="submit" variant="secondary" @click="$emit('update-characters')">
-            <span class="sr-only">Reload Character List</span>
-            <Icon class="h-6 w-6" name="radix-icons:symbol" />
-        </Button>
-        <Separator />
-        <div class="flex items-center pl-6 gap-2 justify-start">
-            <Checkbox id="censorChars" v-model:checked="applicationStore.censorChars" />
-            <label for="censorChars" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Blur and Greyscale Character Images? </label>
-        </div>
-        <div class="flex items-center pl-6 gap-2 justify-start">
-            <Checkbox id="censorNames" v-model:checked="applicationStore.censorNames" />
-            <label for="censorNames" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Censor Character Names? </label>
-        </div>
-        <Separator />
-        <Label class="text-1xl" for="chubai-url">Chub.ai Download</Label>
-        <Input id="chubai-url" v-model="chubAiCharacterUrl" class="min-h-9" type="url" placeholder="https://www.chub.ai/characters/..." />
-        <Button type="submit" variant="secondary" @click="downloadChubAiCharacter">
-            <span class="sr-only">Download Character</span>
-            <Icon class="h-6 w-6" name="radix-icons:download" />
-        </Button>
-        <div v-if="chubAiCharacter" class="flex flex-col items-center gap-4">
-            <span>{{ chubAiCharacter.name }}</span>
-            <img :src="chubAiCharacter.content" :alt="chubAiCharacter.name" class="character-card-chub rounded-2xl" />
-            <div class="flex w-full gap-4">
-                <Button type="submit" variant="secondary" class="w-full" @click="saveChubAiCharacter">
-                    <span>Save</span>
-                </Button>
-                <Button type="submit" variant="destructive" class="w-full" @click="clearChubAiCharacter">
-                    <span>Clear</span>
-                </Button>
+    <ScrollArea class="h-full md:order-2 w-full max-w-sm pr-8">
+        <div class="flex flex-col md:order-2 w-full max-w-sm gap-4">
+            <Label class="text-1xl" for="file-input">Upload</Label>
+            <Input id="file-input" ref="fileInput" class="min-h-9" accept="image/png" multiple name="files[]" type="file" @change="onFileChange" />
+            <Button type="submit" variant="secondary" @click="uploadFiles">
+                <span class="sr-only">Upload File(s)</span>
+                <Icon class="h-6 w-6" name="radix-icons:upload" />
+            </Button>
+            <Separator />
+            <Label class="text-1xl" for="file-input">Reload Character List</Label>
+            <Button type="submit" variant="secondary" @click="$emit('update-characters')">
+                <span class="sr-only">Reload Character List</span>
+                <Icon class="h-6 w-6" name="radix-icons:symbol" />
+            </Button>
+            <Separator />
+            <div class="flex items-center pl-6 gap-2 justify-start">
+                <Checkbox id="censorChars" v-model:checked="applicationStore.censorChars" />
+                <label for="censorChars" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Blur and Greyscale Character Images? </label>
             </div>
+            <div class="flex items-center pl-6 gap-2 justify-start">
+                <Checkbox id="censorNames" v-model:checked="applicationStore.censorNames" />
+                <label for="censorNames" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Censor Character Names? </label>
+            </div>
+            <Separator />
+            <Label class="text-1xl" for="chubai-url">Chub.ai Download</Label>
+            <Input id="chubai-url" v-model="chubAiCharacterUrl" class="min-h-9" type="url" placeholder="https://www.chub.ai/characters/..." />
+            <Button type="submit" variant="secondary" @click="downloadChubAiCharacter">
+                <span class="sr-only">Download Character</span>
+                <Icon class="h-6 w-6" name="radix-icons:download" />
+            </Button>
+            <div v-if="chubAiCharacter" class="flex flex-col items-center gap-4">
+                <span>{{ chubAiCharacter.name }}</span>
+                <img :src="chubAiCharacter.content" :alt="chubAiCharacter.name" class="character-card-chub rounded-2xl" />
+                <div class="flex w-full gap-4">
+                    <Button type="submit" variant="secondary" class="w-full" @click="saveChubAiCharacter">
+                        <span>Save</span>
+                    </Button>
+                    <Button type="submit" variant="destructive" class="w-full" @click="clearChubAiCharacter">
+                        <span>Clear</span>
+                    </Button>
+                </div>
+            </div>
+            <Separator />
+            <div class="flex-grow h-full" />
+            <Separator />
+            <Label class="text-1xl" for="sync-database">Synchronize Database</Label>
+            <Button id="sync-database" type="submit" variant="outline" @click="synchronizeDatabase">
+                <span class="sr-only">Synchronize Database</span>
+                <Icon class="h-6 w-6" name="radix-icons:symbol" />
+            </Button>
+            <Label class="text-1xl" for="delete-files">Delete All Files</Label>
+            <AlertDialog>
+                <AlertDialogTrigger as-child>
+                    <Button id="delete-files" type="submit" variant="destructive">
+                        <span class="sr-only">Delete All File(s)</span>
+                        <Icon class="h-6 w-6" name="radix-icons:trash" />
+                    </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>This action cannot be undone. This will permanently delete your characters and remove your data from the database.</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction @click="deleteCharacter">Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
-        <Separator />
-        <div class="flex-grow h-full" />
-        <Separator />
-        <Label class="text-1xl" for="sync-database">Synchronize Database</Label>
-        <Button id="sync-database" type="submit" variant="outline" @click="synchronizeDatabase">
-            <span class="sr-only">Synchronize Database</span>
-            <Icon class="h-6 w-6" name="radix-icons:symbol" />
-        </Button>
-        <Label class="text-1xl" for="delete-files">Delete All Files</Label>
-        <AlertDialog>
-            <AlertDialogTrigger as-child>
-                <Button id="delete-files" type="submit" variant="destructive">
-                    <span class="sr-only">Delete All File(s)</span>
-                    <Icon class="h-6 w-6" name="radix-icons:trash" />
-                </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-                <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>This action cannot be undone. This will permanently delete your characters and remove your data from the database.</AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction @click="deleteCharacter">Continue</AlertDialogAction>
-                </AlertDialogFooter>
-            </AlertDialogContent>
-        </AlertDialog>
-    </div>
+    </ScrollArea>
 </template>
 
 <style scoped></style>

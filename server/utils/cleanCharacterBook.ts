@@ -8,7 +8,7 @@ export default async function cleanCharacterBook(content: string) {
                 if (entry.position !== 'before_char' && entry.position !== 'after_char') {
                     entry.position = entry.position == 0 ? 'before_char' : 'after_char';
                 }
-            })
+            });
 
             return JSON.stringify(jsonCharacter);
         }

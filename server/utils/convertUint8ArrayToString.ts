@@ -1,7 +1,7 @@
 import extractChunks from 'png-chunks-extract';
 import { decode } from 'png-chunk-text';
 
-export default async function convertUint8ArrayImageToString(image: Uint8Array) {
+export default async function convertUint8ArrayToString(image: Uint8Array) {
     const chunks = extractChunks(image);
 
     const textChunks = chunks

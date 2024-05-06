@@ -7,6 +7,7 @@ import { createHash } from 'node:crypto';
 import { status_success_database_synced } from '~/models/StatusResponses';
 import { characterCards, characterDefinitions } from '~/utils/drizzle/schema';
 import cleanCharacterBook from '~/server/utils/cleanCharacterBook';
+import * as Cards from 'character-card-utils';
 
 export default defineEventHandler(async (_) => {
     const db = createDatabase(sqlite({ name: 'CharaManager' }));
@@ -16,7 +17,12 @@ export default defineEventHandler(async (_) => {
     for (const character of characters) {
         try {
             const contentArray = await base64ToArrayBuffer(character.image_content.split('base64,')[1]);
-            const contentString = await convertUint8ArrayImageToString(contentArray);
+            let contentString = await convertUint8ArrayToString(contentArray);
+            const contentJson = JSON.parse(contentString);
+            if (contentJson.spec === undefined) {
+                const converted = Cards.v1ToV2(contentJson);
+                contentString = JSON.stringify(converted);
+            }
             const content = await cleanCharacterBook(contentString);
             const hash = createHash('sha256').update(content).digest('hex');
             await drizzleDb

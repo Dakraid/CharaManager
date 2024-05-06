@@ -43,7 +43,7 @@ const closeCharacterWindow = async () => {
 </script>
 
 <template>
-    <div class="grid h-full overflow-y-hidden py-6 lg:px-24 items-stretch gap-6 md:grid-cols-[minmax(0,1fr)_300px]">
+    <div class="grid h-full overflow-y-hidden py-6 lg:px-6 items-stretch gap-6 md:grid-cols-[minmax(0,1fr)_332px]">
         <SideBar @update-characters="getCharacters" />
         <div id="main_content" class="flex flex-col h-full overflow-y-hidden gap-2 md:order-1 mt-0 border-0 p-0">
             <ControlBar @update-characters="getCharacters" />

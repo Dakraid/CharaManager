@@ -20,7 +20,7 @@ const response: StatusResponse = await $fetch('/api/character-details', {
     body: body,
 });
 
-if (!response.content[0] || response.status !== 200) {
+if (!response.content || response.status !== 200) {
     toast({
         title: 'Could not retrieve character data.',
         description: 'The character data seems to be corrupted, remove the character and re-download it.',
@@ -29,7 +29,7 @@ if (!response.content[0] || response.status !== 200) {
     emit('close-character');
 } else {
     try {
-        const parsed = JSON.parse(response.content[0].json);
+        const parsed = JSON.parse(response.content.json);
         characterData.value = Cards.parseToV2(parsed);
         characterDump.value = JSON.stringify(parsed.data);
     } catch (e) {
