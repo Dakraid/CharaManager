@@ -1,22 +1,23 @@
-import type { CharacterGetRequest } from '~/models/CharacterGetRequest';
-import type { CharacterDeleteRequest } from '~/models/CharacterDeleteRequest';
+import type { CharactersGetRequest } from '~/models/CharactersGetRequest';
+import type { CharactersDeleteRequest } from '~/models/CharactersDeleteRequest';
 
 export const useApplicationStore = defineStore('application', {
     state: () => {
         return {
+            provisioned: false,
             processing: true,
             censorChars: false,
             censorNames: false,
             searchValue: '',
             orderByValue: 'time_desc',
-            deleteOptions: {} as CharacterDeleteRequest,
+            deleteOptions: {} as CharactersDeleteRequest,
             currentPage: 1,
             itemsPerPage: 5,
         };
     },
     getters: {
         queryOptions: (state) =>
-            <CharacterGetRequest>{
+            <CharactersGetRequest>{
                 page: state.currentPage,
                 count: state.itemsPerPage,
                 order: state.orderByValue,

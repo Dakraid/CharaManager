@@ -1,196 +1,116 @@
 {
-    "id": "00000000-0000-0000-0000-000000000000",
-    "prevId": "",
-    "version": "5",
-    "dialect": "sqlite",
-    "tables": {
-        "character_cards": {
-            "name": "character_cards",
-            "columns": {
-                "id": {
-                    "autoincrement": false,
-                    "name": "id",
-                    "type": "integer",
-                    "primaryKey": true,
-                    "notNull": false
-                },
-                "hash": {
-                    "autoincrement": false,
-                    "name": "hash",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "full_name": {
-                    "autoincrement": false,
-                    "name": "full_name",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "file_name": {
-                    "autoincrement": false,
-                    "name": "file_name",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "timestamp": {
-                    "autoincrement": false,
-                    "name": "timestamp",
-                    "type": "integer",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "formatted_timestamp": {
-                    "autoincrement": false,
-                    "name": "formatted_timestamp",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "image_content": {
-                    "autoincrement": false,
-                    "name": "image_content",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                }
-            },
-            "compositePrimaryKeys": {},
-            "indexes": {},
-            "foreignKeys": {},
-            "uniqueConstraints": {}
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "5",
+  "dialect": "sqlite",
+  "tables": {
+    "character_cards": {
+      "name": "character_cards",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
         },
-        "character_definition": {
-            "name": "character_definition",
-            "columns": {
-                "characterId": {
-                    "autoincrement": false,
-                    "name": "characterId",
-                    "type": "integer",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "id": {
-                    "autoincrement": false,
-                    "name": "id",
-                    "type": "integer",
-                    "primaryKey": true,
-                    "notNull": false
-                },
-                "hash": {
-                    "autoincrement": false,
-                    "name": "hash",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "name": {
-                    "autoincrement": false,
-                    "name": "name",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "description": {
-                    "autoincrement": false,
-                    "name": "description",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "personality": {
-                    "autoincrement": false,
-                    "name": "personality",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "scenario": {
-                    "autoincrement": false,
-                    "name": "scenario",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "first_mes": {
-                    "autoincrement": false,
-                    "name": "first_mes",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "mes_example": {
-                    "autoincrement": false,
-                    "name": "mes_example",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "creator_notes": {
-                    "autoincrement": false,
-                    "name": "creator_notes",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "system_prompt": {
-                    "autoincrement": false,
-                    "name": "system_prompt",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "alternate_greetings": {
-                    "autoincrement": false,
-                    "name": "alternate_greetings",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "tags": {
-                    "autoincrement": false,
-                    "name": "tags",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "creator": {
-                    "autoincrement": false,
-                    "name": "creator",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "character_version": {
-                    "autoincrement": false,
-                    "name": "character_version",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                }
-            },
-            "compositePrimaryKeys": {},
-            "indexes": {},
-            "foreignKeys": {
-                "character_definition_characterId_character_cards_id_fk": {
-                    "name": "character_definition_characterId_character_cards_id_fk",
-                    "tableFrom": "character_definition",
-                    "tableTo": "character_cards",
-                    "columnsFrom": ["characterId"],
-                    "columnsTo": ["id"],
-                    "onDelete": "no action",
-                    "onUpdate": "no action"
-                }
-            },
-            "uniqueConstraints": {}
+        "hash": {
+          "autoincrement": false,
+          "name": "hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "full_name": {
+          "autoincrement": false,
+          "name": "full_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file_name": {
+          "autoincrement": false,
+          "name": "file_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "formatted_timestamp": {
+          "autoincrement": false,
+          "name": "formatted_timestamp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image_content": {
+          "autoincrement": false,
+          "name": "image_content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {}
     },
-    "enums": {},
-    "_meta": {
-        "schemas": {},
-        "tables": {},
-        "columns": {}
+    "character_definition": {
+      "name": "character_definition",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hash": {
+          "autoincrement": false,
+          "name": "hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "json": {
+          "autoincrement": false,
+          "name": "json",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {
+        "character_definition_id_character_cards_id_fk": {
+          "name": "character_definition_id_character_cards_id_fk",
+          "tableFrom": "character_definition",
+          "tableTo": "character_cards",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {}
     }
+  },
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
 }

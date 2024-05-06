@@ -1,17 +1,46 @@
 <script setup lang="ts">
 import type { CharacterCard } from '~/models/CharacterCard';
-defineEmits(['close-character']);
+import { useToast } from '~/components/ui/toast';
+import type { StatusResponse } from '~/models/StatusResponse';
+import type { CharacterDefinitionGetRequest } from '~/models/CharacterDefinitionGetRequest';
+import * as Cards from 'character-card-utils';
+const { toast } = useToast();
+const emit = defineEmits(['close-character']);
 
 const props = defineProps<{
     character: CharacterCard;
 }>();
 
-const characterData = processCharacterData(props.character.image_content);
-const characterDump = JSON.stringify(characterData.data);
+const characterData = ref();
+const characterDump = ref('');
+
+const body: CharacterDefinitionGetRequest = { id: props.character.id as number };
+const response: StatusResponse = await $fetch('/api/character-details', {
+    method: 'POST',
+    body: body,
+});
+
+if (!response.content[0] || response.status !== 200) {
+    toast({
+        title: 'Could not retrieve character data.',
+        description: 'The character data seems to be corrupted, remove the character and re-download it.',
+        variant: 'destructive',
+    });
+    emit('close-character');
+} else {
+    try {
+        const parsed = JSON.parse(response.content[0].json);
+        characterData.value = Cards.parseToV2(parsed);
+        characterDump.value = JSON.stringify(parsed.data);
+    } catch (e) {
+        console.error(e);
+        emit('close-character');
+    }
+}
 </script>
 
 <template>
-    <Card class="flex flex-col flex-grow items-center h-full w-full p-2">
+    <Card v-if="characterData" class="flex flex-col flex-grow items-center h-full w-full p-2">
         <Button variant="outline" size="icon" class="absolute right-20" @click="$emit('close-character')">
             <Icon name="radix-icons:cross-1" class="w-4 h-4" />
         </Button>

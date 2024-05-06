@@ -1,14 +1,15 @@
+// noinspection ES6PreferShortImport
+
 import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';
-// noinspection ES6PreferShortImport
 import { drizzle } from 'db0/integrations/drizzle/index';
 import { characterCards } from '~/utils/drizzle/schema';
 import { asc, desc, like } from 'drizzle-orm';
 import { status_failure_characters_get, status_success_characters_get } from '~/models/StatusResponses';
-import type { CharacterGetRequest } from '~/models/CharacterGetRequest';
+import type { CharactersGetRequest } from '~/models/CharactersGetRequest';
 
 export default defineEventHandler(async (event) => {
-    const body = await readBody<CharacterGetRequest>(event);
+    const body = await readBody<CharactersGetRequest>(event);
     if (!body) {
         return null;
     }

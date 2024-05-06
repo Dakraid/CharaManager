@@ -1,9 +1,22 @@
 <script lang="ts" setup>
-await $fetch('/api/database', {
-    method: 'POST',
-});
+import { Toaster } from '~/components/ui/toast';
+
+const applicationStore = useApplicationStore();
+
+if (!applicationStore.provisioned) {
+    await $fetch('/api/database-provision', {
+        method: 'POST',
+    });
+
+    applicationStore.provisioned = true;
+}
 </script>
 
 <template>
-    <NuxtPage />
+    <Toaster />
+    <div class="h-screen flex flex-col overflow-y-hidden">
+        <TopBar />
+        <Separator />
+        <NuxtPage />
+    </div>
 </template>

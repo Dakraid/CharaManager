@@ -4,8 +4,6 @@ import { useToast } from '~/components/ui/toast';
 import type { FileUpload } from '~/models/FileUpload';
 import { useCharacterStore } from '~/stores/characterStore';
 import { useApplicationStore } from '~/stores/applicationStore';
-import { cn } from '~/lib/utils';
-import type { ChubAiGetRequest } from '~/models/ChubAiGetRequest';
 import type { StatusResponse } from '~/models/StatusResponse';
 
 const emit = defineEmits(['update-characters']);
@@ -79,6 +77,19 @@ const uploadFiles = async () => {
     }
 
     emit('update-characters');
+};
+
+const synchronizeDatabase = async () => {
+    const response: StatusResponse = await $fetch('/api/database-sync', {
+        method: 'POST',
+    });
+
+    if (response.status === 200) {
+        toast({
+            title: 'Database synchronized successfully.',
+            description: 'All character definitions are now synchronized.',
+        });
+    }
 };
 
 const deleteCharacter = async () => {
@@ -184,10 +195,15 @@ const clearChubAiCharacter = async () => {
         <Separator />
         <div class="flex-grow h-full" />
         <Separator />
-        <Label class="text-1xl" for="file-input">Delete All Files</Label>
+        <Label class="text-1xl" for="sync-database">Synchronize Database</Label>
+        <Button id="sync-database" type="submit" variant="outline" @click="synchronizeDatabase">
+            <span class="sr-only">Synchronize Database</span>
+            <Icon class="h-6 w-6" name="radix-icons:symbol" />
+        </Button>
+        <Label class="text-1xl" for="delete-files">Delete All Files</Label>
         <AlertDialog>
             <AlertDialogTrigger as-child>
-                <Button type="submit" variant="destructive">
+                <Button id="delete-files" type="submit" variant="destructive">
                     <span class="sr-only">Delete All File(s)</span>
                     <Icon class="h-6 w-6" name="radix-icons:trash" />
                 </Button>

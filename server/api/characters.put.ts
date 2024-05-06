@@ -1,8 +1,9 @@
+// noinspection ES6PreferShortImport
+
 import { createHash } from 'node:crypto';
 import dayjs from 'dayjs';
 import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';
-// noinspection ES6PreferShortImport
 import { drizzle } from 'db0/integrations/drizzle/index';
 import { characterCards } from '~/utils/drizzle/schema';
 import { like } from 'drizzle-orm';
@@ -27,15 +28,10 @@ export default defineEventHandler(async (event) => {
             continue;
         }
 
-        const newChar = new CharacterCard();
-        newChar.hash = hash;
-        newChar.file_name = file.name;
-        newChar.image_content = file.content;
-        newChar.timestamp = file.lastModified ? file.lastModified : dayjs().unix();
-        newChar.formatted_timestamp = dayjs(newChar.timestamp).format('YYYY-MM-DD HH:mm:ss');
-        newChar.full_name = newChar.timestamp + '_' + file.name;
+        const timestamp = file.lastModified ? file.lastModified : dayjs().unix();
+        const newChar = new CharacterCard(hash, timestamp + '_' + file.name, file.name, timestamp, dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'), file.content);
 
-        await drizzleDb
+        const result = await drizzleDb
             .insert(characterCards)
             .values({
                 hash: newChar.hash,
@@ -45,7 +41,14 @@ export default defineEventHandler(async (event) => {
                 formattedTimestamp: newChar.formatted_timestamp,
                 imageContent: newChar.image_content,
             })
+            .returning({ id: characterCards.id })
             .onConflictDoNothing();
+
+        newChar.id = result[0].id;
+        await $fetch('/api/character-details', {
+            method: 'PUT',
+            body: JSON.stringify(newChar),
+        });
     }
 
     if (fileConflicts.length > 0) {

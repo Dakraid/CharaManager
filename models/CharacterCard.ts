@@ -1,19 +1,20 @@
 export class CharacterCard {
+    // ID is filled by the database, so when creating a new card to be inserted we can't assign one yet
     id: number | undefined;
-    hash: string | undefined;
-    full_name: string | undefined;
-    file_name: string | undefined;
-    timestamp: number | undefined;
-    formatted_timestamp: string | undefined;
-    image_content: string | undefined;
+    hash: string;
+    full_name: string;
+    file_name: string;
+    timestamp: number;
+    formatted_timestamp: string;
+    image_content: string;
 
-    public constructor(id?: number, hash?: string, full_name?: string, file_name?: string, timestamp?: number, formatted_timestamp?: string, image_content?: string) {
-        this.id = id;
+    public constructor(hash: string, full_name: string, file_name: string, timestamp: number, formatted_timestamp: string, image_content: string, id?: number) {
         this.hash = hash;
         this.full_name = full_name;
         this.file_name = file_name;
         this.timestamp = timestamp;
         this.formatted_timestamp = formatted_timestamp;
         this.image_content = image_content;
+        this.id = id;
     }
 }

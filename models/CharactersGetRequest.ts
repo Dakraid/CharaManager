@@ -1,4 +1,4 @@
-export interface CharacterGetRequest {
+export interface CharactersGetRequest {
     page: number;
     count: number;
     order?: string;

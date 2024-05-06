@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     const characterPath = body.characterUrl.replace('https://www.chub.ai/characters/', '');
     const fileName = 'main_' + characterPath.split('/')[1] + '_spec_v2.png';
     try {
-        const apiResponse = <Blob>await $fetch("https://api.chub.ai/api/characters/download", {
+        const apiResponse = <Blob>await $fetch('https://api.chub.ai/api/characters/download', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
