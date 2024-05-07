@@ -118,8 +118,7 @@ const downloadChubAiCharacter = async () => {
     if (characterUrl.value.trim().length === 0) {
         return;
     }
-    if (!characterUrl.value.includes('chub.ai/characters/') &&
-        !characterUrl.value.includes('characterhub.org/characters/')) {
+    if (!characterUrl.value.includes('chub.ai/characters/') && !characterUrl.value.includes('characterhub.org/characters/')) {
         toast({
             title: 'Wrong URL',
             description: 'The URL you entered is not valid.',
@@ -157,12 +156,8 @@ const clearChubAiCharacter = async () => {
 <template>
     <Tabs default-value="general" class="flex flex-col h-full w-full md:order-2 max-w-sm py-1px">
         <TabsList class="grid w-full grid-cols-2">
-            <TabsTrigger value="general">
-                General
-            </TabsTrigger>
-            <TabsTrigger value="download">
-                Download
-            </TabsTrigger>
+            <TabsTrigger value="general"> General </TabsTrigger>
+            <TabsTrigger value="download"> Download </TabsTrigger>
         </TabsList>
         <TabsContent value="general" class="flex-grow">
             <div class="flex flex-col md:order-2 w-full h-full max-w-sm gap-4">
@@ -188,7 +183,7 @@ const clearChubAiCharacter = async () => {
                     <label for="censorNames" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Censor Character Names? </label>
                 </div>
                 <Separator />
-                <div class="h-full"/>
+                <div class="h-full" />
                 <Separator />
                 <Label class="text-1xl" for="sync-database">Synchronize Database</Label>
                 <Button id="sync-database" type="submit" variant="outline" @click="synchronizeDatabase">

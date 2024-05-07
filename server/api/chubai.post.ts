@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
         }
     } else {
         const response = status_failure_chubai_get;
-        response.content = "Unknown URL given.";
+        response.content = 'Unknown URL given.';
         return response;
     }
 });
