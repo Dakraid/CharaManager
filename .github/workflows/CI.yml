@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  CI:
+  Build_Linux:
     runs-on: ubuntu-latest
 
     steps:
@@ -46,5 +46,45 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: build
+          name: build-linux
+          path: .output
+
+  Build_Windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Setup node env
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/Iron
+          check-latest: true
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --silent
+
+      - name: Run linter
+        run: yarn lint
+
+      - name: Run build
+        run: yarn build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-windows
           path: .output
