@@ -80,7 +80,7 @@ const downloadCharacter = async (id: number) => {
                 :key="character.file_name"
                 :alt="character.file_name"
                 :src="character.image_content"
-                :class="cn('character-card rounded-2xl', censorChars ? 'blur-xl grayscale' : '')"
+                :class="cn('character-card rounded-2xl', censorChars ? 'blur-2xl rotate-180 grayscale' : '')"
                 @click="showCharacter" />
         </CardContent>
         <CardFooter class="flex flex-col w-full gap-2 px-2 py-2">
