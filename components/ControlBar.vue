@@ -56,7 +56,7 @@ const clearSearch = async () => {
         applicationStore.searchValue = '';
         emit('update-characters');
     }
-}
+};
 
 const processSearch = pDebounce(() => {
     emit('update-characters');
@@ -75,8 +75,8 @@ onMounted(async () => {
             <div class="relative w-[250px] max-w-sm items-center">
                 <Input id="search" v-model="applicationStore.searchValue" type="text" placeholder="Search..." class="pl-10" @input="processSearch" />
                 <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
-                <Icon class="h-6 w-6 text-muted-foreground" name="radix-icons:magnifying-glass" />
-            </span>
+                    <Icon class="h-6 w-6 text-muted-foreground" name="radix-icons:magnifying-glass" />
+                </span>
             </div>
             <Button variant="outline" size="icon" @click="clearSearch">
                 <Icon class="w-4 h-4" name="radix-icons:cross-circled" />

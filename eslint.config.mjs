@@ -16,5 +16,6 @@ export default createConfigForNuxt({})
             'vue/no-multiple-template-root': 'off',
             'vue/valid-v-for': 'off',
             'vue/no-parsing-error': 'off',
+            'vue/html-self-closing': 'off'
         },
     });
