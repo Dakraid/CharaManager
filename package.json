@@ -69,7 +69,6 @@
         "lodash": "^4.17.21",
         "nuxt-icon": "^0.6.10",
         "nuxt-lodash": "^2.5.3",
-        "nuxt-purgecss": "^2.0.0",
         "png-chunk-text": "^1.0.0",
         "png-chunks-encode": "^1.0.0",
         "png-chunks-extract": "^1.0.0",

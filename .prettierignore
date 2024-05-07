@@ -1,9 +1,10 @@
 **/.git
 **/.svn
 **/.hg
+**/.github
 **/node_modules
 **/*.config.js
 **/*.d.ts
-**/components/ui/
+**/components/ui
 **/uploads
-**/utils/drizzle/
+**/utils/drizzle

@@ -5,7 +5,7 @@ import { createConfigForNuxt } from '@nuxt/eslint-config/flat';
 export default createConfigForNuxt({})
     .prepend(
         withNuxt({
-            ignores: ['**/*.config.js', '**/*.d.ts', '**/utils/drizzle/*', '**/components/ui/*'],
+            ignores: ['**/.github/*', '**/*.config.js', '**/*.d.ts', '**/utils/drizzle/*', '**/components/ui/*'],
         })
     )
     .append({
