@@ -1,13 +1,33 @@
 <script setup lang="ts">
-const response = await $fetch('/api/statistics', {
+import type {Statistics} from "~/models/Statistics";
+
+const response: Statistics = await $fetch('/api/statistics', {
     method: 'POST',
 });
 
-console.log(response);
+const statistics = ref();
+statistics.value = response
 </script>
 
 <template>
-    <div class="grid h-full overflow-y-hidden py-6 lg:px-24 items-stretch gap-6 md:grid-cols-[minmax(0,1fr)_300px]" />
+    <div class="flex-col h-full overflow-y-hidden py-6 lg:px-24 items-stretch">
+        <div class="flex flex-col gap-4 mb-24">
+            <Label>Characters per Author</Label>
+            <BarChart
+                :data="response.charAuthors.filter(x => x.count > 1).sort((a, b) => b.count - a.count)"
+                index="name"
+                :categories="['count']"
+            />
+        </div>
+        <div class="flex flex-col gap-4">
+            <Label>Characters per Date</Label>
+            <LineChart
+                :data="response.charDates"
+                index="date"
+                :categories="['count']"
+            />
+        </div>
+    </div>
 </template>
 
 <style scoped></style>
