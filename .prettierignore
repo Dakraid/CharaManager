@@ -8,3 +8,4 @@
 **/components/ui
 **/uploads
 **/utils/drizzle
+eslint.config.mjs

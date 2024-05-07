@@ -45,7 +45,6 @@
         "zod": "^3.23.6"
     },
     "devDependencies": {
-        "@iconify-json/radix-icons": "^1.1.14",
         "@nuxt/eslint": "^0.3.10",
         "@nuxt/eslint-config": "^0.3.10",
         "@nuxtjs/color-mode": "^3.4.1",
