@@ -14,8 +14,43 @@
 /*    background: #555;*/
 /*}*/
 
+@media (min-width: 768px) {
+    .character-grid {
+        grid-template-columns: minmax(0, 1fr) 332px;
+    }
+}
+
 html.dark input {
     color-scheme: dark;
+}
+
+.bg-background {
+    background-color: hsl(var(--background));
+}
+
+.text-foreground {
+    color: hsl(var(--foreground));
+}
+
+.border-border {
+    border-color: hsl(var(--border));
+}
+
+.w-250 {
+    width: 250px;
+}
+
+.w-200 {
+    width: 200px;
+}
+
+.w-168 {
+    width: 168px;
+}
+
+.size-1 {
+    height: 1.2rem;
+    width: 1.2rem;
 }
 
 .character-card {

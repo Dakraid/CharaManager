@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import '~/assets/css/style.css';
 import { Toaster } from '~/components/ui/toast';
 
 const applicationStore = useApplicationStore();

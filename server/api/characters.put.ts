@@ -7,7 +7,7 @@ import sqlite from 'db0/connectors/better-sqlite3';
 import { drizzle } from 'db0/integrations/drizzle/index';
 import { characterCards } from '~/utils/drizzle/schema';
 import { like } from 'drizzle-orm';
-import { CharacterCard } from '~/models/CharacterCard';
+import { Character } from '~/models/Character';
 import { status_success_characters_uploaded, status_success_characters_uploaded_withConflict } from '~/models/StatusResponses';
 
 export default defineEventHandler(async (event) => {
@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
         }
 
         const timestamp = file.lastModified ? file.lastModified : dayjs().unix();
-        const newChar = new CharacterCard(hash, timestamp + '_' + file.name, file.name, timestamp, dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'), file.content);
+        const newChar = new Character(hash, timestamp + '_' + file.name, file.name, timestamp, dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'), file.content);
 
         const result = await drizzleDb
             .insert(characterCards)

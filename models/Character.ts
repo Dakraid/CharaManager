@@ -1,4 +1,4 @@
-export class CharacterCard {
+export class Character {
     // ID is filled by the database, so when creating a new card to be inserted we can't assign one yet
     id: number | undefined;
     hash: string;

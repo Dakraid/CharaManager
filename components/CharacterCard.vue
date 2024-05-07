@@ -3,12 +3,10 @@ import { cn } from '~/lib/utils';
 import { useApplicationStore } from '~/stores/applicationStore';
 import { useToast } from '~/components/ui/toast';
 import { useCharacterStore } from '~/stores/characterStore';
-import type { CharacterCard } from '~/models/CharacterCard';
+import type { Character } from '~/models/Character';
 
-defineEmits(['open-characterwindow']);
-
-defineProps<{
-    character: CharacterCard;
+const props = defineProps<{
+    character: Character;
 }>();
 
 const { toast } = useToast();
@@ -18,13 +16,22 @@ const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
 const censorChars = ref(false);
 const censorNames = ref(false);
+const characterInstance = ref<Character>();
+const showCharacterWindow = ref(false);
 
 const updateApplication = async () => {
     censorChars.value = applicationStore.censorChars;
     censorNames.value = applicationStore.censorNames;
+    characterInstance.value = applicationStore.characterInstance;
+    showCharacterWindow.value = applicationStore.showCharacterWindow;
 };
 
 applicationStore.$subscribe(updateApplication);
+
+const showCharacter = async () => {
+    applicationStore.characterInstance = props.character;
+    applicationStore.showCharacterWindow = true;
+};
 
 const deleteCharacter = async (id: number = -1, purge: boolean = false) => {
     applicationStore.deleteOptions = { id: id, purge: purge };
@@ -43,7 +50,7 @@ const deleteCharacter = async (id: number = -1, purge: boolean = false) => {
     }
 };
 
-const downloadImage = async (id: number) => {
+const downloadCharacter = async (id: number) => {
     const character = await characterStore.getCharacterById(id);
     if (character === undefined || character.image_content === undefined) {
         toast({
@@ -74,14 +81,14 @@ const downloadImage = async (id: number) => {
                 :alt="character.file_name"
                 :src="character.image_content"
                 :class="cn('character-card rounded-2xl', censorChars ? 'blur-xl grayscale' : '')"
-                @click="$emit('open-characterwindow')" />
+                @click="showCharacter" />
         </CardContent>
         <CardFooter class="flex flex-col w-full gap-2 px-2 py-2">
             <div class="flex w-full gap-4">
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger as-child>
-                            <Button type="submit" variant="outline" class="flex justify-center items-center px-2" @click="downloadImage(<number>character.id)">
+                            <Button type="submit" variant="outline" class="flex justify-center items-center px-2" @click="downloadCharacter(<number>character.id)">
                                 <span class="sr-only">Download File</span>
                                 <Icon class="h-5 w-5 m-0.5" name="radix-icons:download" />
                             </Button>

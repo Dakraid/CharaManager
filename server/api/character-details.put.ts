@@ -5,11 +5,11 @@ import sqlite from 'db0/connectors/better-sqlite3';
 import { drizzle } from 'db0/integrations/drizzle/index';
 import { createHash } from 'node:crypto';
 import { characterDefinitions } from '~/utils/drizzle/schema';
-import type { CharacterCard } from '~/models/CharacterCard';
+import type { Character } from '~/models/Character';
 import cleanCharacterBook from '~/server/utils/cleanCharacterBook';
 
 export default defineEventHandler(async (event) => {
-    const body = await readBody<CharacterCard>(event);
+    const body = await readBody<Character>(event);
     if (!body) {
         return null;
     }

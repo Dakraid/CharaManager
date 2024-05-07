@@ -1,6 +1,6 @@
 import type { CharactersGetRequest } from '~/models/CharactersGetRequest';
 import type { StatusResponse } from '~/models/StatusResponse';
-import type { CharacterCard } from '~/models/CharacterCard';
+import type { Character } from '~/models/Character';
 import type { CharactersDeleteRequest } from '~/models/CharactersDeleteRequest';
 
 async function getCharacterCount() {
@@ -17,7 +17,7 @@ async function getCharacters(options: CharactersGetRequest) {
         body: options,
     });
 
-    const characters: CharacterCard[] = [];
+    const characters: Character[] = [];
     if (response.status === 200) {
         if (response.content === undefined || response.content.length === 0) {
             return characters;
@@ -49,7 +49,7 @@ async function deleteCharacter(options: CharactersDeleteRequest) {
 export const useCharacterStore = defineStore('characters', {
     state: () => {
         return {
-            characterList: [] as CharacterCard[],
+            characterList: [] as Character[],
             characterCount: 0,
         };
     },

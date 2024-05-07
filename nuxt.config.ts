@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    sourcemap: true,
+    modules: ['@nuxt/eslint', '@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxtjs/color-mode', 'shadcn-nuxt', '@nuxt/image', 'dayjs-nuxt', 'nuxt-icon'],
     ssr: true,
     devtools: {
         enabled: true,
@@ -8,7 +8,11 @@ export default defineNuxtConfig({
             enabled: true,
         },
     },
-    modules: ['@nuxt/eslint', '@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxtjs/color-mode', 'shadcn-nuxt', '@nuxt/image', 'dayjs-nuxt', 'nuxt-icon'],
+    sourcemap: true,
+    experimental: {
+        asyncEntry: true,
+        asyncContext: true,
+    },
     colorMode: {
         classSuffix: '',
     },
