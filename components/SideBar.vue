@@ -115,9 +115,12 @@ const deleteCharacter = async () => {
 const chubAiCharacterUrl = ref('');
 const chubAiCharacter = ref();
 const downloadChubAiCharacter = async () => {
-    if (!chubAiCharacterUrl.value.startsWith('https://www.chub.ai/characters/')) {
+    if (chubAiCharacterUrl.value.trim().length === 0) {
+        return;
+    }
+    if (!chubAiCharacterUrl.value.startsWith('https://www.chub.ai/characters/') && !chubAiCharacterUrl.value.startsWith('https://characterhub.org/characters/')) {
         toast({
-            title: 'Wrong Chub.ai URL',
+            title: 'Wrong URL',
             description: 'The URL you entered is not valid.',
             variant: 'destructive',
         });

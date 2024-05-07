@@ -9,10 +9,6 @@ export default defineNuxtConfig({
         },
     },
     sourcemap: true,
-    experimental: {
-        asyncEntry: true,
-        asyncContext: true,
-    },
     colorMode: {
         classSuffix: '',
     },
