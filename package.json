@@ -4,6 +4,7 @@
     "type": "module",
     "license": "AGPL-3.0-NC",
     "scripts": {
+        "run": "yarn build && node .output/server/index.mjs",
         "build": "nuxt build",
         "analyze": "nuxt build --analyze",
         "dev": "nuxt dev",
@@ -47,8 +48,7 @@
         "vee-validate": "^4.12.7",
         "vue": "^3.4.27",
         "vue-router": "^4.3.2",
-        "vue-sonner": "^1.1.2",
-        "zod": "^3.23.7"
+        "vue-sonner": "^1.1.2"
     },
     "devDependencies": {
         "@nuxt/eslint": "^0.3.10",
