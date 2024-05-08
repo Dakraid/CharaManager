@@ -12,11 +12,11 @@ statistics.value = response;
 <template>
     <div class="flex-col h-full overflow-y-hidden py-6 lg:px-24 items-stretch">
         <div class="flex flex-col gap-4 mb-24">
-            <Label>Characters per Author</Label>
+            <Label>Characters per Author (Count > 1)</Label>
             <BarChart :data="response.charAuthors.filter((x) => x.count > 1).sort((a, b) => b.count - a.count)" index="name" :categories="['count']" />
         </div>
         <div class="flex flex-col gap-4">
-            <Label>Characters per Date</Label>
+            <Label>Character Downloads per Date (Count > 0)</Label>
             <LineChart :data="response.charDates" index="date" :categories="['count']" />
         </div>
     </div>

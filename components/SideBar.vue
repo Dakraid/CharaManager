@@ -132,8 +132,14 @@ const downloadChubAiCharacter = async () => {
         body: { characterUrl: characterUrl.value },
     });
 
-    if (response) {
+    if (response.status === 200) {
         fetchedCharacter.value = response.content;
+    } else {
+        toast({
+            title: 'Failed to download character',
+            description: response.content,
+            variant: 'destructive',
+        });
     }
 };
 

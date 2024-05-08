@@ -1,5 +1,8 @@
+// noinspection ExceptionCaughtLocallyJS
+
 import type { ChubAiGetRequest } from '~/models/ChubAiGetRequest';
 import { status_failure_chubai_get, status_success_chubai_get } from '~/models/StatusResponses';
+import * as fs from "node:fs";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody<ChubAiGetRequest>(event);
@@ -13,7 +16,7 @@ export default defineEventHandler(async (event) => {
 
     if (baseUrl.includes('chub.ai') || baseUrl.includes('characterhub.org')) {
         try {
-            const apiResponse = <Blob>await $fetch('https://api.chub.ai/api/characters/download', {
+            const apiResponse = await $fetch('https://api.chub.ai/api/characters/download', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,10 +32,14 @@ export default defineEventHandler(async (event) => {
                 return status_failure_chubai_get;
             }
 
-            const buffer = Buffer.from(await apiResponse.arrayBuffer());
-            const response = status_success_chubai_get;
-            response.content = { name: fileName, lastModified: Date.now(), content: 'data:' + apiResponse.type + ';base64,' + buffer.toString('base64') };
-            return response;
+            if (apiResponse instanceof Blob) {
+                const buffer = Buffer.from(await apiResponse.arrayBuffer());
+                const response = status_success_chubai_get;
+                response.content = { name: fileName, lastModified: Date.now(), content: 'data:' + apiResponse.type + ';base64,' + buffer.toString('base64') };
+                return response;
+            }
+
+            throw "Unexpected response from Chub API received.";
         } catch (e) {
             const response = status_failure_chubai_get;
             response.content = e;

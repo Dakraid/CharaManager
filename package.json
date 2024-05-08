@@ -20,6 +20,7 @@
         "@formkit/auto-animate": "^0.8.2",
         "@nuxt/image": "^1.7.0",
         "@pinia/nuxt": "^0.5.1",
+        "@radix-icons/vue": "^1.0.0",
         "@unovis/ts": "^1.4.0",
         "@unovis/vue": "^1.4.0",
         "@vee-validate/zod": "^4.12.7",
