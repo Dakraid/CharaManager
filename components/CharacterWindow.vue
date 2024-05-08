@@ -41,7 +41,6 @@ const processCharacterDetails = async () => {
         try {
             const parsed = JSON.parse(response.content.json);
             characterData.value = Cards.parseToV2(parsed);
-            characterDump.value = JSON.stringify(parsed.data);
         } catch (e) {
             console.error(e);
         }
@@ -58,32 +57,114 @@ await processCharacterDetails();
 </script>
 
 <template>
-    <Card v-if="characterData" class="flex flex-col flex-grow items-center h-full w-full p-2">
+    <Card v-if="characterData" class="flex flex-col flex-1 items-center p-2">
         <Button variant="outline" size="icon" class="absolute right-20" @click="closeCharacterWindow">
             <Icon name="radix-icons:cross-1" class="w-4 h-4" />
         </Button>
         <CardHeader class="flex flex-col p-2 w-full">
             <CardTitle class="font-bold text-4xl">{{ characterData.data.name }}</CardTitle>
-            <CardDescription
-                >Filename: {{ characterInstance?.file_name }} | Last Modified at {{ characterInstance?.formatted_timestamp }} | Created by {{ characterData.data.creator }}</CardDescription
-            >
+            <CardDescription> </CardDescription>
         </CardHeader>
         <CardContent class="p-2 w-full">
             <div class="flex flex-row gap-2 w-full h-full">
                 <img :key="characterInstance?.file_name" :alt="characterInstance?.file_name" :src="characterInstance?.image_content" class="character-card-large rounded-2xl" />
-                <div class="flex flex-col gap-2 w-full h-full">
-                    <Label for="description">Description</Label>
-                    <Textarea id="description" v-model="characterData.data.description" class="flex-grow w-full h-full" />
-                    <Label for="first_message">First Message</Label>
-                    <Textarea id="first_message" v-model="characterData.data.first_mes" class="flex-grow w-full h-full" />
-                </div>
+                <Tabs default-value="general" class="w-full">
+                    <TabsList class="w-full flex justify-around">
+                        <TabsTrigger class="flex-grow" value="general"> General </TabsTrigger>
+                        <TabsTrigger class="flex-grow" value="alternatives"> Alternative Greetings </TabsTrigger>
+                        <TabsTrigger class="flex-grow" value="examples"> Message Examples </TabsTrigger>
+                        <TabsTrigger class="flex-grow" value="prompts"> Prompt Overrides </TabsTrigger>
+                        <TabsTrigger class="flex-grow" value="creator"> Creator Metadata </TabsTrigger>
+                        <TabsTrigger
+                            class="flex-grow"
+                            value="json"
+                            @click="
+                                () => {
+                                    characterDump = JSON.stringify(characterData.data);
+                                }
+                            ">
+                            JSON Dump
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent class="h-full" value="general">
+                        <div class="flex tab-content-character flex-col gap-2">
+                            <div class="flex flex-col gap-2 flex-1">
+                                <Label for="description">Description</Label>
+                                <Textarea id="description" v-model="characterData.data.description" class="flex-grow" />
+                            </div>
+                            <div class="flex flex-col gap-2 flex-1">
+                                <Label for="first_message">First Message</Label>
+                                <Textarea id="first_message" v-model="characterData.data.first_mes" class="flex-grow" />
+                            </div>
+                            <div class="flex flex-col gap-2 flex-1">
+                                <Label for="personality">Personality</Label>
+                                <Textarea id="personality" v-model="characterData.data.personality" class="flex-grow" />
+                            </div>
+                            <div class="flex flex-col gap-2 flex-1">
+                                <Label for="scenario">Scenario</Label>
+                                <Textarea id="scenario" v-model="characterData.data.scenario" class="flex-grow" />
+                            </div>
+                        </div>
+                    </TabsContent>
+                    <TabsContent class="h-full" value="alternatives">
+                        <div class="flex tab-content-character flex-col gap-2">
+                            <span class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Alt Messages</span>
+                            <div v-for="(item, index) in characterData.data.alternate_greetings" :key="item" class="flex-grow">
+                                <Textarea v-model="characterData.data.alternate_greetings[index]" class="h-full" />
+                            </div>
+                        </div>
+                    </TabsContent>
+                    <TabsContent class="h-full" value="examples">
+                        <div class="flex tab-content-character flex-col gap-2">
+                            <div class="flex flex-col gap-2 flex-1">
+                                <Label for="examples">Message Examples</Label>
+                                <Textarea id="examples" v-model="characterData.data.mes_example" class="flex-grow" />
+                            </div>
+                        </div>
+                    </TabsContent>
+                    <TabsContent class="h-full" value="prompts">
+                        <div class="flex tab-content-character flex-col gap-2">
+                            <div class="flex flex-col gap-2 flex-1">
+                                <Label for="system_prompt">System Prompt</Label>
+                                <Textarea id="system_prompt" v-model="characterData.data.system_prompt" class="flex-grow" />
+                            </div>
+                            <div class="flex flex-col gap-2 flex-1">
+                                <Label for="post_history_instructions">Jailbreak</Label>
+                                <Textarea id="post_history_instructions" v-model="characterData.data.post_history_instructions" class="flex-grow" />
+                            </div>
+                        </div>
+                    </TabsContent>
+                    <TabsContent class="h-full" value="creator">
+                        <div class="flex tab-content-character flex-col gap-2">
+                            <div class="flex flex-col gap-2 flex-1">
+                                <Label for="creator">Creator</Label>
+                                <Textarea id="creator" v-model="characterData.data.creator" class="flex-grow" />
+                            </div>
+                            <div class="flex flex-col gap-2 flex-1">
+                                <Label for="creator_notes">Creator Notes</Label>
+                                <Textarea id="creator_notes" v-model="characterData.data.creator_notes" class="flex-grow" />
+                            </div>
+                            <div class="flex flex-col gap-2 flex-1">
+                                <Label for="character_version">Character Version</Label>
+                                <Textarea id="character_version" v-model="characterData.data.character_version" class="flex-grow" />
+                            </div>
+                            <div class="flex flex-col gap-2 flex-1">
+                                <Label for="character_version">Tags</Label>
+                                <Textarea id="character_version" v-model="characterData.data.tags" class="flex-grow" />
+                            </div>
+                        </div>
+                    </TabsContent>
+                    <TabsContent class="h-full" value="json">
+                        <div class="flex tab-content-character flex-col gap-2">
+                            <Label for="dump">JSON Dump</Label>
+                            <Textarea id="dump" v-model="characterDump" class="flex-grow w-full h-full" />
+                        </div>
+                    </TabsContent>
+                </Tabs>
             </div>
         </CardContent>
-        <CardFooter class="p-2 w-full h-full">
-            <div class="flex flex-col gap-2 w-full h-full">
-                <Label for="dump">Dump</Label>
-                <Textarea id="dump" v-model="characterDump" class="flex-grow w-full h-full" />
-            </div>
+        <CardFooter class="flex justify-end w-full p-2 text-sm text-muted-foreground">
+            Filename: {{ characterInstance?.file_name }} | Last Modified at {{ characterInstance?.formatted_timestamp }}
         </CardFooter>
     </Card>
 </template>

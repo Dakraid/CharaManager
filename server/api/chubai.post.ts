@@ -2,7 +2,7 @@
 
 import type { ChubAiGetRequest } from '~/models/ChubAiGetRequest';
 import { status_failure_chubai_get, status_success_chubai_get } from '~/models/StatusResponses';
-import * as fs from "node:fs";
+import * as fs from 'node:fs';
 
 export default defineEventHandler(async (event) => {
     const body = await readBody<ChubAiGetRequest>(event);
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
                 return response;
             }
 
-            throw "Unexpected response from Chub API received.";
+            throw 'Unexpected response from Chub API received.';
         } catch (e) {
             const response = status_failure_chubai_get;
             response.content = e;
