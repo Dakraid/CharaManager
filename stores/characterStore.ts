@@ -1,7 +1,7 @@
-import type { CharactersGetRequest } from '~/models/CharactersGetRequest';
-import type { StatusResponse } from '~/models/StatusResponse';
-import type { Character } from '~/models/Character';
-import type { CharactersDeleteRequest } from '~/models/CharactersDeleteRequest';
+import type {CharactersGetRequest} from '~/models/CharactersGetRequest';
+import type {StatusResponse} from '~/models/StatusResponse';
+import type {Character} from '~/models/Character';
+import type {CharactersDeleteRequest} from '~/models/CharactersDeleteRequest';
 
 async function getCharacterCount() {
     const response: StatusResponse = await $fetch('/api/count', {
@@ -39,6 +39,13 @@ async function getCharacters(options: CharactersGetRequest) {
     return characters;
 }
 
+async function getCharacter(id: number) {
+    return await $fetch('/api/character', {
+        method: 'POST',
+        body: {id: id},
+    });
+}
+
 async function deleteCharacter(options: CharactersDeleteRequest) {
     return await $fetch('/api/characters', {
         method: 'DELETE',
@@ -74,7 +81,7 @@ export const useCharacterStore = defineStore('characters', {
             return response;
         },
         async getCharacterById(id: number) {
-            return this.characterList.find((e) => e.id === id);
+            return (await getCharacter(id)) as Character;
         },
     },
 });
