@@ -10,8 +10,8 @@ import { like } from 'drizzle-orm';
 import { Character } from '~/models/Character';
 import { status_success_characters_uploaded, status_success_characters_uploaded_withConflict } from '~/models/StatusResponses';
 import cleanCharacterBook from '~/server/utils/cleanCharacterBook';
-import convertBase64PNGToString from "~/server/utils/convertBase64PNGToString";
-import * as Cards from "character-card-utils";
+import convertBase64PNGToString from '~/server/utils/convertBase64PNGToString';
+import * as Cards from 'character-card-utils';
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
@@ -38,14 +38,10 @@ export default defineEventHandler(async (event) => {
         if (!content.data) {
             const converted = Cards.v1ToV2(content);
             newChar.image_content = convertStringToBase64PNG(file.content, JSON.stringify(converted));
-            console.log("Updated character from v1 to v2: " + file.name);
+            console.log('Updated character from v1 to v2: ' + file.name);
         }
 
-        const result = await drizzleDb
-            .insert(characterCards)
-            .values(newChar)
-            .returning({ id: characterCards.id })
-            .onConflictDoNothing();
+        const result = await drizzleDb.insert(characterCards).values(newChar).returning({ id: characterCards.id }).onConflictDoNothing();
 
         newChar.id = result[0].id;
         await $fetch('/api/character-details', {

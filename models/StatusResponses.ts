@@ -3,36 +3,36 @@ import type { StatusResponse } from '~/models/StatusResponse';
 // Character count related responses
 export const status_success_characters_count: StatusResponse = {
     status: 200,
-    message: ''
+    message: '',
 };
 
 // Database related responses
 export const status_success_database_connected: StatusResponse = {
     status: 200,
-    message: 'Database connected.'
+    message: 'Database connected.',
 };
 export const status_success_database_synced: StatusResponse = {
     status: 200,
-    message: 'Database synchronized.'
+    message: 'Database synchronized.',
 };
 export const status_success_database_updated: StatusResponse = {
     status: 200,
     message: 'Database updated.',
-    content: undefined
+    content: undefined,
 };
 
 // Character upload related responses
 export const status_success_characters_uploaded: StatusResponse = {
     status: 201,
-    message: 'All uploads successful.'
+    message: 'All uploads successful.',
 };
 export const status_success_characters_uploaded_withConflict: StatusResponse = {
     status: 200,
-    message: ''
+    message: '',
 };
 export const status_success_characters_deleted: StatusResponse = {
     status: 200,
-    message: 'Character deleted.'
+    message: 'Character deleted.',
 };
 export const status_success_characters_all_deleted: StatusResponse = {
     status: 200,
@@ -53,13 +53,14 @@ export const status_success_characters_get: StatusResponse = {
 
 export const status_failure_characters_get: StatusResponse = {
     status: 400,
-    message: 'No characters found.'
+    message: 'No characters found.',
 };
 
 export const status_success_character_get: StatusResponse = {
     status: 200,
     message: 'Character delivered.',
-    content: undefined };
+    content: undefined,
+};
 
 // Character update related responses
 export const status_success_character_updated: StatusResponse = {
@@ -76,5 +77,5 @@ export const status_success_chubai_get: StatusResponse = {
 export const status_failure_chubai_get: StatusResponse = {
     status: 400,
     message: 'Failed to download character.',
-    content: undefined
+    content: undefined,
 };

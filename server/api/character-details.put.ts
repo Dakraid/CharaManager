@@ -7,7 +7,7 @@ import { createHash } from 'node:crypto';
 import { characterDefinitions } from '~/utils/drizzle/schema';
 import type { Character } from '~/models/Character';
 import cleanCharacterBook from '~/server/utils/cleanCharacterBook';
-import convertBase64PNGToString from "~/server/utils/convertBase64PNGToString";
+import convertBase64PNGToString from '~/server/utils/convertBase64PNGToString';
 
 export default defineEventHandler(async (event) => {
     const body = await readBody<Character>(event);

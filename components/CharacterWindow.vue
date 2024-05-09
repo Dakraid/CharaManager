@@ -5,8 +5,8 @@ import type { Character } from '~/models/Character';
 import * as Cards from 'character-card-utils';
 import { useApplicationStore } from '~/stores/applicationStore';
 import { useToast } from '~/components/ui/toast';
-import type {CharacterUpdateRequest} from "~/models/CharacterUpdateRequest";
-import {Button} from "~/components/ui/button";
+import type { CharacterUpdateRequest } from '~/models/CharacterUpdateRequest';
+import { Button } from '~/components/ui/button';
 
 const { toast } = useToast();
 
@@ -52,7 +52,7 @@ const processCharacterDetails = async () => {
 };
 
 const saveCharacter = async () => {
-    const request: CharacterUpdateRequest = {character: <Character>characterInstance.value, newContent: JSON.stringify(characterData.value)};
+    const request: CharacterUpdateRequest = { character: <Character>characterInstance.value, newContent: JSON.stringify(characterData.value) };
     const response: StatusResponse = await $fetch('/api/character', {
         method: 'PATCH',
         body: request,
@@ -63,7 +63,7 @@ const saveCharacter = async () => {
             title: 'Successfully saved character',
         });
     }
-}
+};
 
 const closeCharacterWindow = async () => {
     applicationStore.showCharacterWindow = false;
@@ -175,7 +175,7 @@ await processCharacterDetails();
                     <TabsContent class="h-full" value="json">
                         <div class="flex tab-content-character flex-col gap-2">
                             <Label for="dump">JSON Dump</Label>
-                            <Textarea id="dump" v-model="characterDump" class="flex-grow w-full h-full" disabled="disabled"/>
+                            <Textarea id="dump" v-model="characterDump" class="flex-grow w-full h-full" disabled="disabled" />
                         </div>
                     </TabsContent>
                 </Tabs>

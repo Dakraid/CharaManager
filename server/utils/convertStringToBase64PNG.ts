@@ -1,7 +1,7 @@
-import extractChunks from "png-chunks-extract";
-import b64EncodeUnicode from "~/server/utils/b64EncodeUnicode";
-import * as pngText from "png-chunk-text";
-import encode from "png-chunks-encode";
+import extractChunks from 'png-chunks-extract';
+import b64EncodeUnicode from '~/server/utils/b64EncodeUnicode';
+import * as pngText from 'png-chunk-text';
+import encode from 'png-chunks-encode';
 
 export default function convertStringToBase64PNG(image: string, newContent: string) {
     const contentArray = Buffer.from(image.split('base64,')[1], 'base64');
