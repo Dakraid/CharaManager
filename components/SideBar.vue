@@ -5,6 +5,7 @@ import type { FileUpload } from '~/models/FileUpload';
 import { useCharacterStore } from '~/stores/characterStore';
 import { useApplicationStore } from '~/stores/applicationStore';
 import type { StatusResponse } from '~/models/StatusResponse';
+import type { Character } from '~/models/Character';
 
 const emit = defineEmits(['update-characters']);
 
@@ -40,7 +41,7 @@ const onFileChange = async (e: any) => {
 const uploadFiles = async () => {
     if (files.value.length === 0) {
         toast({
-            title: 'No images selected.',
+            title: 'No images selected',
             description: 'Please select images before trying to upload.',
             variant: 'destructive',
         });
@@ -86,7 +87,7 @@ const synchronizeDatabase = async () => {
 
     if (response.status === 200) {
         toast({
-            title: 'Database synchronized successfully.',
+            title: 'Database synchronized successfully',
             description: 'All character definitions are now synchronized.',
         });
     }
@@ -157,6 +158,24 @@ const clearChubAiCharacter = async () => {
     characterUrl.value = '';
     fetchedCharacter.value = undefined;
 };
+
+const debugTest = async () => {
+    const response: StatusResponse = await $fetch('/api/database-update', {
+        method: 'POST',
+    });
+
+    if (response.status === 200) {
+        toast({
+            title: 'Database updated',
+            description: response.content,
+        });
+    } else {
+        toast({
+            title: 'Failed to updated database',
+            description: response.content,
+        });
+    }
+};
 </script>
 
 <template>
@@ -190,6 +209,12 @@ const clearChubAiCharacter = async () => {
                 </div>
                 <Separator />
                 <div class="h-full" />
+                <Separator />
+                <Label class="text-1xl" for="update-database">Update Database</Label>
+                <Button id="update-database" type="submit" variant="outline" @click="debugTest">
+                    <span class="sr-only">Update Database</span>
+                    <Icon class="h-6 w-6" name="radix-icons:timer" />
+                </Button>
                 <Separator />
                 <Label class="text-1xl" for="sync-database">Synchronize Database</Label>
                 <Button id="sync-database" type="submit" variant="outline" @click="synchronizeDatabase">

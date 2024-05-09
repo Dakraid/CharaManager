@@ -28,6 +28,14 @@ applicationStore.$subscribe(updateApplication);
 const getCharacters = async () => {
     await characterStore.loadCharacters();
 };
+
+if (!applicationStore.provisioned) {
+    await $fetch('/api/database-provision', {
+        method: 'POST',
+    });
+
+    applicationStore.provisioned = true;
+}
 </script>
 
 <template>

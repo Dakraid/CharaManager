@@ -5,6 +5,8 @@ import type { Character } from '~/models/Character';
 import * as Cards from 'character-card-utils';
 import { useApplicationStore } from '~/stores/applicationStore';
 import { useToast } from '~/components/ui/toast';
+import type {CharacterUpdateRequest} from "~/models/CharacterUpdateRequest";
+import {Button} from "~/components/ui/button";
 
 const { toast } = useToast();
 
@@ -33,19 +35,35 @@ const processCharacterDetails = async () => {
 
     if (!response.content || response.status !== 200) {
         toast({
-            title: 'Could not retrieve character data.',
+            title: 'Could not retrieve character data',
             description: 'The character data seems to be corrupted, remove the character and re-download it.',
             variant: 'destructive',
         });
     } else {
         try {
-            const parsed = JSON.parse(response.content.json);
+            const parsed = JSON.parse(JSON.parse(response.content.json));
             characterData.value = Cards.parseToV2(parsed);
         } catch (e) {
             console.error(e);
+            applicationStore.showCharacterWindow = false;
+            applicationStore.characterInstance = undefined;
         }
     }
 };
+
+const saveCharacter = async () => {
+    const request: CharacterUpdateRequest = {character: <Character>characterInstance.value, newContent: JSON.stringify(characterData.value)};
+    const response: StatusResponse = await $fetch('/api/character', {
+        method: 'PATCH',
+        body: request,
+    });
+
+    if (response.status === 200) {
+        toast({
+            title: 'Successfully saved character',
+        });
+    }
+}
 
 const closeCharacterWindow = async () => {
     applicationStore.showCharacterWindow = false;
@@ -157,14 +175,18 @@ await processCharacterDetails();
                     <TabsContent class="h-full" value="json">
                         <div class="flex tab-content-character flex-col gap-2">
                             <Label for="dump">JSON Dump</Label>
-                            <Textarea id="dump" v-model="characterDump" class="flex-grow w-full h-full" />
+                            <Textarea id="dump" v-model="characterDump" class="flex-grow w-full h-full" disabled="disabled"/>
                         </div>
                     </TabsContent>
                 </Tabs>
             </div>
         </CardContent>
-        <CardFooter class="flex justify-end w-full p-2 text-sm text-muted-foreground">
-            Filename: {{ characterInstance?.file_name }} | Last Modified at {{ characterInstance?.formatted_timestamp }}
+        <CardFooter class="flex justify-between w-full p-2">
+            <span class="text-sm text-muted-foreground">Filename: {{ characterInstance?.file_name }} | Last Modified at {{ characterInstance?.formatted_timestamp }}</span>
+            <Button id="save" type="submit" variant="secondary" @click="saveCharacter">
+                <span class="sr-only">Save</span>
+                <Icon class="h-6 w-6" name="radix-icons:paper-plane" />
+            </Button>
         </CardFooter>
     </Card>
 </template>

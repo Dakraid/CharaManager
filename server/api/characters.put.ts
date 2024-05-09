@@ -9,6 +9,9 @@ import { characterCards } from '~/utils/drizzle/schema';
 import { like } from 'drizzle-orm';
 import { Character } from '~/models/Character';
 import { status_success_characters_uploaded, status_success_characters_uploaded_withConflict } from '~/models/StatusResponses';
+import cleanCharacterBook from '~/server/utils/cleanCharacterBook';
+import convertBase64PNGToString from "~/server/utils/convertBase64PNGToString";
+import * as Cards from "character-card-utils";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
@@ -31,16 +34,16 @@ export default defineEventHandler(async (event) => {
         const timestamp = file.lastModified ? file.lastModified : dayjs().unix();
         const newChar = new Character(hash, timestamp + '_' + file.name, file.name, timestamp, dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'), file.content);
 
+        const content = JSON.parse(convertBase64PNGToString(file.content));
+        if (!content.data) {
+            const converted = Cards.v1ToV2(content);
+            newChar.image_content = convertStringToBase64PNG(file.content, JSON.stringify(converted));
+            console.log("Updated character from v1 to v2: " + file.name);
+        }
+
         const result = await drizzleDb
             .insert(characterCards)
-            .values({
-                hash: newChar.hash,
-                fullName: newChar.full_name,
-                fileName: newChar.file_name,
-                timestamp: newChar.timestamp,
-                formattedTimestamp: newChar.formatted_timestamp,
-                imageContent: newChar.image_content,
-            })
+            .values(newChar)
             .returning({ id: characterCards.id })
             .onConflictDoNothing();
 

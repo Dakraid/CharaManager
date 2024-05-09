@@ -4,8 +4,9 @@
     "type": "module",
     "license": "AGPL-3.0-NC",
     "scripts": {
-        "run": "yarn build && node .output/server/index.mjs",
+        "run": "node .output/server/index.mjs",
         "build": "nuxt build",
+        "buildRun": "yarn build && yarn run",
         "analyze": "nuxt build --analyze",
         "dev": "nuxt dev",
         "generate": "nuxt generate",

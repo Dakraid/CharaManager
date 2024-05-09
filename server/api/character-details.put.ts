@@ -7,6 +7,7 @@ import { createHash } from 'node:crypto';
 import { characterDefinitions } from '~/utils/drizzle/schema';
 import type { Character } from '~/models/Character';
 import cleanCharacterBook from '~/server/utils/cleanCharacterBook';
+import convertBase64PNGToString from "~/server/utils/convertBase64PNGToString";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody<Character>(event);
@@ -18,8 +19,7 @@ export default defineEventHandler(async (event) => {
     const drizzleDb = drizzle(db);
 
     try {
-        const contentArray = await base64ToArrayBuffer(body.image_content.split('base64,')[1]);
-        const contentString = await convertUint8ArrayToString(contentArray);
+        const contentString = convertBase64PNGToString(body.image_content);
         const content = await cleanCharacterBook(contentString);
         const hash = createHash('sha256').update(content).digest('hex');
         await drizzleDb

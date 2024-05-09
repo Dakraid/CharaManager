@@ -13,22 +13,16 @@ export default defineEventHandler(async (_) => {
     const db = createDatabase(sqlite({ name: 'CharaManager' }));
     const drizzleDb = drizzle(db);
 
-    const characters = await drizzleDb.select({ id: characterCards.id, image_content: characterCards.imageContent }).from(characterCards).all();
+    const characters = await drizzleDb.select({ id: characterCards.id, image_content: characterCards.image_content }).from(characterCards).all();
     for (const character of characters) {
         try {
-            const contentArray = await base64ToArrayBuffer(character.image_content.split('base64,')[1]);
-            let contentString = await convertUint8ArrayToString(contentArray);
-            const contentJson = JSON.parse(contentString);
-            if (contentJson.spec === undefined) {
-                const converted = Cards.v1ToV2(contentJson);
-                contentString = JSON.stringify(converted);
-            }
-            const content = await cleanCharacterBook(contentString);
-            const hash = createHash('sha256').update(content).digest('hex');
+            const contentString = convertBase64PNGToString(character.image_content);
+            const contentJson = await cleanCharacterBook(contentString);
+            const hash = createHash('sha256').update(contentJson).digest('hex');
             await drizzleDb
                 .insert(characterDefinitions)
-                .values({ id: character.id, hash: hash, json: content })
-                .onConflictDoUpdate({ target: characterDefinitions.id, set: { hash: hash, json: content } });
+                .values({ id: character.id, hash: hash, json: contentJson })
+                .onConflictDoUpdate({ target: characterDefinitions.id, set: { hash: hash, json: contentJson } });
             console.log('Added definition for character with ID ' + character.id);
         } catch (e) {
             console.error('Failed to insert character with ID ' + character.id + ' into definition table: ' + e);

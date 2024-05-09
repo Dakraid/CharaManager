@@ -1,28 +1,28 @@
-import extractChunks from 'png-chunks-extract';
-import { decode } from 'png-chunk-text';
+import extractChunks from "png-chunks-extract";
+import * as pngText from "png-chunk-text";
+import b64DecodeUnicode from "~/server/utils/b64DecodeUnicode";
 
-export default async function convertUint8ArrayToString(image: Uint8Array) {
-    const chunks = extractChunks(image);
+export default function convertBase64PNGToString(image: string) {
+    const contentArray = Buffer.from(image.split('base64,')[1], 'base64');
+    const chunks = extractChunks(contentArray);
 
     const textChunks = chunks
         .filter(function (chunk) {
             return chunk.name === 'tEXt';
         })
         .map(function (chunk) {
-            return decode(chunk.data);
+            return pngText.decode(chunk.data);
         });
 
     if (textChunks.length === 0) {
         console.error('PNG metadata does not contain any text chunks.');
-        throw new Error('No PNG metadata.');
     }
 
     const index = textChunks.findIndex((chunk) => chunk.keyword.toLowerCase() == 'chara');
 
     if (index === -1) {
         console.error('PNG metadata does not contain any character data.');
-        throw new Error('No PNG metadata.');
     }
 
-    return atob(textChunks[index].text);
+    return b64DecodeUnicode(textChunks[index].text);
 }

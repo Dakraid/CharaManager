@@ -54,7 +54,7 @@ const downloadCharacter = async (id: number) => {
     const character = await characterStore.getCharacterById(id);
     if (character === undefined || character.image_content === undefined) {
         toast({
-            title: 'Failed to download image.',
+            title: 'Failed to download image',
             variant: 'destructive',
         });
         return;

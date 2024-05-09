@@ -1,16 +1,6 @@
 <script lang="ts" setup>
 import '~/assets/css/style.css';
 import { Toaster } from '~/components/ui/toast';
-
-const applicationStore = useApplicationStore();
-
-if (!applicationStore.provisioned) {
-    await $fetch('/api/database-provision', {
-        method: 'POST',
-    });
-
-    applicationStore.provisioned = true;
-}
 </script>
 
 <template>
