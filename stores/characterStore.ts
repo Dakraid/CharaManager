@@ -1,7 +1,7 @@
-import type {CharactersGetRequest} from '~/models/CharactersGetRequest';
-import type {StatusResponse} from '~/models/StatusResponse';
-import type {Character} from '~/models/Character';
-import type {CharactersDeleteRequest} from '~/models/CharactersDeleteRequest';
+import type { CharactersGetRequest } from '~/models/CharactersGetRequest';
+import type { StatusResponse } from '~/models/StatusResponse';
+import type { Character } from '~/models/Character';
+import type { CharactersDeleteRequest } from '~/models/CharactersDeleteRequest';
 
 async function getCharacterCount() {
     const response: StatusResponse = await $fetch('/api/count', {
@@ -42,7 +42,7 @@ async function getCharacters(options: CharactersGetRequest) {
 async function getCharacter(id: number) {
     return await $fetch('/api/character', {
         method: 'POST',
-        body: {id: id},
+        body: { id: id },
     });
 }
 
@@ -65,7 +65,10 @@ export const useCharacterStore = defineStore('characters', {
         async updateCharacterCount() {
             this.characterCount = await getCharacterCount();
         },
-        async loadCharacters() {
+        async getCharacterById(id: number) {
+            return (await getCharacter(id)) as Character;
+        },
+        async getCharacters() {
             const applicationStore = useApplicationStore();
             applicationStore.processing = true;
             this.characterCount = await getCharacterCount();
@@ -76,12 +79,9 @@ export const useCharacterStore = defineStore('characters', {
             const applicationStore = useApplicationStore();
             applicationStore.processing = true;
             const response = await deleteCharacter(applicationStore.deleteOptions);
-            await this.loadCharacters();
+            await this.getCharacters();
             applicationStore.processing = false;
             return response;
-        },
-        async getCharacterById(id: number) {
-            return (await getCharacter(id)) as Character;
         },
     },
 });

@@ -212,13 +212,13 @@ const debugTest = async () => {
                 <Separator />
                 <Label class="text-1xl" for="update-database">Update Database</Label>
                 <Button id="update-database" type="submit" variant="outline" @click="debugTest">
-                    <span class="sr-only">Update Database</span>
+                    <span class="sr-only">Update all v1 to v2</span>
                     <Icon class="h-6 w-6" name="radix-icons:timer" />
                 </Button>
                 <Separator />
                 <Label class="text-1xl" for="sync-database">Synchronize Database</Label>
                 <Button id="sync-database" type="submit" variant="outline" @click="synchronizeDatabase">
-                    <span class="sr-only">Synchronize Database</span>
+                    <span class="sr-only">Synchronize Definitions</span>
                     <Icon class="h-6 w-6" name="radix-icons:symbol" />
                 </Button>
                 <Label class="text-1xl" for="delete-files">Delete All Files</Label>

@@ -26,7 +26,7 @@ const updateApplication = async () => {
 applicationStore.$subscribe(updateApplication);
 
 const getCharacters = async () => {
-    await characterStore.loadCharacters();
+    await characterStore.getCharacters();
 };
 
 if (!applicationStore.provisioned) {

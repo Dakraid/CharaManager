@@ -51,6 +51,12 @@ const processCharacterDetails = async () => {
     }
 };
 
+const counter = ref(0);
+
+const addGreeting = async () => {
+    characterData.value.data.alternate_greetings.push('');
+};
+
 const saveCharacter = async () => {
     const request: CharacterUpdateRequest = { character: <Character>characterInstance.value, newContent: JSON.stringify(characterData.value) };
     const response: StatusResponse = await $fetch('/api/character', {
@@ -98,7 +104,7 @@ await processCharacterDetails();
                             value="json"
                             @click="
                                 () => {
-                                    characterDump = JSON.stringify(characterData.data);
+                                    characterDump = JSON.stringify(characterData.data, null, 4);
                                 }
                             ">
                             JSON Dump
@@ -126,7 +132,13 @@ await processCharacterDetails();
                     </TabsContent>
                     <TabsContent class="h-full" value="alternatives">
                         <div class="flex tab-content-character flex-col gap-2">
-                            <span class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Alt Messages</span>
+                            <div class="flex justify-between items-end">
+                                <span class="text-sm font-medium align-text-bottom leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Alt Messages</span>
+                                <Button id="save" type="submit" variant="secondary" @click="addGreeting">
+                                    <span class="sr-only">Add Greeting</span>
+                                    <Icon class="h-6 w-6" name="radix-icons:plus" />
+                                </Button>
+                            </div>
                             <div v-for="(item, index) in characterData.data.alternate_greetings" :key="item" class="flex-grow">
                                 <Textarea v-model="characterData.data.alternate_greetings[index]" class="h-full" />
                             </div>
