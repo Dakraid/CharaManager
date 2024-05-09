@@ -52,13 +52,6 @@ const deleteCharacter = async (id: number = -1, purge: boolean = false) => {
 
 const downloadCharacter = async (id: number) => {
     const character = await characterStore.getCharacterById(id);
-    if (character === undefined || character.image_content === undefined) {
-        toast({
-            title: 'Failed to download image',
-            variant: 'destructive',
-        });
-        return;
-    }
     const anchor = document.createElement('a');
     anchor.href = character.image_content;
     anchor.download = character.file_name ?? 'Character.png';
