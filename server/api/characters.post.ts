@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
                 characters = await drizzleDb
                     .select()
                     .from(characterCards)
-                    .orderBy(asc(characterCards.fileName))
+                    .orderBy(asc(characterCards.file_name))
                     .offset(body.count * (body.page - 1))
                     .limit(body.count);
                 break;
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
                 characters = await drizzleDb
                     .select()
                     .from(characterCards)
-                    .orderBy(desc(characterCards.fileName))
+                    .orderBy(desc(characterCards.file_name))
                     .offset(body.count * (body.page - 1))
                     .limit(body.count);
                 break;
@@ -67,17 +67,17 @@ export default defineEventHandler(async (event) => {
                     .from(characterCards)
                     .offset(body.count * (body.page - 1))
                     .limit(body.count)
-                    .orderBy(asc(characterCards.fileName))
-                    .where(like(characterCards.fileName, '%' + body.filter + '%'));
+                    .orderBy(asc(characterCards.file_name))
+                    .where(like(characterCards.file_name, '%' + body.filter + '%'));
                 break;
             case 'alph_desc':
                 characters = await drizzleDb
                     .select()
                     .from(characterCards)
-                    .orderBy(desc(characterCards.fileName))
+                    .orderBy(desc(characterCards.file_name))
                     .offset(body.count * (body.page - 1))
                     .limit(body.count)
-                    .where(like(characterCards.fileName, '%' + body.filter + '%'));
+                    .where(like(characterCards.file_name, '%' + body.filter + '%'));
                 break;
             case 'time_asc':
                 characters = await drizzleDb
@@ -86,7 +86,7 @@ export default defineEventHandler(async (event) => {
                     .orderBy(asc(characterCards.timestamp))
                     .offset(body.count * (body.page - 1))
                     .limit(body.count)
-                    .where(like(characterCards.fileName, '%' + body.filter + '%'));
+                    .where(like(characterCards.file_name, '%' + body.filter + '%'));
                 break;
             case 'time_desc':
                 characters = await drizzleDb
@@ -95,7 +95,7 @@ export default defineEventHandler(async (event) => {
                     .orderBy(desc(characterCards.timestamp))
                     .offset(body.count * (body.page - 1))
                     .limit(body.count)
-                    .where(like(characterCards.fileName, '%' + body.filter + '%'));
+                    .where(like(characterCards.file_name, '%' + body.filter + '%'));
                 break;
         }
     }

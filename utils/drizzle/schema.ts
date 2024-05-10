@@ -12,6 +12,7 @@ export const characterCards = sqliteTable("character_cards", {
 	timestamp: integer("timestamp").notNull(),
 	formatted_timestamp: text("formatted_timestamp").notNull(),
 	image_content: text("image_content").notNull(),
+    rating: integer("rating").default(0).notNull(),
 });
 
 export const characterDefinitions = sqliteTable("character_definitions", {

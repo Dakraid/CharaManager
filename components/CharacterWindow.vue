@@ -58,7 +58,7 @@ const addGreeting = async () => {
 };
 
 const saveCharacter = async () => {
-    const request: CharacterUpdateRequest = { character: <Character>characterInstance.value, newContent: JSON.stringify(characterData.value) };
+    const request: CharacterUpdateRequest = { character: <Character>characterInstance.value, newContent: JSON.stringify(characterData.value), ratingOnly: false };
     const response: StatusResponse = await $fetch('/api/character', {
         method: 'PATCH',
         body: request,
@@ -166,7 +166,7 @@ await processCharacterDetails();
                     </TabsContent>
                     <TabsContent class="h-full" value="creator">
                         <div class="flex tab-content-character flex-col gap-2">
-                            <div class="flex flex-col gap-2 flex-1">
+                            <div class="flex flex-col gap-2">
                                 <Label for="creator">Creator</Label>
                                 <Textarea id="creator" v-model="characterData.data.creator" class="flex-grow" />
                             </div>
@@ -174,13 +174,19 @@ await processCharacterDetails();
                                 <Label for="creator_notes">Creator Notes</Label>
                                 <Textarea id="creator_notes" v-model="characterData.data.creator_notes" class="flex-grow" />
                             </div>
-                            <div class="flex flex-col gap-2 flex-1">
+                            <div class="flex flex-col gap-2">
                                 <Label for="character_version">Character Version</Label>
                                 <Textarea id="character_version" v-model="characterData.data.character_version" class="flex-grow" />
                             </div>
-                            <div class="flex flex-col gap-2 flex-1">
-                                <Label for="character_version">Tags</Label>
-                                <Textarea id="character_version" v-model="characterData.data.tags" class="flex-grow" />
+                            <div class="flex flex-col gap-2">
+                                <Label>Tags</Label>
+                                <TagsInput v-model="characterData.data.tags" class="flex-grow">
+                                    <TagsInputItem v-for="item in characterData.data.tags" :key="item" :value="item">
+                                        <TagsInputItemText />
+                                        <TagsInputItemDelete />
+                                    </TagsInputItem>
+                                    <TagsInputInput placeholder="Add Tag..." />
+                                </TagsInput>
                             </div>
                         </div>
                     </TabsContent>
@@ -203,4 +209,14 @@ await processCharacterDetails();
     </Card>
 </template>
 
-<style scoped></style>
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+}
+</style>

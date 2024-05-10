@@ -14,10 +14,19 @@ export default defineEventHandler(async (event) => {
         return null;
     }
 
-    const update = convertStringToBase64PNG(body.character.image_content, body.newContent);
-
     const db = createDatabase(sqlite({ name: 'CharaManager' }));
     const drizzleDb = drizzle(db);
+
+    if (body.ratingOnly) {
+        await drizzleDb
+            .update(characterCards)
+            .set({ rating: body.character.rating })
+            .where(eq(characterCards.id, <number>body.character.id));
+
+        return status_success_character_updated;
+    }
+
+    const update = convertStringToBase64PNG(body.character.image_content, body.newContent);
 
     const updatedCharacter = await drizzleDb
         .update(characterCards)

@@ -32,6 +32,7 @@ async function getCharacters(options: CharactersGetRequest) {
                 timestamp: character.timestamp,
                 formatted_timestamp: character.formatted_timestamp,
                 image_content: character.image_content,
+                rating: character.rating,
             });
         }
     }

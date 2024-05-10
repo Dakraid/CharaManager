@@ -39,6 +39,7 @@
         "json-diff-ts": "^4.0.1",
         "lodash": "^4.17.21",
         "nuxt": "^3.11.2",
+        "nuxt-rating": "^0.0.15",
         "p-debounce": "^4.0.0",
         "png-chunk-text": "^1.0.0",
         "png-chunks-encode": "^1.0.0",

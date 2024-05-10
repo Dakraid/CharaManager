@@ -45,7 +45,9 @@ if (!applicationStore.provisioned) {
             <ControlBar @update-characters="getCharacters" />
             <ScrollArea id="scrollArea" class="w-full h-full overflow-y-hidden rounded-md border p-4 pr-6">
                 <Transition>
-                    <div v-if="showCharacterWindow" class="absolute backdrop-blur bg-background/80 transition-all w-full h-full inset-0 z-10 p-16 rounded-md flex flex-1 justify-center items-center">
+                    <div
+                        v-if="showCharacterWindow"
+                        class="absolute backdrop-blur bg-background/80 transition-all w-full h-full inset-0 z-10 p-16 rounded-md flex flex-1 justify-center items-center overflow-scroll">
                         <CharacterWindow />
                     </div>
                 </Transition>

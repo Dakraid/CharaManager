@@ -11,7 +11,7 @@ export default defineNuxtConfig({
             link: [],
         },
     },
-    modules: ['@nuxt/eslint', '@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxtjs/color-mode', 'shadcn-nuxt', '@nuxt/image', 'dayjs-nuxt', 'nuxt-icon'],
+    modules: ['@nuxt/eslint', '@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxtjs/color-mode', 'shadcn-nuxt', '@nuxt/image', 'dayjs-nuxt', 'nuxt-icon', 'nuxt-rating'],
     ssr: true,
     devtools: {
         enabled: true,

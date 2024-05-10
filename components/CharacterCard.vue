@@ -4,6 +4,8 @@ import { useApplicationStore } from '~/stores/applicationStore';
 import { useToast } from '~/components/ui/toast';
 import { useCharacterStore } from '~/stores/characterStore';
 import type { Character } from '~/models/Character';
+import type { CharacterUpdateRequest } from '~/models/CharacterUpdateRequest';
+import type { StatusResponse } from '~/models/StatusResponse';
 
 const props = defineProps<{
     character: Character;
@@ -59,11 +61,30 @@ const downloadCharacter = async (id: number) => {
     anchor.click();
     document.body.removeChild(anchor);
 };
+
+const updateRating = async (rating: number) => {
+    const character = props.character;
+    character.rating = rating;
+    const request: CharacterUpdateRequest = { character: character, newContent: '', ratingOnly: true };
+    const response: StatusResponse = await $fetch('/api/character', {
+        method: 'PATCH',
+        body: request,
+    });
+};
 </script>
 
 <template>
     <Card class="flex flex-col items-center w-60">
-        <CardHeader class="flex flex-col w-full gap-2 flex-1 p-2">
+        <CardHeader class="flex flex-col w-full items-center gap-2 flex-1 p-2">
+            <CardDescription class="w-min">
+                <NuxtRating
+                    :read-only="false"
+                    :rating-value="character.rating"
+                    active-color="hsl(var(--primary))"
+                    inactive-color="hsl(var(--secondary))"
+                    rating-size="24px"
+                    @rating-selected="updateRating" />
+            </CardDescription>
             <CardTitle class="font-bold text-center">
                 {{ censorNames ? character.file_name?.replaceAll(/\w/g, '#') : character.file_name }}
             </CardTitle>

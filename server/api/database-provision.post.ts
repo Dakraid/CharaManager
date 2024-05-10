@@ -13,7 +13,8 @@ export default defineEventHandler(async (_) => {
 		file_name text NOT NULL,
 		timestamp integer NOT NULL,
 		formatted_timestamp text NOT NULL,
-		image_content text NOT NULL
+		image_content text NOT NULL,
+		rating integer DEFAULT 0 NOT NULL
 	  )`;
 
     await db.sql`CREATE TABLE IF NOT EXISTS character_definitions (

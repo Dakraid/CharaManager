@@ -63,6 +63,14 @@ html.dark input {
     padding: 1px 0;
 }
 
+.average-rating {
+    justify-content: center;
+}
+
+.average-rating::before {
+    position: relative !important;
+}
+
 .tab-content-character {
     height: calc(100% - 44px);
 }
