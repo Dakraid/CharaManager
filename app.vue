@@ -4,10 +4,12 @@ import { Toaster } from '~/components/ui/toast';
 </script>
 
 <template>
-    <Toaster />
-    <div class="h-screen flex flex-col overflow-y-hidden">
-        <TopBar />
-        <Separator />
-        <NuxtPage />
+    <div class="h-full w-full">
+        <Toaster />
+        <div class="h-screen flex flex-col overflow-y-hidden">
+            <TopBar />
+            <Separator />
+            <NuxtPage />
+        </div>
     </div>
 </template>

@@ -63,12 +63,12 @@ const downloadCharacter = async (id: number) => {
 
 <template>
     <Card class="flex flex-col items-center w-60">
-        <CardHeader class="flex flex-col gap-4 flex-1 px-2 py-2">
+        <CardHeader class="flex flex-col w-full gap-2 flex-1 p-2">
             <CardTitle class="font-bold text-center">
                 {{ censorNames ? character.file_name?.replaceAll(/\w/g, '#') : character.file_name }}
             </CardTitle>
         </CardHeader>
-        <CardContent class="w-full px-2 py-2 overflow-hidden">
+        <CardContent class="w-full p-2 overflow-hidden">
             <img
                 :key="character.file_name"
                 :alt="character.file_name"
@@ -76,7 +76,7 @@ const downloadCharacter = async (id: number) => {
                 :class="cn('character-card rounded-2xl', censorChars ? 'blur-2xl rotate-180 grayscale' : '')"
                 @click="showCharacter" />
         </CardContent>
-        <CardFooter class="flex flex-col w-full gap-2 px-2 py-2">
+        <CardFooter class="flex flex-col w-full gap-2 p-2">
             <div class="flex w-full gap-4">
                 <TooltipProvider>
                     <Tooltip>

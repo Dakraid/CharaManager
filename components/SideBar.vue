@@ -159,7 +159,7 @@ const clearChubAiCharacter = async () => {
     fetchedCharacter.value = undefined;
 };
 
-const debugTest = async () => {
+const updateCharacters = async () => {
     const response: StatusResponse = await $fetch('/api/database-update', {
         method: 'POST',
     });
@@ -193,12 +193,6 @@ const debugTest = async () => {
                     <Icon class="h-6 w-6" name="radix-icons:upload" />
                 </Button>
                 <Separator />
-                <Label class="text-1xl" for="file-input">Reload Character List</Label>
-                <Button type="submit" variant="secondary" @click="$emit('update-characters')">
-                    <span class="sr-only">Reload Character List</span>
-                    <Icon class="h-6 w-6" name="radix-icons:symbol" />
-                </Button>
-                <Separator />
                 <div class="flex items-center pl-6 gap-2 justify-start">
                     <Checkbox id="censorChars" v-model:checked="applicationStore.censorChars" />
                     <label for="censorChars" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Blur and Greyscale Character Images? </label>
@@ -210,17 +204,22 @@ const debugTest = async () => {
                 <Separator />
                 <div class="h-full" />
                 <Separator />
-                <Label class="text-1xl" for="update-database">Update Database</Label>
-                <Button id="update-database" type="submit" variant="outline" @click="debugTest">
+                <Label class="text-1xl">Reload Characters from Database</Label>
+                <Button type="submit" variant="outline" @click="$emit('update-characters')">
+                    <span class="sr-only">Reload Character List</span>
+                    <Icon class="h-6 w-6" name="radix-icons:symbol" />
+                </Button>
+                <Label class="text-1xl" for="update-database">Update all v1 to v2</Label>
+                <Button id="update-database" type="submit" variant="outline" @click="updateCharacters">
                     <span class="sr-only">Update all v1 to v2</span>
                     <Icon class="h-6 w-6" name="radix-icons:timer" />
                 </Button>
-                <Separator />
                 <Label class="text-1xl" for="sync-database">Synchronize Database</Label>
                 <Button id="sync-database" type="submit" variant="outline" @click="synchronizeDatabase">
                     <span class="sr-only">Synchronize Definitions</span>
                     <Icon class="h-6 w-6" name="radix-icons:symbol" />
                 </Button>
+                <Separator />
                 <Label class="text-1xl" for="delete-files">Delete All Files</Label>
                 <AlertDialog>
                     <AlertDialogTrigger as-child>
