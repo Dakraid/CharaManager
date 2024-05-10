@@ -96,3 +96,26 @@ html.dark input {
     max-height: 768px;
     object-fit: cover;
 }
+
+.dropzone::before {
+    display: flex;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    width: 512px;
+    max-width: 512px;
+    height: 768px;
+    max-height: 768px;
+    content: 'Drop image here to change...';
+    opacity: 0;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 500ms;
+    border-radius: 1rem;
+}
+
+.dropzone:hover::before {
+    opacity: 1;
+    background-color: hsl(var(--background) / 0.4);
+    backdrop-filter: blur(10px);
+}

@@ -7,6 +7,7 @@ import { useApplicationStore } from '~/stores/applicationStore';
 import { useToast } from '~/components/ui/toast';
 import type { CharacterUpdateRequest } from '~/models/CharacterUpdateRequest';
 import { Button } from '~/components/ui/button';
+import { useDropZone } from '@vueuse/core';
 
 const { toast } = useToast();
 
@@ -76,6 +77,29 @@ const closeCharacterWindow = async () => {
     applicationStore.characterInstance = undefined;
 };
 
+const dropZoneRef = ref<HTMLDivElement>();
+
+function onDrop(files: File[] | null) {
+    if (!files) {
+        return;
+    }
+
+    if (files.length > 1) {
+        toast({
+            title: 'Only one image may be uploaded',
+        });
+    }
+
+    console.log('Hello');
+
+    // called when files are dropped on zone
+}
+
+const { isOverDropZone } = useDropZone(dropZoneRef, {
+    onDrop,
+    dataTypes: ['image/png'],
+});
+
 await updateApplicationState();
 await processCharacterDetails();
 </script>
@@ -91,7 +115,9 @@ await processCharacterDetails();
         </CardHeader>
         <CardContent class="p-2 w-full">
             <div class="flex flex-row gap-2 w-full h-full">
-                <img :key="characterInstance?.file_name" :alt="characterInstance?.file_name" :src="characterInstance?.image_content" class="character-card-large rounded-2xl" />
+                <div ref="dropZoneRef" class="rounded-2xl dropzone trans">
+                    <img :key="characterInstance?.file_name" :alt="characterInstance?.file_name" :src="characterInstance?.image_content" class="character-card-large rounded-2xl" />
+                </div>
                 <Tabs default-value="general" class="w-full">
                     <TabsList class="w-full flex justify-around">
                         <TabsTrigger class="flex-grow" value="general"> General </TabsTrigger>
