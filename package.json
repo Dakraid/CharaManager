@@ -27,7 +27,7 @@
         "@unovis/vue": "^1.4.0",
         "@vee-validate/zod": "^4.12.8",
         "@vueuse/core": "^10.9.0",
-        "better-sqlite3": "^9.6.0",
+        "better-sqlite3": "^10.0.0",
         "character-card-utils": "^2.0.3",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
