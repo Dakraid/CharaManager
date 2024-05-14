@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
 
         const response = await $fetch<ApiResponse>('/api/image', {
             method: 'PUT',
-            body: new PutImageRequest(result[0].id, file.content),
+            body: JSON.stringify(new PutImageRequest(result[0].id, file.content)),
         });
 
         if (response.Status !== StatusCode.OK) {

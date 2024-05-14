@@ -4,13 +4,13 @@ import StatusCode from '~/models/enums/StatusCode';
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
-    const body = await readBody<string>(event);
+    const body = await readBody(event);
     if (!body) {
         return new ApiResponse(StatusCode.BAD_REQUEST, 'The request body is malformed or corrupted.');
     }
 
-    const baseUrl = body.split('/characters/')[0];
-    const characterPath = body.split('/characters/')[1];
+    const baseUrl = body.characterUrl.split('/characters/')[0];
+    const characterPath = body.characterUrl.split('/characters/')[1];
     const fileName = 'main_' + characterPath.split('/')[1] + '_spec_v2.png';
 
     if (baseUrl.includes('chub.ai') || baseUrl.includes('characterhub.org')) {

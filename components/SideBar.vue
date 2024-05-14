@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { Button } from '~/components/ui/button';
 import { useToast } from '~/components/ui/toast';
-import type { CharacterDetails } from '~/models/CharacterDetails';
+import type ApiResponse from '~/models/ApiResponse';
+import DatabaseRequest from '~/models/DatabaseRequest';
 import type { FileUpload } from '~/models/OLD/FileUpload';
-import type { StatusResponse } from '~/models/OLD/StatusResponse';
+import { DatabaseAction } from '~/models/enums/DatabaseAction';
+import StatusCode from '~/models/enums/StatusCode';
 import { useApplicationStore } from '~/stores/applicationStore';
 import { useCharacterStore } from '~/stores/characterStore';
-import type ApiResponse from "~/models/ApiResponse";
-import StatusCode from "~/models/enums/StatusCode";
 
 const emit = defineEmits(['update-characters']);
 
@@ -17,7 +17,7 @@ const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
 
 const files = ref<FileUpload[]>([]);
-const fileInput = ref(null);
+const fileInput = ref<HTMLInputElement>(undefined);
 
 const onFileChange = async (e: any) => {
     const fileList = e.target.files || e.dataTransfer.files;
@@ -89,31 +89,33 @@ const uploadFiles = async () => {
 };
 
 const synchronizeDatabase = async () => {
-    const response: StatusResponse = await $fetch('/api/database-sync', {
+    const response = await $fetch<ApiResponse>('/api/database', {
         method: 'POST',
+        body: JSON.stringify(new DatabaseRequest(DatabaseAction.Synchronize)),
     });
 
-    if (response.status === 200) {
+    if (response.Status === StatusCode.OK) {
         toast({
-            title: 'Database synchronized successfully',
-            description: 'All character definitions are now synchronized.',
+            title: response.Message,
+            description: response.Content,
         });
     }
 };
 
-const deleteCharacter = async () => {
-    applicationStore.deleteOptions = { id: -1, purge: true };
-    const response = await characterStore.deleteCharacter();
+const deleteCharacters = async () => {
+    const response = await $fetch<ApiResponse>('/api/database', {
+        method: 'DELETE',
+    });
 
-    if (response?.status === 200) {
+    if (response.Status === StatusCode.OK) {
         toast({
-            title: 'Character(s) have been deleted',
-            description: response.message,
+            title: response.Message,
+            description: response.Content,
         });
     } else {
         toast({
-            title: "Character(s) couldn't be deleted",
-            description: response?.message,
+            title: response.Message,
+            description: response.Content,
             variant: 'destructive',
         });
     }
@@ -136,17 +138,17 @@ const downloadChubAiCharacter = async () => {
         return;
     }
 
-    const response: StatusResponse = await $fetch('/api/chubai', {
+    const response = await $fetch<ApiResponse>('/api/chubai', {
         method: 'POST',
         body: { characterUrl: characterUrl.value },
     });
 
-    if (response.status === 200) {
-        fetchedCharacter.value = response.content;
+    if (response.Status === StatusCode.OK) {
+        fetchedCharacter.value = response.Content;
     } else {
         toast({
-            title: 'Failed to download character',
-            description: response.content,
+            title: response.Message,
+            description: response.Content,
             variant: 'destructive',
         });
     }
@@ -168,27 +170,42 @@ const clearChubAiCharacter = async () => {
 };
 
 const updateCharacters = async () => {
-    const response: StatusResponse = await $fetch('/api/database-update', {
+    const response = await $fetch<ApiResponse>('/api/database', {
         method: 'POST',
+        body: JSON.stringify(new DatabaseRequest(DatabaseAction.Update)),
     });
 
-    if (response.status === 200) {
+    if (response.Status === StatusCode.OK) {
         toast({
-            title: 'Database updated',
-            description: response.content,
+            title: response.Message,
+            description: response.Content,
         });
     } else {
         toast({
-            title: 'Failed to updated database',
-            description: response.content,
+            title: response.Message,
+            description: response.Content,
+            variant: 'destructive',
         });
     }
 };
 
 const renderImages = async () => {
-    await $fetch('/api/image-render', {
+    const response = await $fetch<ApiResponse>('/api/images', {
         method: 'POST',
     });
+
+    if (response.Status === StatusCode.OK) {
+        toast({
+            title: response.Message,
+            description: response.Content,
+        });
+    } else {
+        toast({
+            title: response.Message,
+            description: response.Content,
+            variant: 'destructive',
+        });
+    }
 };
 </script>
 
@@ -254,7 +271,7 @@ const renderImages = async () => {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction @click="deleteCharacter">Continue</AlertDialogAction>
+                            <AlertDialogAction @click="deleteCharacters">Continue</AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>

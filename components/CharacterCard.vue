@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useToast } from '~/components/ui/toast';
 import { cn } from '~/lib/utils';
+import type ApiResponse from '~/models/ApiResponse';
 import type { CharacterDetails } from '~/models/CharacterDetails';
-import type { CharacterUpdateRequest } from '~/models/OLD/CharacterUpdateRequest';
-import type { StatusResponse } from '~/models/OLD/StatusResponse';
+import PatchDetailsRequest from '~/models/PatchDetailsRequest';
+import StatusCode from '~/models/enums/StatusCode';
 import { useApplicationStore } from '~/stores/applicationStore';
 import { useCharacterStore } from '~/stores/characterStore';
 
@@ -37,18 +38,17 @@ const showCharacter = async () => {
     applicationStore.showCharacterWindow = true;
 };
 
-const deleteCharacter = async (id: number = -1, purge: boolean = false) => {
-    applicationStore.deleteOptions = { id: id, purge: purge };
-    const response = await characterStore.deleteCharacter();
-    if (response?.status === 200) {
+const deleteCharacter = async (id: number = -1) => {
+    const response = await characterStore.deleteCharacter(id);
+    if (response.Status === StatusCode.OK) {
         toast({
-            title: 'Character(s) have been deleted',
-            description: response.message,
+            title: response.Message,
+            description: response.Content,
         });
     } else {
         toast({
-            title: "Character(s) couldn't be deleted",
-            description: response?.message,
+            title: response.Message,
+            description: response.Content,
             variant: 'destructive',
         });
     }
@@ -56,22 +56,45 @@ const deleteCharacter = async (id: number = -1, purge: boolean = false) => {
 
 const downloadCharacter = async (id: number) => {
     const character = await characterStore.getCharacterById(id);
-    const anchor = document.createElement('a');
-    anchor.href = character.image_content;
-    anchor.download = character.file_name ?? 'Character.png';
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
+    const response = await $fetch<ApiResponse>('/api/image', {
+        method: 'GET',
+        query: { id: id },
+    });
+    if (response.Status === StatusCode.OK) {
+        const anchor = document.createElement('a');
+        anchor.href = response.Content.content;
+        anchor.download = character?.file_name ?? 'Character.png';
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+    } else {
+        toast({
+            title: response.Message,
+            description: response.Content,
+            variant: 'destructive',
+        });
+    }
 };
 
 const updateRating = async (rating: number) => {
     const character = props.character;
     character.rating = rating;
-    const request: CharacterUpdateRequest = { character: character, newContent: '', ratingOnly: true };
-    const response: StatusResponse = await $fetch('/api/character', {
+    const response = await $fetch<ApiResponse>('/api/details', {
         method: 'PATCH',
-        body: request,
+        body: JSON.stringify(new PatchDetailsRequest(character)),
     });
+    if (response.Status === StatusCode.OK) {
+        toast({
+            title: response.Message,
+            description: response.Content,
+        });
+    } else {
+        toast({
+            title: response.Message,
+            description: response.Content,
+            variant: 'destructive',
+        });
+    }
 };
 </script>
 

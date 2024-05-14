@@ -1,5 +1,5 @@
 import type { CharacterDetails } from '~/models/CharacterDetails';
-import GetCharactersRequest from "~/models/GetCharactersRequest";
+import GetCharactersRequest from '~/models/GetCharactersRequest';
 
 export const useApplicationStore = defineStore('application', {
     state: () => {
@@ -17,6 +17,6 @@ export const useApplicationStore = defineStore('application', {
         };
     },
     getters: {
-        queryOptions: (state: any) => new GetCharactersRequest(state.currentPage, state.itemsPerPage, state.orderByValue, state.searchValue)
+        queryOptions: (state: any) => new GetCharactersRequest(state.currentPage, state.itemsPerPage, state.orderByValue, state.searchValue),
     },
 });

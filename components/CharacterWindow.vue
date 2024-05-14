@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import type { StatusResponse } from '~/models/OLD/StatusResponse';
-import type { CharacterDefinitionGetRequest } from '~/models/OLD/CharacterDefinitionGetRequest';
 import type { CharacterDetails } from '~/models/CharacterDetails';
 import * as Cards from 'character-card-utils';
 import { useApplicationStore } from '~/stores/applicationStore';
 import { useToast } from '~/components/ui/toast';
-import type { CharacterUpdateRequest } from '~/models/OLD/CharacterUpdateRequest';
 import { Button } from '~/components/ui/button';
 import { useDropZone } from '@vueuse/core';
+import StatusCode from "~/models/enums/StatusCode";
+import type ApiResponse from "~/models/ApiResponse";
+import PutDefinitionRequest from "~/models/PutDefinitionRequest";
+import {cn} from "~/lib/utils";
 
 const { toast } = useToast();
 
@@ -28,27 +29,26 @@ const characterData = ref();
 const characterDump = ref('');
 
 const processCharacterDetails = async () => {
-    const body: CharacterDefinitionGetRequest = { id: characterInstance.value?.id as number };
-    const response: StatusResponse = await $fetch('/api/character-details', {
-        method: 'POST',
-        body: body,
+    const response = await $fetch<ApiResponse>('/api/definition', {
+        method: 'GET',
+        query: {id: characterInstance.value?.id},
     });
 
-    if (!response.content || response.status !== 200) {
-        toast({
-            title: 'Could not retrieve character data',
-            description: 'The character data seems to be corrupted, remove the character and re-download it.',
-            variant: 'destructive',
-        });
-    } else {
+    if (response.Status === StatusCode.OK) {
         try {
-            const parsed = JSON.parse(JSON.parse(response.content.json));
+            const parsed = JSON.parse(response.Content.json);
             characterData.value = Cards.parseToV2(parsed);
         } catch (e) {
             console.error(e);
             applicationStore.showCharacterWindow = false;
             applicationStore.characterInstance = undefined;
         }
+    } else {
+        toast({
+            title: response.Message,
+            description: response.Content,
+            variant: 'destructive',
+        });
     }
 };
 
@@ -59,15 +59,21 @@ const addGreeting = async () => {
 };
 
 const saveCharacter = async () => {
-    const request: CharacterUpdateRequest = { character: <CharacterDetails>characterInstance.value, newContent: JSON.stringify(characterData.value), ratingOnly: false };
-    const response: StatusResponse = await $fetch('/api/character', {
-        method: 'PATCH',
-        body: request,
+    const response = await $fetch<ApiResponse>('/api/definition', {
+        method: 'PUT',
+        body: JSON.stringify(new PutDefinitionRequest(characterInstance.value?.id as number, JSON.stringify(characterData.value))),
     });
 
-    if (response.status === 200) {
+    if (response.Status === StatusCode.OK) {
         toast({
-            title: 'Successfully saved character',
+            title: response.Message,
+            description: response.Content,
+        });
+    } else {
+        toast({
+            title: response.Message,
+            description: response.Content,
+            variant: 'destructive',
         });
     }
 };
@@ -102,6 +108,9 @@ const { isOverDropZone } = useDropZone(dropZoneRef, {
 
 await updateApplicationState();
 await processCharacterDetails();
+
+const imageUri = ref('');
+imageUri.value = `/${characterInstance.value?.id}.png`;
 </script>
 
 <template>
@@ -116,7 +125,14 @@ await processCharacterDetails();
         <CardContent class="p-2 w-full">
             <div class="flex flex-row gap-2 w-full h-full">
                 <div ref="dropZoneRef" class="rounded-2xl dropzone trans">
-                    <img :key="characterInstance?.file_name" :alt="characterInstance?.file_name" :src="characterInstance?.image_content" class="character-card-large rounded-2xl" />
+                    <NuxtImg
+                        :key="characterInstance?.file_name"
+                        fit="inside"
+                        loading="lazy"
+                        placeholder
+                        :alt="characterInstance?.file_name"
+                        :src="imageUri"
+                        class="character-card-large rounded-2xl"/>
                 </div>
                 <Tabs default-value="general" class="w-full">
                     <TabsList class="w-full flex justify-around">

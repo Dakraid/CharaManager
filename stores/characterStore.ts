@@ -1,8 +1,8 @@
+import type ApiResponse from '~/models/ApiResponse';
 import type { CharacterDetails } from '~/models/CharacterDetails';
-import ApiResponse from "~/models/ApiResponse";
-import type GetCharactersRequest from "~/models/GetCharactersRequest";
-import StatusCode from "~/models/enums/StatusCode";
-import DeleteCharacterRequest from "~/models/DeleteCharacterRequest";
+import DeleteCharacterRequest from '~/models/DeleteCharacterRequest';
+import type GetCharactersRequest from '~/models/GetCharactersRequest';
+import StatusCode from '~/models/enums/StatusCode';
 
 async function getCharacterCount() {
     const response = await $fetch<ApiResponse>('/api/count', {
@@ -15,7 +15,7 @@ async function getCharacterCount() {
 async function getCharacters(options: GetCharactersRequest) {
     const response = await $fetch<ApiResponse>('/api/characters', {
         method: 'POST',
-        body: options,
+        body: JSON.stringify(options),
     });
 
     const characters: CharacterDetails[] = [];
@@ -46,7 +46,7 @@ async function getCharacter(id: number) {
 async function deleteCharacter(options: DeleteCharacterRequest) {
     return await $fetch<ApiResponse>('/api/characters', {
         method: 'DELETE',
-        body: options,
+        body: JSON.stringify(options),
     });
 }
 
@@ -63,7 +63,7 @@ export const useCharacterStore = defineStore('characters', {
             this.characterCount = await getCharacterCount();
         },
         async getCharacterById(id: number) {
-            const result= await getCharacter(id);
+            const result = await getCharacter(id);
             if (result.Status === StatusCode.OK) {
                 return result.Content as CharacterDetails;
             } else {

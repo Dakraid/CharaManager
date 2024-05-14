@@ -66,7 +66,7 @@ async function UpdateDatabase(db: Database) {
     const imageIDs: number[] = [];
     sqlChunks.push(sql`(case`);
     for (const updatedItem of updatedItems) {
-        sqlChunks.push(sql`when ${updatedItem.id} = ${updatedItem.id} then ${updatedItem.content}`);
+        sqlChunks.push(sql`when ${character_images.id} = ${updatedItem.id} then ${updatedItem.content}`);
         imageIDs.push(updatedItem.id);
     }
     sqlChunks.push(sql`end)`);
@@ -97,7 +97,7 @@ async function SynchronizeDatabase(db: Database) {
             await drizzleDb
                 .insert(character_definitions)
                 .values({ id: image.id, hash: hash, json: contentJson })
-                .onConflictDoUpdate({ target: character_images.id, set: { hash: hash, json: contentJson } });
+                .onConflictDoUpdate({ target: character_definitions.id, set: { hash: hash, json: contentJson } });
         } catch (e) {
             console.error('Failed to upsert definition for character with ID ' + image.id + ': ' + e);
         }

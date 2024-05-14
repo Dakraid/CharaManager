@@ -21,11 +21,6 @@ async function PurgeDatabase(db: Database) {
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
-    const body = await readBody<DatabaseRequest>(event);
-    if (!body) {
-        return new ApiResponse(StatusCode.BAD_REQUEST, 'The request body is malformed or corrupted.');
-    }
-
     const db = createDatabase(sqlite({ name: 'CharaManager' }));
 
     try {
