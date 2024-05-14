@@ -9,3 +9,4 @@
 **/utils/drizzle
 **/public
 eslint.config.mjs
+server/api/details.patch.ts

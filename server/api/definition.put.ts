@@ -1,18 +1,18 @@
 // noinspection ES6PreferShortImport
 
+import * as Cards from 'character-card-utils';
 import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';
 import { drizzle } from 'db0/integrations/drizzle/index';
+import { eq } from 'drizzle-orm';
 import { createHash } from 'node:crypto';
 import ApiResponse from '~/models/ApiResponse';
 import type PutDefinitionRequest from '~/models/PutDefinitionRequest';
+import PutImageRequest from '~/models/PutImageRequest';
 import StatusCode from '~/models/enums/StatusCode';
 import cleanCharacterBook from '~/server/utils/cleanCharacterBook';
-import {character_definitions, character_images} from '~/utils/drizzle/schema';
-import {eq} from "drizzle-orm";
-import convertBase64PNGToString from "~/server/utils/convertBase64PNGToString";
-import * as Cards from "character-card-utils";
-import PutImageRequest from "~/models/PutImageRequest";
+import convertBase64PNGToString from '~/server/utils/convertBase64PNGToString';
+import { character_definitions, character_images } from '~/utils/drizzle/schema';
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
