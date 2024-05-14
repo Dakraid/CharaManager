@@ -44,7 +44,7 @@ async function getCharacter(id: number) {
 }
 
 async function deleteCharacter(options: DeleteCharacterRequest) {
-    return await $fetch<ApiResponse>('/api/characters', {
+    return await $fetch<ApiResponse>('/api/character', {
         method: 'DELETE',
         body: JSON.stringify(options),
     });

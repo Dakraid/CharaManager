@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
 
         const image = (await drizzleDb.select().from(character_images).where(eq(character_images.id, body.Id)))[0];
         const content = JSON.parse(convertBase64PNGToString(image.content));
-        if (content) {
+        if (content && !body.DefinitionOnly) {
             image.content = convertStringToBase64PNG(image.content, cleanedContent);
             await $fetch<ApiResponse>('/api/image', {
                 method: 'PUT',

@@ -9,7 +9,6 @@ import { like } from 'drizzle-orm';
 import { createHash } from 'node:crypto';
 import ApiResponse from '~/models/ApiResponse';
 import { CharacterDetails } from '~/models/CharacterDetails';
-import { status_success_characters_uploaded, status_success_characters_uploaded_withConflict } from '~/models/OLD/StatusResponses';
 import PutImageRequest from '~/models/PutImageRequest';
 import StatusCode from '~/models/enums/StatusCode';
 import convertBase64PNGToString from '~/server/utils/convertBase64PNGToString';
@@ -69,7 +68,7 @@ export default defineEventHandler(async (event) => {
     }
 
     if (fileConflicts.length > 0) {
-        return new ApiResponse(StatusCode.OK, 'Files have been uploaded, but some have been skipped due to already existing.', fileConflicts);
+        return new ApiResponse(StatusCode.OK, 'Files have been uploaded, but some have been skipped due to already existing.', fileConflicts.join("\n"));
     }
 
     return new ApiResponse(StatusCode.OK, 'Files have been uploaded.');

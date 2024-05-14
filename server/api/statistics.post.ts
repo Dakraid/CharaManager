@@ -5,7 +5,7 @@ import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';
 import { drizzle } from 'db0/integrations/drizzle/index';
 import _ from 'lodash';
-import type { Statistics } from '~/models/OLD/Statistics';
+import {CharTokens, Statistics} from '~/models/OLD/Statistics';
 import { Author, CharDate } from '~/models/OLD/Statistics';
 import { character_definitions, character_details } from '~/utils/drizzle/schema';
 
@@ -32,6 +32,11 @@ export default defineEventHandler(async (event) => {
         authors.push(new Author(key, value.length));
     });
 
+    const tokens: CharTokens[] = [];
+    characterDefs.forEach(char => {
+        tokens.push(new CharTokens(char.name, char.description.length))
+    })
+
     const datesGrouped = _.groupBy(characters, (char) => dayjs(char.timestamp).format('DD/MM/YYYY'));
     const dates: CharDate[] = [];
     _.forEach(datesGrouped, function (value, key) {
@@ -42,6 +47,7 @@ export default defineEventHandler(async (event) => {
         charCount: characters.length,
         charAuthors: authors,
         charDates: dates,
+        charTokens: tokens,
     };
 
     return statistics;

@@ -13,11 +13,13 @@ const emit = defineEmits(['update-characters']);
 
 const { toast } = useToast();
 
+const loading = ref(false);
+
 const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
 
 const files = ref<FileUpload[]>([]);
-const fileInput = ref<HTMLInputElement>(undefined);
+const fileInput = ref<HTMLInputElement>();
 
 const onFileChange = async (e: any) => {
     const fileList = e.target.files || e.dataTransfer.files;
@@ -138,6 +140,7 @@ const downloadChubAiCharacter = async () => {
         return;
     }
 
+    loading.value = true;
     const response = await $fetch<ApiResponse>('/api/chubai', {
         method: 'POST',
         body: { characterUrl: characterUrl.value },
@@ -152,6 +155,7 @@ const downloadChubAiCharacter = async () => {
             variant: 'destructive',
         });
     }
+    loading.value = false;
 };
 
 const saveChubAiCharacter = async () => {
@@ -286,7 +290,11 @@ const renderImages = async () => {
                         <span class="sr-only">Download Character</span>
                         <Icon class="h-6 w-6" name="radix-icons:download" />
                     </Button>
-                    <div v-if="fetchedCharacter" class="flex flex-col items-center gap-4">
+                    <div v-if="loading" class="flex flex-col items-center gap-4">
+                        <Skeleton class="w-[332px] h-[48px] rounded-2xl"/>
+                        <Skeleton class="w-[332px] h-[516px] rounded-2xl"/>
+                    </div>
+                    <div v-else-if="fetchedCharacter" class="flex flex-col items-center gap-4">
                         <span>{{ fetchedCharacter.name }}</span>
                         <img :src="fetchedCharacter.content" :alt="fetchedCharacter.name" class="character-card-chub rounded-2xl" />
                         <div class="flex w-full gap-4">

@@ -41,9 +41,9 @@ export default defineEventHandler(async (event) => {
     }
 
     const json = convertBase64PNGToString(body.Base64Image);
-    const response = await $fetch<ApiResponse>('/api/image', {
+    const response = await $fetch<ApiResponse>('/api/definition', {
         method: 'PUT',
-        body: JSON.stringify(new PutDefinitionRequest(body.Id, json)),
+        body: JSON.stringify(new PutDefinitionRequest(body.Id, json, true)),
     });
 
     if (response.Status !== StatusCode.OK) {
