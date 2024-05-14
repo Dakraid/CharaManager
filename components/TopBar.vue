@@ -23,6 +23,14 @@ const colorMode = useColorMode();
                         </NuxtLink>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
+                        <NuxtLink to="/relations">
+                            <NavigationMenuLink :class="cn(navigationMenuTriggerStyle(), 'flex gap-2')">
+                                <Icon class="h-5 w-5" name="radix-icons:share-1" />
+                                <span>Relations</span>
+                            </NavigationMenuLink>
+                        </NuxtLink>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
                         <NuxtLink to="/statistics">
                             <NavigationMenuLink :class="cn(navigationMenuTriggerStyle(), 'flex gap-2')">
                                 <Icon class="h-5 w-5" name="radix-icons:bar-chart" />

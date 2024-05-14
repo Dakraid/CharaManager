@@ -30,14 +30,23 @@ async function ProvisionDatabase(db: Database) {
     await db.sql`CREATE TABLE IF NOT EXISTS character_images (
           id integer primary key NOT NULL UNIQUE,
           content text NOT NULL,
-          FOREIGN KEY(id) REFERENCES character_cards(id)
+          FOREIGN KEY(id) REFERENCES character_details(id)
 	  )`;
 
     await db.sql`CREATE TABLE IF NOT EXISTS character_definitions (
         id integer primary key NOT NULL UNIQUE,
 		hash text NOT NULL,
         json text NOT NULL,
-        FOREIGN KEY(id) REFERENCES character_cards(id)
+        FOREIGN KEY(id) REFERENCES character_details(id)
+	  )`;
+
+    await db.sql`CREATE TABLE IF NOT EXISTS character_relations (
+        id integer primary key autoincrement UNIQUE,
+		current_id integer NOT NULL,
+        old_id integer NOT NULL,
+        FOREIGN KEY(current_id) REFERENCES character_details(id),
+        FOREIGN KEY(old_id) REFERENCES character_details(id),
+        UNIQUE("current_id","old_id")
 	  )`;
 
     return new ApiResponse(StatusCode.OK, 'Database connection established.');

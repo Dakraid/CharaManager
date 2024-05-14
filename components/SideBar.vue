@@ -90,10 +90,23 @@ const uploadFiles = async () => {
     emit('update-characters');
 };
 
-const synchronizeDatabase = async () => {
+const synchronizeDefinitions = async () => {
     const response = await $fetch<ApiResponse>('/api/database', {
         method: 'POST',
         body: JSON.stringify(new DatabaseRequest(DatabaseAction.Synchronize)),
+    });
+
+    if (response.Status === StatusCode.OK) {
+        toast({
+            title: response.Message,
+            description: response.Content,
+        });
+    }
+};
+
+const synchronizeRelations = async () => {
+    const response = await $fetch<ApiResponse>('/api/relations', {
+        method: 'PUT',
     });
 
     if (response.Status === StatusCode.OK) {
@@ -254,9 +267,14 @@ const renderImages = async () => {
                     <span class="sr-only">Update all v1 to v2</span>
                     <Icon class="h-6 w-6" name="radix-icons:timer" />
                 </Button>
-                <Label class="text-1xl" for="sync-database">Synchronize Database</Label>
-                <Button id="sync-database" type="submit" variant="outline" @click="synchronizeDatabase">
+                <Label class="text-1xl" for="sync-definitions">Synchronize Definitions</Label>
+                <Button id="sync-definitions" type="submit" variant="outline" @click="synchronizeDefinitions">
                     <span class="sr-only">Synchronize Definitions</span>
+                    <Icon class="h-6 w-6" name="radix-icons:symbol" />
+                </Button>
+                <Label class="text-1xl" for="sync-relations">Synchronize Relations</Label>
+                <Button id="sync-relations" type="submit" variant="outline" @click="synchronizeRelations">
+                    <span class="sr-only">Synchronize Relations</span>
                     <Icon class="h-6 w-6" name="radix-icons:symbol" />
                 </Button>
                 <Separator />
@@ -291,8 +309,8 @@ const renderImages = async () => {
                         <Icon class="h-6 w-6" name="radix-icons:download" />
                     </Button>
                     <div v-if="loading" class="flex flex-col items-center gap-4">
-                        <Skeleton class="w-[332px] h-[48px] rounded-2xl"/>
-                        <Skeleton class="w-[332px] h-[516px] rounded-2xl"/>
+                        <Skeleton class="w-[332px] h-[48px] rounded-2xl" />
+                        <Skeleton class="w-[332px] h-[516px] rounded-2xl" />
                     </div>
                     <div v-else-if="fetchedCharacter" class="flex flex-col items-center gap-4">
                         <span>{{ fetchedCharacter.name }}</span>

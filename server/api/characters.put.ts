@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
     }
 
     if (fileConflicts.length > 0) {
-        return new ApiResponse(StatusCode.OK, 'Files have been uploaded, but some have been skipped due to already existing.', fileConflicts.join("\n"));
+        return new ApiResponse(StatusCode.OK, 'Files have been uploaded, but some have been skipped due to already existing.', fileConflicts.join('\n'));
     }
 
     return new ApiResponse(StatusCode.OK, 'Files have been uploaded.');

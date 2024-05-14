@@ -1,11 +1,92 @@
 {
   "id": "00000000-0000-0000-0000-000000000000",
   "prevId": "",
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
   "tables": {
-    "character_cards": {
-      "name": "character_cards",
+    "character_definitions": {
+      "name": "character_definitions",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "hash": {
+          "autoincrement": false,
+          "name": "hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "json": {
+          "autoincrement": false,
+          "name": "json",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {
+        "character_definitions_id_character_details_id_fk": {
+          "name": "character_definitions_id_character_details_id_fk",
+          "tableFrom": "character_definitions",
+          "tableTo": "character_details",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "character_images": {
+      "name": "character_images",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "content": {
+          "autoincrement": false,
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {
+        "character_images_id_character_details_id_fk": {
+          "name": "character_images_id_character_details_id_fk",
+          "tableFrom": "character_images",
+          "tableTo": "character_details",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "character_details": {
+      "name": "character_details",
       "columns": {
         "id": {
           "autoincrement": true,
@@ -49,10 +130,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "image_content": {
+        "rating": {
+          "default": 0,
           "autoincrement": false,
-          "name": "image_content",
-          "type": "text",
+          "name": "rating",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         }
@@ -62,27 +144,27 @@
       "foreignKeys": {},
       "uniqueConstraints": {}
     },
-    "character_definition": {
-      "name": "character_definition",
+    "character_relations": {
+      "name": "character_relations",
       "columns": {
         "id": {
-          "autoincrement": false,
+          "autoincrement": true,
           "name": "id",
           "type": "integer",
-          "primaryKey": false,
-          "notNull": false
+          "primaryKey": true,
+          "notNull": true
         },
-        "hash": {
+        "current_id": {
           "autoincrement": false,
-          "name": "hash",
-          "type": "text",
+          "name": "current_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "json": {
+        "old_id": {
           "autoincrement": false,
-          "name": "json",
-          "type": "text",
+          "name": "old_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         }
@@ -90,12 +172,25 @@
       "compositePrimaryKeys": {},
       "indexes": {},
       "foreignKeys": {
-        "character_definition_id_character_cards_id_fk": {
-          "name": "character_definition_id_character_cards_id_fk",
-          "tableFrom": "character_definition",
-          "tableTo": "character_cards",
+        "character_relations_old_id_character_details_id_fk": {
+          "name": "character_relations_old_id_character_details_id_fk",
+          "tableFrom": "character_relations",
+          "tableTo": "character_details",
           "columnsFrom": [
+            "old_id"
+          ],
+          "columnsTo": [
             "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "character_relations_current_id_character_details_id_fk": {
+          "name": "character_relations_current_id_character_details_id_fk",
+          "tableFrom": "character_relations",
+          "tableTo": "character_details",
+          "columnsFrom": [
+            "current_id"
           ],
           "columnsTo": [
             "id"

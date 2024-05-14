@@ -4888,13 +4888,15 @@ __metadata:
     dayjs: "npm:^1.11.11"
     dayjs-nuxt: "npm:^2.1.9"
     db0: "npm:^0.1.4"
-    drizzle-kit: "npm:^0.21.1"
+    drizzle-kit: "npm:^0.21.2"
     drizzle-orm: "npm:^0.30.10"
     embla-carousel: "npm:^8.0.4"
     embla-carousel-vue: "npm:^8.0.4"
     eslint: "npm:^9.2.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-prettier: "npm:^5.1.3"
+    fastest-levenshtein: "npm:^1.0.16"
+    img-diff-js: "npm:^0.5.4"
     json-diff-ts: "npm:^4.0.1"
     libvips: "npm:^0.0.2"
     lodash: "npm:^4.17.21"
@@ -6037,6 +6039,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"decode-tiff@npm:^0.2.0":
+  version: 0.2.1
+  resolution: "decode-tiff@npm:0.2.1"
+  checksum: 10c0/624a33cd3d28a71fc1808f07ed673494c1872ffe4e0b213eaf13880b4a46b0b7f170da760af117a82470524ee0865db55f413b0c87c7b123e470d99953e82c0c
+  languageName: node
+  linkType: hard
+
 "decompress-response@npm:^6.0.0":
   version: 6.0.0
   resolution: "decompress-response@npm:6.0.0"
@@ -6319,9 +6328,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-kit@npm:^0.21.1":
-  version: 0.21.1
-  resolution: "drizzle-kit@npm:0.21.1"
+"drizzle-kit@npm:^0.21.2":
+  version: 0.21.2
+  resolution: "drizzle-kit@npm:0.21.2"
   dependencies:
     "@esbuild-kit/esm-loader": "npm:^2.5.5"
     commander: "npm:^9.4.1"
@@ -6334,7 +6343,7 @@ __metadata:
     zod: "npm:^3.20.2"
   bin:
     drizzle-kit: bin.cjs
-  checksum: 10c0/34503b6e94c63bb60708e2c611ada883d4ca14dcfd96a7ce0cb59566e1aa9663f8c38d6f896a651742ae3a6d4ab80100fe9fdb92e5b535cdde4d9f5f6b06bd21
+  checksum: 10c0/d6464f33edee9be44f985e350329d51ae3871966287f92c7b58be85d934f1152d2168e9e7b0957bca630e962fe9577a64ac20092d4b0af02adbcfcadea438c13
   languageName: node
   linkType: hard
 
@@ -7478,6 +7487,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fastest-levenshtein@npm:^1.0.16":
+  version: 1.0.16
+  resolution: "fastest-levenshtein@npm:1.0.16"
+  checksum: 10c0/7e3d8ae812a7f4fdf8cad18e9cde436a39addf266a5986f653ea0d81e0de0900f50c0f27c6d5aff3f686bcb48acbd45be115ae2216f36a6a13a7dbbf5cad878b
+  languageName: node
+  linkType: hard
+
 "fastq@npm:^1.6.0":
   version: 1.17.1
   resolution: "fastq@npm:1.17.1"
@@ -8348,6 +8364,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"img-diff-js@npm:^0.5.4":
+  version: 0.5.4
+  resolution: "img-diff-js@npm:0.5.4"
+  dependencies:
+    decode-tiff: "npm:^0.2.0"
+    jpeg-js: "npm:^0.4.2"
+    mkdirp: "npm:^1.0.4"
+    pixelmatch: "npm:^5.2.1"
+    pngjs: "npm:^7.0.0"
+  checksum: 10c0/c736c79a10e27fde97f1983430d81a0df37b390f45f43ac4fbfadc7434091370f2872c782a7f6e127d5170ac90e58df561463b8cec02c267b6f9eeedc81c1523
+  languageName: node
+  linkType: hard
+
 "immutable@npm:^4.0.0":
   version: 4.3.5
   resolution: "immutable@npm:4.3.5"
@@ -8908,6 +8937,13 @@ __metadata:
   bin:
     jiti: bin/jiti.js
   checksum: 10c0/7f361219fe6c7a5e440d5f1dba4ab763a5538d2df8708cdc22561cf25ea3e44b837687931fca7cdd8cdd9f567300e90be989dd1321650045012d8f9ed6aab07f
+  languageName: node
+  linkType: hard
+
+"jpeg-js@npm:^0.4.2":
+  version: 0.4.4
+  resolution: "jpeg-js@npm:0.4.4"
+  checksum: 10c0/4d0d5097f8e55d8bbce6f1dc32ffaf3f43f321f6222e4e6490734fdc6d005322e3bd6fb992c2df7f5b587343b1441a1c333281dc3285bc9116e369fd2a2b43a7
   languageName: node
   linkType: hard
 
@@ -9818,7 +9854,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mkdirp@npm:^1.0.3":
+"mkdirp@npm:^1.0.3, mkdirp@npm:^1.0.4":
   version: 1.0.4
   resolution: "mkdirp@npm:1.0.4"
   bin:
@@ -10921,6 +10957,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pixelmatch@npm:^5.2.1":
+  version: 5.3.0
+  resolution: "pixelmatch@npm:5.3.0"
+  dependencies:
+    pngjs: "npm:^6.0.0"
+  bin:
+    pixelmatch: bin/pixelmatch
+  checksum: 10c0/30850661db29b57cefbe6cf36e930b7517aea4e0ed129e85fcc8ec04a7e6e7648a822a972f8e01d2d3db268ca3c735555caf6b8099a164d8b64d105986d682d2
+  languageName: node
+  linkType: hard
+
 "pkg-types@npm:^1.0.3, pkg-types@npm:^1.1.0":
   version: 1.1.0
   resolution: "pkg-types@npm:1.1.0"
@@ -10962,6 +11009,20 @@ __metadata:
   dependencies:
     crc-32: "npm:^0.3.0"
   checksum: 10c0/40e1c6101e936c56cf2d29e5546d6765fad67a0f2d720b496cfa6ce4d2f49f06200ee91c2b6ba1d9b7a0c8e06d9ebecfe7ef15a6977ea1d54be5efcaaefd69d7
+  languageName: node
+  linkType: hard
+
+"pngjs@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "pngjs@npm:6.0.0"
+  checksum: 10c0/ac23ea329b1881d1a10575aff58116dc27b894ec3f5b84ba15c7f527d21e609fbce7ba16d48f8ccb86c7ce45ceed622472765476ab2875949d4bec55e153f87a
+  languageName: node
+  linkType: hard
+
+"pngjs@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "pngjs@npm:7.0.0"
+  checksum: 10c0/0d4c7a0fd476a9c33df7d0a2a73e1d56537628a668841f6995c2bca070cf30819f9254a64363266bc14ef2fee47659dd3b4f2b18eec7ab65143015139f497b38
   languageName: node
   linkType: hard
 

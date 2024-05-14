@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     vite: {
         build: {
             rollupOptions: {
-                external: ['sharp'],
+                external: ['odiff-bin'],
             },
         },
     },
