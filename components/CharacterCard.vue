@@ -121,7 +121,6 @@ const updateRating = async (rating: number) => {
                 height="222"
                 fit="inside"
                 loading="lazy"
-                placeholder
                 :alt="character.file_name"
                 :src="imageUri"
                 :class="cn('character-card rounded-2xl', censorChars ? 'blur-2xl rotate-180 grayscale' : '')"
