@@ -1,29 +1,26 @@
-import type { CharactersGetRequest } from '~/models/CharactersGetRequest';
-import type { StatusResponse } from '~/models/StatusResponse';
-import type { Character } from '~/models/Character';
-import type { CharactersDeleteRequest } from '~/models/CharactersDeleteRequest';
+import type { CharacterDetails } from '~/models/CharacterDetails';
+import ApiResponse from "~/models/ApiResponse";
+import type GetCharactersRequest from "~/models/GetCharactersRequest";
+import StatusCode from "~/models/enums/StatusCode";
+import DeleteCharacterRequest from "~/models/DeleteCharacterRequest";
 
 async function getCharacterCount() {
-    const response: StatusResponse = await $fetch('/api/count', {
+    const response = await $fetch<ApiResponse>('/api/count', {
         method: 'GET',
     });
 
-    return response.content ?? 0;
+    return response.Content ?? 0;
 }
 
-async function getCharacters(options: CharactersGetRequest) {
-    const response: StatusResponse = await $fetch('/api/characters', {
+async function getCharacters(options: GetCharactersRequest) {
+    const response = await $fetch<ApiResponse>('/api/characters', {
         method: 'POST',
         body: options,
     });
 
-    const characters: Character[] = [];
-    if (response.status === 200) {
-        if (response.content === undefined || response.content.length === 0) {
-            return characters;
-        }
-
-        for (const character of response.content) {
+    const characters: CharacterDetails[] = [];
+    if (response.Status === StatusCode.OK) {
+        for (const character of response.Content) {
             characters.push({
                 id: character.id,
                 hash: character.hash,
@@ -31,7 +28,6 @@ async function getCharacters(options: CharactersGetRequest) {
                 file_name: character.file_name,
                 timestamp: character.timestamp,
                 formatted_timestamp: character.formatted_timestamp,
-                image_content: character.image_content,
                 rating: character.rating,
             });
         }
@@ -41,14 +37,14 @@ async function getCharacters(options: CharactersGetRequest) {
 }
 
 async function getCharacter(id: number) {
-    return await $fetch('/api/character', {
-        method: 'POST',
-        body: { id: id },
+    return await $fetch<ApiResponse>('/api/character', {
+        method: 'GET',
+        query: { id: id },
     });
 }
 
-async function deleteCharacter(options: CharactersDeleteRequest) {
-    return await $fetch('/api/characters', {
+async function deleteCharacter(options: DeleteCharacterRequest) {
+    return await $fetch<ApiResponse>('/api/characters', {
         method: 'DELETE',
         body: options,
     });
@@ -57,7 +53,7 @@ async function deleteCharacter(options: CharactersDeleteRequest) {
 export const useCharacterStore = defineStore('characters', {
     state: () => {
         return {
-            characterList: [] as Character[],
+            characterList: [] as CharacterDetails[],
             characterCount: 0,
         };
     },
@@ -67,7 +63,12 @@ export const useCharacterStore = defineStore('characters', {
             this.characterCount = await getCharacterCount();
         },
         async getCharacterById(id: number) {
-            return (await getCharacter(id)) as Character;
+            const result= await getCharacter(id);
+            if (result.Status === StatusCode.OK) {
+                return result.Content as CharacterDetails;
+            } else {
+                return undefined;
+            }
         },
         async getCharacters() {
             const applicationStore = useApplicationStore();
@@ -76,11 +77,11 @@ export const useCharacterStore = defineStore('characters', {
             this.characterList = await getCharacters(applicationStore.queryOptions);
             applicationStore.processing = false;
         },
-        async deleteCharacter() {
+        async deleteCharacter(id: number) {
             const applicationStore = useApplicationStore();
             applicationStore.processing = true;
-            const response = await deleteCharacter(applicationStore.deleteOptions);
-            await this.getCharacters();
+            const response = await deleteCharacter(new DeleteCharacterRequest(id));
+            this.getCharacters();
             applicationStore.processing = false;
             return response;
         },

@@ -6,6 +6,6 @@
 **/*.config.js
 **/*.d.ts
 **/components/ui
-**/uploads
 **/utils/drizzle
+**/public
 eslint.config.mjs

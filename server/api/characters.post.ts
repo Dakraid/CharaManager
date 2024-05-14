@@ -3,15 +3,17 @@
 import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';
 import { drizzle } from 'db0/integrations/drizzle/index';
-import { characterCards } from '~/utils/drizzle/schema';
 import { asc, desc, like } from 'drizzle-orm';
-import { status_failure_characters_get, status_success_characters_get } from '~/models/StatusResponses';
-import type { CharactersGetRequest } from '~/models/CharactersGetRequest';
+import ApiResponse from '~/models/ApiResponse';
+import type GetCharactersRequest from '~/models/GetCharactersRequest';
+import StatusCode from '~/models/enums/StatusCode';
+import { character_details } from '~/utils/drizzle/schema';
 
+// noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
-    const body = await readBody<CharactersGetRequest>(event);
+    const body = await readBody<GetCharactersRequest>(event);
     if (!body) {
-        return null;
+        return new ApiResponse(StatusCode.BAD_REQUEST, 'The request body is malformed or corrupted.');
     }
 
     const db = createDatabase(sqlite({ name: 'CharaManager' }));
@@ -19,92 +21,90 @@ export default defineEventHandler(async (event) => {
 
     let characters: any;
 
-    const count = (await drizzleDb.select({ id: characterCards.id }).from(characterCards).all()).length;
+    const count = (await drizzleDb.select({ id: character_details.id }).from(character_details).all()).length;
     if (count === 0) {
-        return status_failure_characters_get;
+        return new ApiResponse(StatusCode.NOT_FOUND, 'No characters found.');
     }
 
-    if (!body.filter) {
-        switch (body.order) {
+    if (body.Filter.trim().length === 0) {
+        switch (body.Order) {
             case 'alph_asc':
                 characters = await drizzleDb
                     .select()
-                    .from(characterCards)
-                    .orderBy(asc(characterCards.file_name))
-                    .offset(body.count * (body.page - 1))
-                    .limit(body.count);
+                    .from(character_details)
+                    .orderBy(asc(character_details.file_name))
+                    .offset(body.Count * (body.Page - 1))
+                    .limit(body.Count);
                 break;
             case 'alph_desc':
                 characters = await drizzleDb
                     .select()
-                    .from(characterCards)
-                    .orderBy(desc(characterCards.file_name))
-                    .offset(body.count * (body.page - 1))
-                    .limit(body.count);
+                    .from(character_details)
+                    .orderBy(desc(character_details.file_name))
+                    .offset(body.Count * (body.Page - 1))
+                    .limit(body.Count);
                 break;
             case 'time_asc':
                 characters = await drizzleDb
                     .select()
-                    .from(characterCards)
-                    .orderBy(asc(characterCards.timestamp))
-                    .offset(body.count * (body.page - 1))
-                    .limit(body.count);
+                    .from(character_details)
+                    .orderBy(asc(character_details.timestamp))
+                    .offset(body.Count * (body.Page - 1))
+                    .limit(body.Count);
                 break;
             case 'time_desc':
                 characters = await drizzleDb
                     .select()
-                    .from(characterCards)
-                    .orderBy(desc(characterCards.timestamp))
-                    .offset(body.count * (body.page - 1))
-                    .limit(body.count);
+                    .from(character_details)
+                    .orderBy(desc(character_details.timestamp))
+                    .offset(body.Count * (body.Page - 1))
+                    .limit(body.Count);
                 break;
         }
     } else {
-        switch (body.order) {
+        switch (body.Order) {
             case 'alph_asc':
                 characters = await drizzleDb
                     .select()
-                    .from(characterCards)
-                    .offset(body.count * (body.page - 1))
-                    .limit(body.count)
-                    .orderBy(asc(characterCards.file_name))
-                    .where(like(characterCards.file_name, '%' + body.filter + '%'));
+                    .from(character_details)
+                    .offset(body.Count * (body.Page - 1))
+                    .limit(body.Count)
+                    .orderBy(asc(character_details.file_name))
+                    .where(like(character_details.file_name, '%' + body.Filter + '%'));
                 break;
             case 'alph_desc':
                 characters = await drizzleDb
                     .select()
-                    .from(characterCards)
-                    .orderBy(desc(characterCards.file_name))
-                    .offset(body.count * (body.page - 1))
-                    .limit(body.count)
-                    .where(like(characterCards.file_name, '%' + body.filter + '%'));
+                    .from(character_details)
+                    .orderBy(desc(character_details.file_name))
+                    .offset(body.Count * (body.Page - 1))
+                    .limit(body.Count)
+                    .where(like(character_details.file_name, '%' + body.Filter + '%'));
                 break;
             case 'time_asc':
                 characters = await drizzleDb
                     .select()
-                    .from(characterCards)
-                    .orderBy(asc(characterCards.timestamp))
-                    .offset(body.count * (body.page - 1))
-                    .limit(body.count)
-                    .where(like(characterCards.file_name, '%' + body.filter + '%'));
+                    .from(character_details)
+                    .orderBy(asc(character_details.timestamp))
+                    .offset(body.Count * (body.Page - 1))
+                    .limit(body.Count)
+                    .where(like(character_details.file_name, '%' + body.Filter + '%'));
                 break;
             case 'time_desc':
                 characters = await drizzleDb
                     .select()
-                    .from(characterCards)
-                    .orderBy(desc(characterCards.timestamp))
-                    .offset(body.count * (body.page - 1))
-                    .limit(body.count)
-                    .where(like(characterCards.file_name, '%' + body.filter + '%'));
+                    .from(character_details)
+                    .orderBy(desc(character_details.timestamp))
+                    .offset(body.Count * (body.Page - 1))
+                    .limit(body.Count)
+                    .where(like(character_details.file_name, '%' + body.Filter + '%'));
                 break;
         }
     }
 
     if (characters.length === 0) {
-        return status_failure_characters_get;
+        return new ApiResponse(StatusCode.NOT_FOUND, 'No characters found.');
     }
 
-    const response = status_success_characters_get;
-    response.content = characters;
-    return response;
+    return new ApiResponse(StatusCode.OK, 'Character retrieved.', characters);
 });

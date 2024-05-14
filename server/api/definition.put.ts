@@ -1,0 +1,35 @@
+// noinspection ES6PreferShortImport
+
+import { createDatabase } from 'db0';
+import sqlite from 'db0/connectors/better-sqlite3';
+import { drizzle } from 'db0/integrations/drizzle/index';
+import { createHash } from 'node:crypto';
+import ApiResponse from '~/models/ApiResponse';
+import type PutDefinitionRequest from '~/models/PutDefinitionRequest';
+import StatusCode from '~/models/enums/StatusCode';
+import cleanCharacterBook from '~/server/utils/cleanCharacterBook';
+import { character_definitions } from '~/utils/drizzle/schema';
+
+// noinspection JSUnusedGlobalSymbols
+export default defineEventHandler(async (event) => {
+    const body = await readBody<PutDefinitionRequest>(event);
+    if (!body) {
+        return new ApiResponse(StatusCode.BAD_REQUEST, 'The request body is malformed or corrupted.');
+    }
+
+    const db = createDatabase(sqlite({ name: 'CharaManager' }));
+    const drizzleDb = drizzle(db);
+
+    try {
+        const cleanedContent = await cleanCharacterBook(body.Json);
+        const hash = createHash('sha256').update(cleanedContent).digest('hex');
+        await drizzleDb
+            .insert(character_definitions)
+            .values({ id: body.Id, hash: hash, json: cleanedContent })
+            .onConflictDoUpdate({ target: character_definitions.id, set: { hash: hash, json: cleanedContent } });
+
+        return new ApiResponse(StatusCode.OK, `Upserted definition for character with ID ${body.Id}`);
+    } catch (err) {
+        return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, `Failed to upsert character definition with ID ${body.Id}`, err);
+    }
+});

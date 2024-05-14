@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useCharacterStore } from '~/stores/characterStore';
+import pDebounce from 'p-debounce';
 import { cn } from '~/lib/utils';
 import { useApplicationStore } from '~/stores/applicationStore';
-import pDebounce from 'p-debounce';
+import { useCharacterStore } from '~/stores/characterStore';
 
 const emit = defineEmits(['update-characters']);
 

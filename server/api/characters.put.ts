@@ -1,60 +1,76 @@
 // noinspection ES6PreferShortImport
 
-import { createHash } from 'node:crypto';
+import * as Cards from 'character-card-utils';
 import dayjs from 'dayjs';
 import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';
 import { drizzle } from 'db0/integrations/drizzle/index';
-import { characterCards } from '~/utils/drizzle/schema';
 import { like } from 'drizzle-orm';
-import { Character } from '~/models/Character';
-import { status_success_characters_uploaded, status_success_characters_uploaded_withConflict } from '~/models/StatusResponses';
-import cleanCharacterBook from '~/server/utils/cleanCharacterBook';
+import { createHash } from 'node:crypto';
+import ApiResponse from '~/models/ApiResponse';
+import { CharacterDetails } from '~/models/CharacterDetails';
+import { status_success_characters_uploaded, status_success_characters_uploaded_withConflict } from '~/models/OLD/StatusResponses';
+import PutImageRequest from '~/models/PutImageRequest';
+import StatusCode from '~/models/enums/StatusCode';
 import convertBase64PNGToString from '~/server/utils/convertBase64PNGToString';
-import * as Cards from 'character-card-utils';
+import { character_details } from '~/utils/drizzle/schema';
 
+// noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
     if (!body) {
-        return null;
+        return new ApiResponse(StatusCode.BAD_REQUEST, 'The request body is malformed or corrupted.');
     }
 
     const db = createDatabase(sqlite({ name: 'CharaManager' }));
     const drizzleDb = drizzle(db);
 
     const fileConflicts: string[] = [];
+    const errors: string[] = [];
+
     for (const file of body.files) {
         const hash = createHash('sha256').update(file.content).digest('hex');
-        const char = await drizzleDb.select().from(characterCards).where(like(characterCards.hash, hash));
-        if (char.length > 0) {
-            fileConflicts.push('File ' + file.name + ' already exists.');
+        const matches = await drizzleDb.select().from(character_details).where(like(character_details.hash, hash));
+        if (matches.length > 0) {
+            fileConflicts.push(`File ${file.name} already exists.`);
             continue;
         }
 
         const timestamp = file.lastModified ? file.lastModified : dayjs().unix();
-        const newChar = new Character(hash, timestamp + '_' + file.name, file.name, timestamp, dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'), file.content);
+        const character = new CharacterDetails(hash, timestamp + '_' + file.name, file.name, timestamp, dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'), 0);
 
         const content = JSON.parse(convertBase64PNGToString(file.content));
         if (!content.data) {
             const converted = Cards.v1ToV2(content);
-            newChar.image_content = convertStringToBase64PNG(file.content, JSON.stringify(converted));
+            file.content = convertStringToBase64PNG(file.content, JSON.stringify(converted));
             console.log('Updated character from v1 to v2: ' + file.name);
         }
 
-        const result = await drizzleDb.insert(characterCards).values(newChar).returning({ id: characterCards.id }).onConflictDoNothing();
+        let result: any;
+        try {
+            result = await drizzleDb.insert(character_details).values(character).returning({ id: character_details.id }).onConflictDoNothing();
+        } catch (err) {
+            errors.push(`Failed to insert character from file ${file.name}: ${err}`);
+            continue;
+        }
 
-        newChar.id = result[0].id;
-        await $fetch('/api/character-details', {
+        const response = await $fetch<ApiResponse>('/api/image', {
             method: 'PUT',
-            body: JSON.stringify(newChar),
+            body: new PutImageRequest(result[0].id, file.content),
         });
+
+        if (response.Status !== StatusCode.OK) {
+            errors.push(`Failed to process image for file ${file.name}: ${response.Content}`);
+        }
+    }
+
+    if (errors.length > 0) {
+        return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Multiple errors occurred during upload, files might only be partially uploaded.', errors);
     }
 
     if (fileConflicts.length > 0) {
-        const response = status_success_characters_uploaded_withConflict;
-        response.message = fileConflicts.join('\n');
-        return response;
+        return new ApiResponse(StatusCode.OK, 'Files have been uploaded, but some have been skipped due to already existing.', fileConflicts);
     }
 
-    return status_success_characters_uploaded;
+    return new ApiResponse(StatusCode.OK, 'Files have been uploaded.');
 });

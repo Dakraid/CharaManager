@@ -1,20 +1,21 @@
 // noinspection ES6PreferShortImport
 
+import dayjs from 'dayjs';
 import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';
 import { drizzle } from 'db0/integrations/drizzle/index';
-import { characterCards, characterDefinitions } from '~/utils/drizzle/schema';
-import type { Statistics } from '~/models/Statistics';
-import { Author, CharDate } from '~/models/Statistics';
 import _ from 'lodash';
-import dayjs from 'dayjs';
+import type { Statistics } from '~/models/OLD/Statistics';
+import { Author, CharDate } from '~/models/OLD/Statistics';
+import { character_definitions, character_details } from '~/utils/drizzle/schema';
 
+// noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
     const db = createDatabase(sqlite({ name: 'CharaManager' }));
 
     const drizzleDb = drizzle(db);
-    const characters = await drizzleDb.select().from(characterCards).all();
-    const characterDefsRaw = await drizzleDb.select().from(characterDefinitions).all();
+    const characters = await drizzleDb.select().from(character_details).all();
+    const characterDefsRaw = await drizzleDb.select().from(character_definitions).all();
     const characterDefs = characterDefsRaw.map((def) => JSON.parse(def.json).data);
 
     const authorsGrouped = _.groupBy(characterDefs, 'creator');

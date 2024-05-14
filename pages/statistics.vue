@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Statistics } from '~/models/Statistics';
+import type { Statistics } from '~/models/OLD/Statistics';
 
 const response: Statistics = await $fetch('/api/statistics', {
     method: 'POST',

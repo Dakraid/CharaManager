@@ -1,6 +1,5 @@
-import type { CharactersGetRequest } from '~/models/CharactersGetRequest';
-import type { CharactersDeleteRequest } from '~/models/CharactersDeleteRequest';
-import type { Character } from '~/models/Character';
+import type { CharacterDetails } from '~/models/CharacterDetails';
+import GetCharactersRequest from "~/models/GetCharactersRequest";
 
 export const useApplicationStore = defineStore('application', {
     state: () => {
@@ -11,21 +10,13 @@ export const useApplicationStore = defineStore('application', {
             censorNames: false,
             searchValue: '',
             orderByValue: 'time_desc',
-            deleteOptions: {} as CharactersDeleteRequest,
             currentPage: 1,
             itemsPerPage: 5,
-            characterInstance: undefined as Character | undefined,
+            characterInstance: undefined as CharacterDetails | undefined,
             showCharacterWindow: false,
         };
     },
     getters: {
-        queryOptions: (state) =>
-            <CharactersGetRequest>{
-                page: state.currentPage,
-                count: state.itemsPerPage,
-                order: state.orderByValue,
-                filter: state.searchValue.trim().length > 0 ? state.searchValue : undefined,
-            },
+        queryOptions: (state: any) => new GetCharactersRequest(state.currentPage, state.itemsPerPage, state.orderByValue, state.searchValue)
     },
-    actions: {},
 });

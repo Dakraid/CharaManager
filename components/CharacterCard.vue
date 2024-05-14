@@ -1,24 +1,26 @@
 <script setup lang="ts">
-import { cn } from '~/lib/utils';
-import { useApplicationStore } from '~/stores/applicationStore';
 import { useToast } from '~/components/ui/toast';
+import { cn } from '~/lib/utils';
+import type { CharacterDetails } from '~/models/CharacterDetails';
+import type { CharacterUpdateRequest } from '~/models/OLD/CharacterUpdateRequest';
+import type { StatusResponse } from '~/models/OLD/StatusResponse';
+import { useApplicationStore } from '~/stores/applicationStore';
 import { useCharacterStore } from '~/stores/characterStore';
-import type { Character } from '~/models/Character';
-import type { CharacterUpdateRequest } from '~/models/CharacterUpdateRequest';
-import type { StatusResponse } from '~/models/StatusResponse';
 
 const props = defineProps<{
-    character: Character;
+    character: CharacterDetails;
 }>();
 
 const { toast } = useToast();
+const imageUri = ref('');
+imageUri.value = `/${props.character.id}.png`;
 
 const characterStore = useCharacterStore();
 
 const applicationStore = useApplicationStore();
 const censorChars = ref(false);
 const censorNames = ref(false);
-const characterInstance = ref<Character>();
+const characterInstance = ref<CharacterDetails>();
 const showCharacterWindow = ref(false);
 
 const updateApplication = async () => {
@@ -90,10 +92,15 @@ const updateRating = async (rating: number) => {
             </CardTitle>
         </CardHeader>
         <CardContent class="w-full p-2 overflow-hidden">
-            <img
+            <NuxtImg
                 :key="character.file_name"
+                width="300"
+                height="222"
+                fit="inside"
+                loading="lazy"
+                placeholder
                 :alt="character.file_name"
-                :src="character.image_content"
+                :src="imageUri"
                 :class="cn('character-card rounded-2xl', censorChars ? 'blur-2xl rotate-180 grayscale' : '')"
                 @click="showCharacter" />
         </CardContent>

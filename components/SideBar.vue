@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { Button } from '~/components/ui/button';
 import { useToast } from '~/components/ui/toast';
-import type { FileUpload } from '~/models/FileUpload';
-import { useCharacterStore } from '~/stores/characterStore';
+import type { CharacterDetails } from '~/models/CharacterDetails';
+import type { FileUpload } from '~/models/OLD/FileUpload';
+import type { StatusResponse } from '~/models/OLD/StatusResponse';
 import { useApplicationStore } from '~/stores/applicationStore';
-import type { StatusResponse } from '~/models/StatusResponse';
-import type { Character } from '~/models/Character';
+import { useCharacterStore } from '~/stores/characterStore';
+import type ApiResponse from "~/models/ApiResponse";
+import StatusCode from "~/models/enums/StatusCode";
 
 const emit = defineEmits(['update-characters']);
 
@@ -54,7 +56,7 @@ const uploadFiles = async () => {
         return b.lastModified - a.lastModified;
     });
 
-    const response = await $fetch('/api/characters', {
+    const response = await $fetch<ApiResponse>('/api/characters', {
         method: 'PUT',
         body: {
             files: files.value,
@@ -63,10 +65,16 @@ const uploadFiles = async () => {
 
     applicationStore.processing = false;
 
-    if (response?.status) {
+    if (response.Status === StatusCode.OK) {
         toast({
-            title: 'Files have been uploaded.',
-            description: response?.message,
+            title: response.Message,
+            description: response.Content,
+        });
+    } else {
+        toast({
+            title: response.Message,
+            description: response.Content,
+            variant: 'destructive',
         });
     }
 
@@ -176,6 +184,12 @@ const updateCharacters = async () => {
         });
     }
 };
+
+const renderImages = async () => {
+    await $fetch('/api/image-render', {
+        method: 'POST',
+    });
+};
 </script>
 
 <template>
@@ -208,6 +222,11 @@ const updateCharacters = async () => {
                 <Button type="submit" variant="outline" @click="$emit('update-characters')">
                     <span class="sr-only">Reload Character List</span>
                     <Icon class="h-6 w-6" name="radix-icons:symbol" />
+                </Button>
+                <Label class="text-1xl">Render Images</Label>
+                <Button type="submit" variant="outline" @click="renderImages">
+                    <span class="sr-only">Render Images</span>
+                    <Icon class="h-6 w-6" name="radix-icons:image" />
                 </Button>
                 <Label class="text-1xl" for="update-database">Update all v1 to v2</Label>
                 <Button id="update-database" type="submit" variant="outline" @click="updateCharacters">

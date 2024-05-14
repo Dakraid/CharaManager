@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-import { useCharacterStore } from '~/stores/characterStore';
-import { useApplicationStore } from '~/stores/applicationStore';
-import type { Character } from '~/models/Character';
+import type {CharacterDetails} from '~/models/CharacterDetails';
+import {useApplicationStore} from '~/stores/applicationStore';
+import {useCharacterStore} from '~/stores/characterStore';
+import DatabaseRequest from "~/models/DatabaseRequest";
+import {DatabaseAction} from "~/models/enums/DatabaseAction";
 
 const characterStore = useCharacterStore();
 const characterCount = ref(0);
-const characters = ref([] as Character[]);
+const characters = ref([] as CharacterDetails[]);
 
 const updateCharacters = async () => {
     characterCount.value = characterStore.characterCount;
@@ -30,8 +32,9 @@ const getCharacters = async () => {
 };
 
 if (!applicationStore.provisioned) {
-    await $fetch('/api/database-provision', {
+    await $fetch('/api/database', {
         method: 'POST',
+        body: new DatabaseRequest(DatabaseAction.Provision)
     });
 
     applicationStore.provisioned = true;

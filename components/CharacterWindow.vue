@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { StatusResponse } from '~/models/StatusResponse';
-import type { CharacterDefinitionGetRequest } from '~/models/CharacterDefinitionGetRequest';
-import type { Character } from '~/models/Character';
+import type { StatusResponse } from '~/models/OLD/StatusResponse';
+import type { CharacterDefinitionGetRequest } from '~/models/OLD/CharacterDefinitionGetRequest';
+import type { CharacterDetails } from '~/models/CharacterDetails';
 import * as Cards from 'character-card-utils';
 import { useApplicationStore } from '~/stores/applicationStore';
 import { useToast } from '~/components/ui/toast';
-import type { CharacterUpdateRequest } from '~/models/CharacterUpdateRequest';
+import type { CharacterUpdateRequest } from '~/models/OLD/CharacterUpdateRequest';
 import { Button } from '~/components/ui/button';
 import { useDropZone } from '@vueuse/core';
 
@@ -13,7 +13,7 @@ const { toast } = useToast();
 
 const applicationStore = useApplicationStore();
 const processing = ref(true);
-const characterInstance = ref<Character>();
+const characterInstance = ref<CharacterDetails>();
 const showCharacterWindow = ref(false);
 
 const updateApplicationState = async () => {
@@ -59,7 +59,7 @@ const addGreeting = async () => {
 };
 
 const saveCharacter = async () => {
-    const request: CharacterUpdateRequest = { character: <Character>characterInstance.value, newContent: JSON.stringify(characterData.value), ratingOnly: false };
+    const request: CharacterUpdateRequest = { character: <CharacterDetails>characterInstance.value, newContent: JSON.stringify(characterData.value), ratingOnly: false };
     const response: StatusResponse = await $fetch('/api/character', {
         method: 'PATCH',
         body: request,
