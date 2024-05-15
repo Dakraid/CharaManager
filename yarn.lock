@@ -4898,6 +4898,7 @@ __metadata:
     fastest-levenshtein: "npm:^1.0.16"
     img-diff-js: "npm:^0.5.4"
     json-diff-ts: "npm:^4.0.1"
+    levenshtein-wasm: "npm:^1.2.0"
     libvips: "npm:^0.0.2"
     lodash: "npm:^4.17.21"
     nuxt: "npm:^3.11.2"
@@ -9261,6 +9262,13 @@ __metadata:
   version: 1.7.1
   resolution: "leaflet@npm:1.7.1"
   checksum: 10c0/1ffd7af8e59c4a459cd5e70e2bb690e77441c73127ef86bcb370599307a33c2dd3b31f3353aae02edefbd4df27a76f3825e9c882814c6fcd8d5f04eec41e9b8f
+  languageName: node
+  linkType: hard
+
+"levenshtein-wasm@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "levenshtein-wasm@npm:1.2.0"
+  checksum: 10c0/e5f77a31d64947d96ae853348b0a430110891493ed6f71934318093fbbb1fdefbdf57e19482bb52a83d869d8bbfb1323e9f457665eac4f968c598cfa4799f4fe
   languageName: node
   linkType: hard
 

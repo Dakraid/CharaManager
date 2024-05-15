@@ -6,7 +6,49 @@ import { drizzle } from 'db0/integrations/drizzle/index';
 import ApiResponse from '~/models/ApiResponse';
 import StatusCode from '~/models/enums/StatusCode';
 import { character_definitions, character_details, character_relations } from '~/utils/drizzle/schema';
-import {distance} from "fastest-levenshtein";
+import { distance } from 'fastest-levenshtein';
+
+async function MatchByDistance(definitions: any, relations: any, parentList: Set<number>, childList: Set<number>, i: number, j: number) {
+    if (definitions[i].id === definitions[j].id || definitions[j].id > definitions[i].id) {
+        return;
+    }
+
+    if (relations.length > 0) {
+        if (relations.find((pair) => pair.current_id === definitions[i].id && pair.old_id === definitions[j].id) !== undefined) {
+            return;
+        }
+    }
+
+    const json1 = JSON.parse(definitions[i].json);
+    const json2 = JSON.parse(definitions[j].json);
+
+    const text1 = json1.data.description + json1.data.first_mes;
+    const text2 = json2.data.description + json2.data.first_mes;
+
+    const measurement = distance(text1, text2);
+    const maxLength = Math.max(text1.length, text2.length);
+    const normalizedDistance = measurement / maxLength;
+    const similarity = 1 - normalizedDistance;
+
+    if (similarity >= 0.6) {
+        const newRelations: any[] = [];
+        if (parentList.has(definitions[j].id)) {
+            newRelations.push({ current_id: definitions[i].id, old_id: definitions[j].id });
+            childList.add(definitions[j].id);
+
+            relations.filter(x => x.current_id === definitions[j].id).forEach((x) => {
+                newRelations.push({ current_id: definitions[i].id, old_id: x.old_id });
+            })
+
+            return {relations: newRelations, childId: definitions[j].id};
+        }
+
+        if (!childList.has(definitions[i].id)) {
+            newRelations.push({ current_id: definitions[i].id, old_id: definitions[j].id });
+            return {relations: newRelations, childId: definitions[j].id};
+        }
+    }
+}
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
@@ -42,6 +84,17 @@ export default defineEventHandler(async (event) => {
                 const name2 = detail2.file_name.replace(/v2.*/g, 'v2.png');
 
                 if (name1 === name2) {
+                    if (parentList.has(detail2.id)) {
+                        newRelations.push({ current_id: detail1.id, old_id: detail2.id });
+                        childList.add(detail2.id);
+
+                        relations.filter(x => x.current_id === detail2.id).forEach((x) => {
+                            newRelations.push({ current_id: detail1.id, old_id: x.old_id });
+                        })
+
+                        continue;
+                    }
+
                     if (!childList.has(detail1.id)) {
                         try {
                             newRelations.push({ current_id: detail1.id, old_id: detail2.id });
@@ -61,35 +114,12 @@ export default defineEventHandler(async (event) => {
     console.log('Matching by string distance...');
     for (let i = 0; i < definitions.length; i++) {
         for (let j = 0; j < definitions.length; j++) {
-            if (definitions[i].id === definitions[j].id || definitions[j].id > definitions[i].id) {
-                continue;
-            }
-
-            if (relations.length > 0) {
-                if (relations.find((pair) => pair.current_id === definitions[i].id && pair.old_id === definitions[j].id) !== undefined) {
-                    continue;
+            MatchByDistance(definitions, relations, parentList, childList, i, j).then(result => {
+                if (result) {
+                    newRelations.concat(result.relations)
+                    childList.add(result.childId);
                 }
-            }
-
-            const json1 = JSON.parse(definitions[i].json);
-            const json2 = JSON.parse(definitions[j].json);
-
-            const text1 = json1.data.description + json1.data.first_mes;
-            const text2 = json2.data.description + json2.data.first_mes;
-
-            const measurement = distance(text1, text2);
-            const maxLength = Math.max(text1.length, text2.length);
-            const normalizedDistance = measurement / maxLength;
-            const similarity = 1 - normalizedDistance;
-
-            if (similarity >= 0.6 && !childList.has(definitions[i].id)) {
-                try {
-                    newRelations.push({ current_id: definitions[i].id, old_id: definitions[j].id });
-                    childList.add(definitions[j].id);
-                } catch {
-                    // Ignore
-                }
-            }
+            })
         }
     }
 
