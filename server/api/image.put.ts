@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
     }
 
     try {
-        fs.writeFile(`public/${body.Id}.png`, body.Base64Image.split('base64,')[1], { encoding: 'base64' }, function (err) {
+        fs.writeFile(`public/cards/${body.Id}.png`, body.Base64Image.split('base64,')[1], { encoding: 'base64' }, function (err) {
             if (err) {
                 throw err;
             }

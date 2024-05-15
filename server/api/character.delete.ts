@@ -21,9 +21,9 @@ export default defineEventHandler(async (event) => {
     const drizzleDb = drizzle(db);
 
     try {
-        fs.access(`public/${body.Id}.png`, constants.F_OK, (err) => {
+        fs.access(`public/cards/${body.Id}.png`, constants.F_OK, (err) => {
             if (!err) {
-                fs.rm(`public/${body.Id}.png`, () => {
+                fs.rm(`public/cards/${body.Id}.png`, () => {
                     console.log(`Deleted file ${body.Id}.png`);
                 });
             }
