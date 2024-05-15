@@ -14,7 +14,7 @@ const props = defineProps<{
 
 const { toast } = useToast();
 const imageUri = ref('');
-imageUri.value = `/${props.character.id}.png`;
+imageUri.value = `/cards/${props.character.id}.png`;
 
 const characterStore = useCharacterStore();
 

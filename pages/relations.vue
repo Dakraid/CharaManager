@@ -37,7 +37,7 @@ total.value = relations.value
                                 fit="inside"
                                 loading="lazy"
                                 :alt="relation.Parent.toString()"
-                                :src="`/${relation.Parent}.png`"
+                                :src="`/cards/${relation.Parent}.png`"
                                 class="character-card rounded-2xl" />
                         </CardContent>
                     </Card>
@@ -48,7 +48,7 @@ total.value = relations.value
                                 <CardTitle class="font-bold text-center"> Previous: ID#{{ child }} </CardTitle>
                             </CardHeader>
                             <CardContent class="w-full p-2 overflow-hidden">
-                                <NuxtImg :key="child" width="300" height="222" fit="inside" loading="lazy" :alt="child.toString()" :src="`/${child}.png`" class="character-card rounded-2xl" />
+                                <NuxtImg :key="child" width="300" height="222" fit="inside" loading="lazy" :alt="child.toString()" :src="`/cards/${child}.png`" class="character-card rounded-2xl" />
                             </CardContent>
                         </Card>
                     </div>

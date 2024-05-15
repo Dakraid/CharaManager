@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 
     try {
         images.forEach((image) => {
-            fs.writeFile(`public/${image.id}.png`, image.content.split('base64,')[1], { encoding: 'base64' }, function (err) {
+            fs.writeFile(`public/cards/${image.id}.png`, image.content.split('base64,')[1], { encoding: 'base64' }, function (err) {
                 if (err) {
                     throw err;
                 }

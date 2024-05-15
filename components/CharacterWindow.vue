@@ -110,7 +110,7 @@ await updateApplicationState();
 await processCharacterDetails();
 
 const imageUri = ref('');
-imageUri.value = `/${characterInstance.value?.id}.png`;
+imageUri.value = `/cards/${characterInstance.value?.id}.png`;
 </script>
 
 <template>
