@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import json from 'json-keys-sort';
+import { cn } from '~/lib/utils';
 import type ApiResponse from '~/models/ApiResponse';
 import type CharacterRelations from '~/models/CharacterRelations';
-import {useApplicationStore} from "~/stores/applicationStore";
-import json from "json-keys-sort";
-import {cn} from "~/lib/utils";
+import { useApplicationStore } from '~/stores/applicationStore';
 
 const applicationStore = useApplicationStore();
 
@@ -52,13 +52,13 @@ const showDiff = async (parentId: number, childId: number) => {
     childJsonString.value = JSON.stringify(childJson, null, 4);
 
     applicationStore.showDiffWindow = true;
-}
+};
 </script>
 
 <template>
     <div class="flex-col h-full overflow-y-hidden py-6 lg:px-24 items-stretch">
         <div v-if="showDiffWindow" class="w-full h-full rounded-md border p-4">
-            <CharacterDiff :currJson="parentJsonString" :oldJson="childJsonString" />
+            <CharacterDiff :curr-json="parentJsonString" :old-json="childJsonString" />
         </div>
         <ScrollArea v-else class="w-full h-full overflow-y-hidden rounded-md border p-4 pr-6 transition-all">
             <h1 class="text-xl font-bold text-center">Total Count of Child Relations: {{ total }}</h1>
@@ -88,8 +88,16 @@ const showDiff = async (parentId: number, childId: number) => {
                                 <CardTitle class="font-bold text-center"> Previous: ID#{{ child }} </CardTitle>
                             </CardHeader>
                             <CardContent class="w-full p-2 overflow-hidden">
-                                <NuxtImg :key="child" width="300" height="222" fit="inside" loading="lazy" :alt="child.toString()" :src="`/cards/${child}.png`" class="character-card rounded-2xl"
-                                         @click="showDiff(relation.Parent, child)" />
+                                <NuxtImg
+                                    :key="child"
+                                    width="300"
+                                    height="222"
+                                    fit="inside"
+                                    loading="lazy"
+                                    :alt="child.toString()"
+                                    :src="`/cards/${child}.png`"
+                                    class="character-card rounded-2xl"
+                                    @click="showDiff(relation.Parent, child)" />
                             </CardContent>
                         </Card>
                     </div>
