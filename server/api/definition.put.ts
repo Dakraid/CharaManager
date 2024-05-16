@@ -1,5 +1,3 @@
-// noinspection ES6PreferShortImport
-
 import * as Cards from 'character-card-utils';
 import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';

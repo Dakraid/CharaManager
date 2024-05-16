@@ -13,6 +13,7 @@ export const character_definitions = sqliteTable("character_definitions", {
 export const character_images = sqliteTable("character_images", {
 	id: integer("id").primaryKey().notNull().references(() => character_details.id),
 	content: text("content").notNull(),
+    hash: text("hash").notNull(),
 });
 
 export const character_details = sqliteTable("character_details", {

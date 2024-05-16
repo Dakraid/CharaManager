@@ -1,5 +1,3 @@
-// noinspection ES6PreferShortImport
-
 import * as Cards from 'character-card-utils';
 import type { Database } from 'db0';
 import { createDatabase } from 'db0';
@@ -30,6 +28,7 @@ async function ProvisionDatabase(db: Database) {
     await db.sql`CREATE TABLE IF NOT EXISTS character_images (
           id integer primary key NOT NULL UNIQUE,
           content text NOT NULL,
+          hash text NOT NULL,
           FOREIGN KEY(id) REFERENCES character_details(id)
 	  )`;
 

@@ -44,6 +44,7 @@
         "nuxt": "^3.11.2",
         "nuxt-rating": "^0.0.15",
         "p-debounce": "^4.0.0",
+        "piscina": "^4.4.0",
         "png-chunk-text": "^1.0.0",
         "png-chunks-encode": "^1.0.0",
         "png-chunks-extract": "^1.0.0",

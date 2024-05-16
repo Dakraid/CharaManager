@@ -31,6 +31,9 @@ jobs:
       - name: Run prepare
         run: yarn prepare
 
+      - name: Run linter
+        run: yarn lint
+
       - name: Run build
         run: yarn build
 
@@ -60,6 +63,9 @@ jobs:
 
       - name: Run prepare
         run: yarn prepare
+
+      - name: Run linter
+        run: yarn lint
 
       - name: Run build
         run: yarn build

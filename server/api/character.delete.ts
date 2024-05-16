@@ -1,5 +1,3 @@
-// noinspection ES6PreferShortImport
-
 import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';
 import { drizzle } from 'db0/integrations/drizzle/index';
@@ -8,7 +6,7 @@ import fs, { constants } from 'node:fs';
 import ApiResponse from '~/models/ApiResponse';
 import type DeleteCharacterRequest from '~/models/DeleteCharacterRequest';
 import StatusCode from '~/models/enums/StatusCode';
-import { character_definitions, character_details, character_images } from '~/utils/drizzle/schema';
+import { character_definitions, character_details, character_images, character_relations } from '~/utils/drizzle/schema';
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
@@ -30,6 +28,12 @@ export default defineEventHandler(async (event) => {
         });
     } catch (err) {
         console.error(err);
+    }
+
+    try {
+        await drizzleDb.delete(character_relations).where(eq(character_relations.current_id, body.Id));
+    } catch {
+        console.log(`Character with ID ${body.Id} had no image?`);
     }
 
     try {

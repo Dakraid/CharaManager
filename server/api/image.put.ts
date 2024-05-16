@@ -1,8 +1,7 @@
-// noinspection ES6PreferShortImport
-
 import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';
 import { drizzle } from 'db0/integrations/drizzle/index';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import ApiResponse from '~/models/ApiResponse';
 import PutDefinitionRequest from '~/models/PutDefinitionRequest';
@@ -22,9 +21,10 @@ export default defineEventHandler(async (event) => {
     const drizzleDb = drizzle(db);
 
     try {
+        const hash = createHash('sha256').update(body.Base64Image).digest('hex');
         await drizzleDb
             .insert(character_images)
-            .values({ id: body.Id, content: body.Base64Image })
+            .values({ id: body.Id, content: body.Base64Image, hash: hash })
             .onConflictDoUpdate({ target: character_images.id, set: { content: body.Base64Image } });
     } catch (err) {
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Failed to upsert character image.', err);

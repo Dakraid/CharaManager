@@ -1,5 +1,3 @@
-// noinspection ES6PreferShortImport
-
 import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';
 import { drizzle } from 'db0/integrations/drizzle/index';

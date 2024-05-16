@@ -1,5 +1,3 @@
-// noinspection ES6PreferShortImport
-
 import * as Cards from 'character-card-utils';
 import dayjs from 'dayjs';
 import { createDatabase } from 'db0';
@@ -12,7 +10,7 @@ import { CharacterDetails } from '~/models/CharacterDetails';
 import PutImageRequest from '~/models/PutImageRequest';
 import StatusCode from '~/models/enums/StatusCode';
 import convertBase64PNGToString from '~/server/utils/convertBase64PNGToString';
-import { character_details } from '~/utils/drizzle/schema';
+import { character_details, character_images } from '~/utils/drizzle/schema';
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
@@ -29,8 +27,9 @@ export default defineEventHandler(async (event) => {
 
     for (const file of body.files) {
         const hash = createHash('sha256').update(file.content).digest('hex');
-        const matches = await drizzleDb.select().from(character_details).where(like(character_details.hash, hash));
-        if (matches.length > 0) {
+        const imageHashes = await drizzleDb.select().from(character_images).where(like(character_images.hash, hash));
+        const detailHashes = await drizzleDb.select().from(character_details).where(like(character_details.hash, hash));
+        if (imageHashes.length > 0 || detailHashes.length > 0) {
             fileConflicts.push(`File ${file.name} already exists.`);
             continue;
         }
