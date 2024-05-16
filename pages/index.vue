@@ -63,7 +63,7 @@ if (!applicationStore.provisioned) {
                         <Icon class="w-16 h-16" name="radix-icons:question-mark-circled" />
                         <h2 class="font-bold text-xl">Upload characters to see them here</h2>
                     </div>
-                    <div v-else class="flex flex-wrap gap-2 justify-between h-full overflow-hidden">
+                    <div v-else class="flex flex-wrap gap-2 justify-between h-full overflow-hidden pt-4">
                         <CharacterCard v-for="character in characters" :key="character.id" :character="character" />
                     </div>
                 </Transition>
