@@ -58,6 +58,9 @@ jobs:
           node-version: lts/Iron
           check-latest: true
 
+      - name: Enable Corepack before setting up Node
+        run: corepack enable
+
       - name: Install dependencies
         run: yarn --frozen-lockfile --silent
 

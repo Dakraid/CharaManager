@@ -1896,7 +1896,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/kit@npm:3.11.2, @nuxt/kit@npm:^3.11.1, @nuxt/kit@npm:^3.11.2, @nuxt/kit@npm:^3.5.0, @nuxt/kit@npm:^3.6.1, @nuxt/kit@npm:^3.7.4, @nuxt/kit@npm:^3.8.0, @nuxt/kit@npm:^3.8.2":
+"@nuxt/kit@npm:3.11.2, @nuxt/kit@npm:^3.0.0, @nuxt/kit@npm:^3.11.1, @nuxt/kit@npm:^3.11.2, @nuxt/kit@npm:^3.5.0, @nuxt/kit@npm:^3.6.1, @nuxt/kit@npm:^3.7.4, @nuxt/kit@npm:^3.8.0, @nuxt/kit@npm:^3.8.2":
   version: 3.11.2
   resolution: "@nuxt/kit@npm:3.11.2"
   dependencies:
@@ -2041,6 +2041,16 @@ __metadata:
     serve-static: "npm:^1.15.0"
     ufo: "npm:^1.5.3"
   checksum: 10c0/351db764ecefada2d27f11bc04d8fd4e70119f4e63a0c9f8eccd41768a4bb86b4307d94454a1756df5fa23c7343c89dec79b789ba5adb41338e3b85f8933c77b
+  languageName: node
+  linkType: hard
+
+"@nuxtjs/robots@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@nuxtjs/robots@npm:3.0.0"
+  dependencies:
+    "@nuxt/kit": "npm:^3.0.0"
+    h3: "npm:^1.0.1"
+  checksum: 10c0/7194b3259837050970840092e9c101947305be2d2eb86ea71ea78495d7e2556dce931c895da50766b4b06f4b0d989688d23834aaf75f9bbc49cea649e5db6f0c
   languageName: node
   linkType: hard
 
@@ -3647,9 +3657,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@unovis/ts@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@unovis/ts@npm:1.4.0"
+"@unovis/ts@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@unovis/ts@npm:1.4.1"
   dependencies:
     "@emotion/css": "npm:^11.7.1"
     "@juggle/resize-observer": "npm:^3.3.1"
@@ -3683,17 +3693,17 @@ __metadata:
     to-px: "npm:^1.1.0"
     topojson-client: "npm:^3.1.0"
     tslib: "npm:^2.3.1"
-  checksum: 10c0/4f7ddd59e3de1ef589a64e380b554c34793ea4bc723c027b79c10e5cc06c711c1079e24a46ca093dd7a87e44762ae760c09f9f4d5e2c05444fb531f1d545aaa3
+  checksum: 10c0/3c3a3203e3927d258ecf160b8a2a2f386c26828e4968f0fca30f4eb97b2d1542347eeece0c5937c1c62ffc2bfe0a04055739047ae5585e06daae7b6f32e77134
   languageName: node
   linkType: hard
 
-"@unovis/vue@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@unovis/vue@npm:1.4.0"
+"@unovis/vue@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@unovis/vue@npm:1.4.1"
   peerDependencies:
-    "@unovis/ts": 1.4.0
+    "@unovis/ts": 1.4.1
     vue: ^3
-  checksum: 10c0/47d986c7528c42460dc27f3bf68d8cce36c41f0d082e2d842de19382fcefeeac64151b0b212a2e702d4115d99ca2ad44265a0d3a7fefadd657765bb40fa85eae
+  checksum: 10c0/c16e87684caf692973f2d3bd6470bfe09bf5642f3e3df4fe0bf82a13a4ca54fee5f34c3423ab587055e731a97cdd14d390dc7bec5eeb00038ae951297961ac72
   languageName: node
   linkType: hard
 
@@ -4866,6 +4876,7 @@ __metadata:
     "@nuxt/image": "npm:^1.7.0"
     "@nuxtjs/color-mode": "npm:^3.4.1"
     "@nuxtjs/partytown": "npm:^1.5.0"
+    "@nuxtjs/robots": "npm:^3.0.0"
     "@nuxtjs/tailwindcss": "npm:^6.12.0"
     "@pinia-plugin-persistedstate/nuxt": "npm:^1.2.0"
     "@pinia/nuxt": "npm:^0.5.1"
@@ -4875,8 +4886,8 @@ __metadata:
     "@types/png-chunk-text": "npm:^1.0.3"
     "@types/png-chunks-encode": "npm:^1.0.2"
     "@types/png-chunks-extract": "npm:^1.0.2"
-    "@unovis/ts": "npm:^1.4.0"
-    "@unovis/vue": "npm:^1.4.0"
+    "@unovis/ts": "npm:^1.4.1"
+    "@unovis/vue": "npm:^1.4.1"
     "@vee-validate/nuxt": "npm:^4.12.8"
     "@vee-validate/zod": "npm:^4.12.8"
     "@vue/compiler-sfc": "npm:^3.4.27"
@@ -4898,10 +4909,13 @@ __metadata:
     fastest-levenshtein: "npm:^1.0.16"
     img-diff-js: "npm:^0.5.4"
     json-diff-ts: "npm:^4.0.1"
+    json-keys-sort: "npm:^2.1.0"
     libvips: "npm:^0.0.2"
     lodash: "npm:^4.17.21"
+    monaco-editor: "npm:^0.48.0"
     nuxt: "npm:^3.11.2"
     nuxt-icon: "npm:^0.6.10"
+    nuxt-monaco-editor: "npm:^1.2.9"
     nuxt-rating: "npm:^0.0.15"
     p-debounce: "npm:^4.0.0"
     piscina: "npm:^4.4.0"
@@ -7461,7 +7475,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.2.7, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0, fast-glob@npm:^3.3.1, fast-glob@npm:^3.3.2":
+"fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.7, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0, fast-glob@npm:^3.3.1, fast-glob@npm:^3.3.2":
   version: 3.3.2
   resolution: "fast-glob@npm:3.3.2"
   dependencies:
@@ -8063,7 +8077,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"h3@npm:^1.10.0, h3@npm:^1.10.2, h3@npm:^1.11.1":
+"h3@npm:^1.0.1, h3@npm:^1.10.0, h3@npm:^1.10.2, h3@npm:^1.11.1":
   version: 1.11.1
   resolution: "h3@npm:1.11.1"
   dependencies:
@@ -9043,6 +9057,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-keys-sort@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "json-keys-sort@npm:2.1.0"
+  checksum: 10c0/ed06d17e49156b1e28148e96df57a3a59f2a6492e87c0d5ffb212c65de91080d152ed93d789ed21a03d2e5f1c18050fcfdb5e791d726ad7b40efbe5342f4f8fa
+  languageName: node
+  linkType: hard
+
 "json-parse-even-better-errors@npm:^2.3.0":
   version: 2.3.1
   resolution: "json-parse-even-better-errors@npm:2.3.1"
@@ -9876,6 +9897,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"monaco-editor@npm:^0.48.0":
+  version: 0.48.0
+  resolution: "monaco-editor@npm:0.48.0"
+  checksum: 10c0/f4f8fbf372ab4a038d35f72b2195f0fef7403188e83cfe41f8ed01bf8e276eec25263b9aa5aed32a87a5e42796344c236b694e4fb1049c46d5f0ed9635ebf970
+  languageName: node
+  linkType: hard
+
 "mri@npm:^1.2.0":
   version: 1.2.0
   resolution: "mri@npm:1.2.0"
@@ -10377,6 +10405,19 @@ __metadata:
     "@nuxt/devtools-kit": "npm:^1.1.1"
     "@nuxt/kit": "npm:^3.11.1"
   checksum: 10c0/948be6855be13f687c027943668af8d0aa804803d5add768a5dbbd3296fa49eba0185a2e0049c24fd0a8903632e25703de8d7f78c8326678bc21a059edada7b0
+  languageName: node
+  linkType: hard
+
+"nuxt-monaco-editor@npm:^1.2.9":
+  version: 1.2.9
+  resolution: "nuxt-monaco-editor@npm:1.2.9"
+  dependencies:
+    "@nuxt/kit": "npm:^3.11.2"
+    defu: "npm:^6.1.4"
+    vite-plugin-static-copy: "npm:^1.0.3"
+  peerDependencies:
+    monaco-editor: "*"
+  checksum: 10c0/cb671489e4401b0e6e649185b6121904e6aeb96d8d390e1e76e28473358313eca9006806427b05f980f2511ef4a3f75c37b4a351fb0ef4c619d00c9e2b6ce69c
   languageName: node
   linkType: hard
 
@@ -13931,6 +13972,20 @@ __metadata:
     "@nuxt/kit":
       optional: true
   checksum: 10c0/cd9924bdf24989f61317a9400e622ab3db574a807aaae8412815558211a572b71c0988f5110bf03eecda718e286786d8c848756322e2e9b1eebc673515f34cec
+  languageName: node
+  linkType: hard
+
+"vite-plugin-static-copy@npm:^1.0.3":
+  version: 1.0.4
+  resolution: "vite-plugin-static-copy@npm:1.0.4"
+  dependencies:
+    chokidar: "npm:^3.5.3"
+    fast-glob: "npm:^3.2.11"
+    fs-extra: "npm:^11.1.0"
+    picocolors: "npm:^1.0.0"
+  peerDependencies:
+    vite: ^5.0.0
+  checksum: 10c0/d9626e5b21c6bb3fef0e4fa3a5709dafc469fb73e097db524cfad2aa5ad136f8d95ec89a0dfccc666f657edcbc612d3b09a440aab7fbd416d01b0bd4bbbe721d
   languageName: node
   linkType: hard
 

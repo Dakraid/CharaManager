@@ -14,6 +14,7 @@ export const useApplicationStore = defineStore('application', {
             itemsPerPage: 5,
             characterInstance: undefined as CharacterDetails | undefined,
             showCharacterWindow: false,
+            showDiffWindow: false,
         };
     },
     getters: {
