@@ -16,7 +16,7 @@ const colorMode = useColorMode();
                 <NavigationMenuList>
                     <NavigationMenuItem>
                         <NuxtLink to="/">
-                            <NavigationMenuLink :class="cn(navigationMenuTriggerStyle(), 'flex gap-2')">
+                            <NavigationMenuLink :class="cn(navigationMenuTriggerStyle(), 'flex gap-2', $route.path === '/' ? 'bg-accent' : '')">
                                 <Icon class="h-5 w-5" name="radix-icons:home" />
                                 <span>Home</span>
                             </NavigationMenuLink>
@@ -24,7 +24,7 @@ const colorMode = useColorMode();
                     </NavigationMenuItem>
                     <NavigationMenuItem>
                         <NuxtLink to="/relations">
-                            <NavigationMenuLink :class="cn(navigationMenuTriggerStyle(), 'flex gap-2')">
+                            <NavigationMenuLink :class="cn(navigationMenuTriggerStyle(), 'flex gap-2', $route.path === '/relations' ? 'bg-accent' : '')">
                                 <Icon class="h-5 w-5" name="radix-icons:share-1" />
                                 <span>Relations</span>
                             </NavigationMenuLink>
@@ -32,7 +32,7 @@ const colorMode = useColorMode();
                     </NavigationMenuItem>
                     <NavigationMenuItem>
                         <NuxtLink to="/statistics">
-                            <NavigationMenuLink :class="cn(navigationMenuTriggerStyle(), 'flex gap-2')">
+                            <NavigationMenuLink :class="cn(navigationMenuTriggerStyle(), 'flex gap-2', $route.path === '/statistics' ? 'bg-accent' : '')">
                                 <Icon class="h-5 w-5" name="radix-icons:bar-chart" />
                                 <span>Statistics</span>
                             </NavigationMenuLink>

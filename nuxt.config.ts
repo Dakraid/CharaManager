@@ -10,12 +10,9 @@ export default defineNuxtConfig({
             meta: [],
             link: [],
         },
-    },
-    vite: {
-        build: {
-            rollupOptions: {
-                external: ['odiff-bin'],
-            },
+        pageTransition: {
+            name: 'page',
+            mode: 'out-in',
         },
     },
     modules: [
