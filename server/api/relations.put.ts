@@ -8,40 +8,6 @@ import ApiResponse from '~/models/ApiResponse';
 import StatusCode from '~/models/enums/StatusCode';
 import { character_definitions, character_details, character_relations } from '~/utils/drizzle/schema';
 
-async function MatchByDistance(definitions: any, relations: any, parentList: Set<number>, childList: Set<number>, i: number, j: number) {
-    const json1 = JSON.parse(definitions[i].json);
-    const json2 = JSON.parse(definitions[j].json);
-
-    const text1 = json1.data.description + json1.data.first_mes;
-    const text2 = json2.data.description + json2.data.first_mes;
-
-    const measurement = distance(text1, text2);
-    const maxLength = Math.max(text1.length, text2.length);
-    const normalizedDistance = measurement / maxLength;
-    const similarity = 1 - normalizedDistance;
-
-    if (similarity >= 0.85) {
-        const newRelations: any[] = [];
-        if (parentList.has(definitions[j].id)) {
-            newRelations.push({ current_id: definitions[i].id, old_id: definitions[j].id });
-            childList.add(definitions[j].id);
-
-            relations
-                .filter((x: any) => x.current_id === definitions[j].id)
-                .forEach((x: any) => {
-                    newRelations.push({ current_id: definitions[i].id, old_id: x.old_id });
-                });
-
-            return { relations: newRelations, childId: definitions[j].id };
-        }
-
-        if (!childList.has(definitions[i].id)) {
-            newRelations.push({ current_id: definitions[i].id, old_id: definitions[j].id });
-            return { relations: newRelations };
-        }
-    }
-}
-
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
     const db = createDatabase(sqlite({ name: 'CharaManager' }));
@@ -49,13 +15,14 @@ export default defineEventHandler(async (event) => {
 
     const startTime = performance.now();
 
-    await drizzleDb.delete(character_relations);
     let newRelations: any[] = [];
 
     const relations = await drizzleDb.select().from(character_relations).all();
     for (const relation of relations) {
         newRelations.push({ current_id: relation.current_id, old_id: relation.old_id });
     }
+
+    await drizzleDb.delete(character_relations);
 
     const parentList = new Set<number>(relations.map((x) => x.current_id));
     const childList = new Set<number>(relations.map((x) => x.old_id));

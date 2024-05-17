@@ -7,6 +7,7 @@ import { like } from 'drizzle-orm';
 import { createHash } from 'node:crypto';
 import ApiResponse from '~/models/ApiResponse';
 import { CharacterDetails } from '~/models/CharacterDetails';
+import PatchRelationsRequest from '~/models/PatchRelationsRequest';
 import PutImageRequest from '~/models/PutImageRequest';
 import StatusCode from '~/models/enums/StatusCode';
 import convertBase64PNGToString from '~/server/utils/convertBase64PNGToString';
@@ -52,13 +53,22 @@ export default defineEventHandler(async (event) => {
             continue;
         }
 
-        const response = await $fetch<ApiResponse>('/api/image', {
+        const imageApiResponse = await $fetch<ApiResponse>('/api/image', {
             method: 'PUT',
             body: JSON.stringify(new PutImageRequest(result[0].id, file.content)),
         });
 
-        if (response.Status !== StatusCode.OK) {
-            errors.push(`Failed to process image for file ${file.name}: ${response.Content}`);
+        if (imageApiResponse.Status !== StatusCode.OK) {
+            errors.push(`Failed to process image for file ${file.name}: ${imageApiResponse.Content}`);
+        }
+
+        const relationsApiResponse = await $fetch<ApiResponse>('/api/relations', {
+            method: 'PATCH',
+            body: JSON.stringify(new PatchRelationsRequest(result[0].id)),
+        });
+
+        if (relationsApiResponse.Status !== StatusCode.OK) {
+            errors.push(`Failed to process relations for file ${file.name}: ${relationsApiResponse.Content}`);
         }
     }
 
