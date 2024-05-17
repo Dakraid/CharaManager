@@ -92,7 +92,7 @@ export default defineEventHandler(async (event) => {
     if (import.meta.dev) {
         fileUrl = new URL('./../../public/scripts/MatchByDistance.js', import.meta.url).href;
     } else {
-        fileUrl = new URL('./../public/scripts/MatchByDistance.js', import.meta.url).href;
+        fileUrl = new URL('./../public/scripts/MatchByDistance.cjs', import.meta.url).href;
     }
     const pool = new Piscina({
         filename: fileUrl,
@@ -124,6 +124,7 @@ export default defineEventHandler(async (event) => {
     });
 
     Promise.all(promises).then(async () => {
+        await pool.close();
         for (const newRelation of relations) {
             await drizzleDb.insert(character_relations).values({ current_id: newRelation.current_id, old_id: newRelation.old_id }).onConflictDoNothing();
         }

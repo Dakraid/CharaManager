@@ -86,7 +86,7 @@ export default defineEventHandler(async (event) => {
     if (import.meta.dev) {
         fileUrl = new URL('./../../public/scripts/MatchByDistance.js', import.meta.url).href;
     } else {
-        fileUrl = new URL('./../public/scripts/MatchByDistance.js', import.meta.url).href;
+        fileUrl = new URL('./../public/scripts/MatchByDistance.cjs', import.meta.url).href;
     }
     const pool = new Piscina({
         filename: fileUrl,
