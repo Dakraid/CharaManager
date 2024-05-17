@@ -227,7 +227,7 @@ const renderImages = async () => {
 </script>
 
 <template>
-    <Tabs default-value="general" class="flex flex-col h-full w-full md:order-2 max-w-sm py-1px">
+    <Tabs default-value="general" class="flex flex-col h-full w-full max-w-sm py-1px">
         <TabsList class="grid w-full grid-cols-2">
             <TabsTrigger value="general"> General </TabsTrigger>
             <TabsTrigger value="download"> Download </TabsTrigger>

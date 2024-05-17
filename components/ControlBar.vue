@@ -70,7 +70,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="flex w-full items-center gap-2 justify-between">
+    <div class="grid control-grid w-full items-center justify-items-center gap-2">
         <div class="flex gap-1">
             <div class="relative w-250 max-w-sm items-center">
                 <Input id="search" v-model="applicationStore.searchValue" type="text" placeholder="Search..." class="pl-10" @input="processSearch" />
@@ -83,7 +83,7 @@ onMounted(async () => {
             </Button>
         </div>
 
-        <div class="flex gap-2 items-center">
+        <div class="flex flex-wrap gap-2 w-full items-center justify-center xl:justify-between row-start-2 col-start-1 col-span-3 2xl:row-start-1 2xl:col-start-2 2xl:col-span-1 2xl:justify-center">
             <Button class="w-200 justify-center" variant="outline"> Number of characters: {{ characterCount }} </Button>
 
             <Pagination v-slot="{ page }" :total="characterCount" :items-per-page="20" :sibling-count="1" show-edges :default-page="1" @update:page="updatePage">
@@ -137,39 +137,41 @@ onMounted(async () => {
             </Popover>
         </div>
 
-        <Popover v-model:open="openOrderBy">
-            <PopoverTrigger as-child>
-                <Button :aria-expanded="openOrderBy" class="w-250 justify-between" role="combobox" variant="outline">
-                    {{ applicationStore.orderByValue ? sortOptions.find((option) => option.value === applicationStore.orderByValue)?.label : 'Select Order...' }}
-                    <Icon class="ml-2 h-4 w-4 shrink-0 opacity-50" name="radix-icons:caret-sort" />
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent class="w-250 p-0">
-                <Command>
-                    <CommandInput class="h-9" placeholder="Search Order..." />
-                    <CommandList>
-                        <CommandGroup>
-                            <CommandItem
-                                v-for="option in sortOptions"
-                                :key="option.value"
-                                :value="option.value"
-                                @select="
-                                    async (ev) => {
-                                        if (typeof ev.detail.value === 'string') {
-                                            applicationStore.orderByValue = ev.detail.value;
+        <div class="flex gap-1 col-start-3">
+            <Popover v-model:open="openOrderBy">
+                <PopoverTrigger as-child>
+                    <Button :aria-expanded="openOrderBy" class="w-290 justify-between" role="combobox" variant="outline">
+                        {{ applicationStore.orderByValue ? sortOptions.find((option) => option.value === applicationStore.orderByValue)?.label : 'Select Order...' }}
+                        <Icon class="ml-2 h-4 w-4 shrink-0 opacity-50" name="radix-icons:caret-sort" />
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent class="w-290 p-0">
+                    <Command>
+                        <CommandInput class="h-9" placeholder="Search Order..." />
+                        <CommandList>
+                            <CommandGroup>
+                                <CommandItem
+                                    v-for="option in sortOptions"
+                                    :key="option.value"
+                                    :value="option.value"
+                                    @select="
+                                        async (ev) => {
+                                            if (typeof ev.detail.value === 'string') {
+                                                applicationStore.orderByValue = ev.detail.value;
+                                            }
+                                            openOrderBy = false;
+                                            $emit('update-characters');
                                         }
-                                        openOrderBy = false;
-                                        $emit('update-characters');
-                                    }
-                                ">
-                                {{ option.label }}
-                                <Icon :class="cn('ml-auto h-4 w-4', applicationStore.orderByValue === option.value ? 'opacity-100' : 'opacity-0')" name="radix-icons:check" />
-                            </CommandItem>
-                        </CommandGroup>
-                    </CommandList>
-                </Command>
-            </PopoverContent>
-        </Popover>
+                                    ">
+                                    {{ option.label }}
+                                    <Icon :class="cn('ml-auto h-4 w-4', applicationStore.orderByValue === option.value ? 'opacity-100' : 'opacity-0')" name="radix-icons:check" />
+                                </CommandItem>
+                            </CommandGroup>
+                        </CommandList>
+                    </Command>
+                </PopoverContent>
+            </Popover>
+        </div>
     </div>
 </template>
 

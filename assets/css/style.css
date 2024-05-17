@@ -20,9 +20,22 @@
     border-radius: 9999px;
 }
 
-@media (min-width: 768px) {
+.character-grid {
+    grid-template-columns: minmax(0, 1fr) 332px;
+}
+
+.control-grid {
+    grid-template-columns: 290px minmax(0, 1fr) 290px;
+    grid-template-rows: 36px minmax(0, 1fr);
+}
+
+@media (min-width: 1536px) {
     .character-grid {
         grid-template-columns: minmax(0, 1fr) 332px;
+    }
+
+    .control-grid {
+        grid-template-rows: 1fr;
     }
 }
 
@@ -40,6 +53,10 @@ html.dark input {
 
 .border-border {
     border-color: hsl(var(--border));
+}
+
+.w-290 {
+    width: 290px;
 }
 
 .w-250 {

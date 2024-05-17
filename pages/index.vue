@@ -42,9 +42,8 @@ if (!applicationStore.provisioned) {
 </script>
 
 <template>
-    <div class="grid h-full overflow-y-hidden py-6 lg:px-6 items-stretch gap-6 character-grid">
-        <SideBar @update-characters="getCharacters" />
-        <div id="main_content" class="flex flex-col h-full overflow-y-hidden gap-2 md:order-1 mt-0 border-0 p-0">
+    <div class="grid character-grid h-full overflow-y-hidden py-6 lg:px-6 items-stretch gap-6">
+        <div id="main_content" class="flex flex-col h-full overflow-y-hidden gap-2 order-1 mt-0 border-0 p-0">
             <ControlBar @update-characters="getCharacters" />
             <ScrollArea id="scrollArea" class="w-full h-full overflow-y-hidden rounded-md border p-4 pr-6">
                 <Transition>
@@ -69,6 +68,7 @@ if (!applicationStore.provisioned) {
                 </Transition>
             </ScrollArea>
         </div>
+        <SideBar @update-characters="getCharacters" class="order-2"/>
     </div>
 </template>
 
