@@ -123,18 +123,6 @@ const distance = (a, b) => {
   }
   return myers_x(a, b);
 };
-const closest = (str, arr) => {
-  let min_distance = Infinity;
-  let min_index = 0;
-  for (let i = 0; i < arr.length; i++) {
-    const dist = distance(str, arr[i]);
-    if (dist < min_distance) {
-      min_distance = dist;
-      min_index = i;
-    }
-  }
-  return arr[min_index];
-};
 
 module.exports = ({definition1, definition2, relations, parentList, childList}) => {
   console.log(`Processing for: ${definition1.id} & ${definition2.id}`);
