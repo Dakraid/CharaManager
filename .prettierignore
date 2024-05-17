@@ -10,3 +10,4 @@
 **/public
 eslint.config.mjs
 server/api/details.patch.ts
+readme.md
