@@ -12,12 +12,46 @@ CharaManager is a web application made to manage and maintain your collection of
 - Character card editor
   - Allows editing of all fields except embedded lorebooks, latter coming soon
 - Automatic hierarchy and relation detection using name and string distance matching
-  - **NOTE: There is currently an issue within the prod builts for this script. Fix coming soon.** 
 - Comparison of definition content between related cards using a full diff editor
 - Statistics for cards, including characters per author, token count, cards uploaded per day
 - Portable as all data is stored within '.data/CharaManager.sqlite3' and the app can recreate all necessary files from that
 
-## Running from pre-built
+### Know Issues
+- Layout and Styling:
+  - Smaller screen sizes may struggle to contain the full application
+  - Workaround:
+    - Currently, there no workaround except using a larger screen
+  - Fix (in progress):
+    - Update styling to work better on smaller screens
+- Relations:
+  - Worker script is not fully functional in production builds
+  - Updating relations on upload seems to stall the worker pool
+  - Workaround:
+    - Run from source in dev
+    - Build relations after upload
+  - Fix (in progress):
+    - Split worker script into variants for prod and dev environments (cjs/mjs)
+    - Share worker pool across API calls
+- Optimized Images:
+  - Images can't be created if 'cards' folder is missing in 'public' folder
+  - Workaround:
+    - Create a folder named 'cards' within the 'public' folder manually
+  - Fix (in progress):
+    - We will create the folder from the server side when necessary
+- Server API:
+  - The API is not protected as of now, there is no API key or local only access
+  - Workaround:
+    - When running your app, use something like Caddy with Caddy Security to block access to your app unless authenticated
+  - Fix (in progress):
+    - Integrate API key authentication
+
+### Upcoming Integrations
+- Lorebook Editing
+- Character Renaming
+- Image Replacement
+- SillyTavern Synchronization
+
+## Running from Pre-Built
 
 You can find the latest builds under the Actions tab or by clicking here: [Actions](https://github.com/Dakraid/CharaManager/actions)
 
@@ -28,8 +62,6 @@ Unpack the archive into a folder and run within it following command:
 ```bash
 node server/index.mjs
 ```
-
-**Note: Currently there is a bug that requires you to create a folder named 'cards' within the 'public' folder manually, otherwise the images won't be rendered.**
 
 ## Running from Source
 
@@ -65,7 +97,7 @@ yarn preview
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 
-# LICENSE
+# License
 
 This project is licensed under AGPLv3.0 (see included LICENSE file).
 
