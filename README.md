@@ -12,6 +12,7 @@ CharaManager is a web application made to manage and maintain your collection of
 - Character card editor
   - Allows editing of all fields except embedded lorebooks, latter coming soon
 - Automatic hierarchy and relation detection using name and string distance matching
+  - **NOTE: There is currently an issue within the prod builts for this script. Fix coming soon.** 
 - Comparison of definition content between related cards using a full diff editor
 - Statistics for cards, including characters per author, token count, cards uploaded per day
 - Portable as all data is stored within '.data/CharaManager.sqlite3' and the app can recreate all necessary files from that
