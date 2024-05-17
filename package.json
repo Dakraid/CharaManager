@@ -3,6 +3,7 @@
     "private": true,
     "type": "module",
     "license": "AGPL-3.0-NC",
+    "version": "0.1.0",
     "scripts": {
         "prod": "node .output/server/index.mjs",
         "build": "nuxt build",
