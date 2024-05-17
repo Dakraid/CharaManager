@@ -68,7 +68,7 @@ if (!applicationStore.provisioned) {
                 </Transition>
             </ScrollArea>
         </div>
-        <SideBar @update-characters="getCharacters" class="order-2"/>
+        <SideBar class="order-2" @update-characters="getCharacters" />
     </div>
 </template>
 
