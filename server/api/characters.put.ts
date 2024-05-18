@@ -61,6 +61,11 @@ export default defineEventHandler(async (event) => {
         if (imageApiResponse.Status !== StatusCode.OK) {
             errors.push(`Failed to process image for file ${file.name}: ${imageApiResponse.Content}`);
         }
+
+        await $fetch<ApiResponse>('/api/relations', {
+            method: 'PATCH',
+            body: JSON.stringify(new PatchRelationsRequest(result[0].id)),
+        });
     }
 
     if (errors.length > 0) {

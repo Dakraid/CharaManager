@@ -20,14 +20,25 @@ export default defineEventHandler(async (event) => {
     const drizzleDb = drizzle(db);
 
     try {
-        const relations = await drizzleDb.select().from(character_relations).where(eq(character_relations.current_id, <number>body.Details.id));
+        const childRelations = await drizzleDb.select().from(character_relations).where(eq(character_relations.current_id, <number>body.Details.id));
 
-        if (relations.length > 0) {
-            for (const relation of relations) {
+        if (childRelations.length > 0) {
+            for (const relation of childRelations) {
                 await drizzleDb
                     .update(character_details)
                     .set({rating: body.Details.rating})
                     .where(eq(character_details.id, <number>relation.old_id));
+            }
+        }
+
+        const parentRelations = await drizzleDb.select().from(character_relations).where(eq(character_relations.old_id, <number>body.Details.id));
+
+        if (parentRelations.length > 0) {
+            for (const relation of parentRelations) {
+                await drizzleDb
+                    .update(character_details)
+                    .set({rating: body.Details.rating})
+                    .where(eq(character_details.id, <number>relation.current_id));
             }
         }
 

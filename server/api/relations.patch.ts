@@ -2,12 +2,10 @@ import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';
 import { drizzle } from 'db0/integrations/drizzle/index';
 import { eq } from 'drizzle-orm';
-import { distance } from 'fastest-levenshtein';
 import _ from 'lodash';
 import Piscina from 'piscina';
 import ApiResponse from '~/models/ApiResponse';
 import type PatchRelationsRequest from '~/models/PatchRelationsRequest';
-import type PutDefinitionRequest from '~/models/PutDefinitionRequest';
 import StatusCode from '~/models/enums/StatusCode';
 import { character_definitions, character_details, character_relations } from '~/utils/drizzle/schema';
 
@@ -88,15 +86,9 @@ export default defineEventHandler(async (event) => {
     definitions.sort((a, b) => b.id - a.id);
 
     console.log('Matching by string distance...');
-    let fileUrl = '';
-    if (import.meta.dev) {
-        fileUrl = new URL('./../../public/scripts/MatchByDistance.js', import.meta.url).href;
-    } else {
-        fileUrl = new URL('./../public/scripts/MatchByDistance.cjs', import.meta.url).href;
-    }
+
     const pool = new Piscina({
-        filename: fileUrl,
-        maxQueue: 'auto',
+        filename: import.meta.dev ? new URL('./../../public/scripts/MatchByDistance.mjs', import.meta.url).href : new URL('./../public/scripts/MatchByDistance.cjs', import.meta.url).href,
     });
 
     const promises = definitions.map(async (definition) => {
@@ -128,9 +120,6 @@ export default defineEventHandler(async (event) => {
         for (const newRelation of relations) {
             await drizzleDb.insert(character_relations).values({ current_id: newRelation.current_id, old_id: newRelation.old_id }).onConflictDoNothing();
         }
-
-        const total = (await drizzleDb.select().from(character_relations).all()).length;
-
-        return new ApiResponse(StatusCode.OK, `Added ${relations.length} relations. Total count of relations: ${total}.`);
+        console.log('Done');
     });
 });

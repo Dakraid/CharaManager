@@ -15,6 +15,10 @@ export default defineEventHandler(async (event) => {
     const images = await drizzleDb.select({ id: character_images.id, content: character_images.content }).from(character_images).all();
 
     try {
+        if (!fs.existsSync('public/cards/')) {
+            fs.mkdirSync('public/cards/');
+        }
+
         for (const image of images) {
             const hash = createHash('sha256').update(image.content).digest('hex');
             await drizzleDb.update(character_images).set({ hash: hash }).where(eq(character_images.id, image.id));

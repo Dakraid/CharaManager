@@ -31,6 +31,10 @@ export default defineEventHandler(async (event) => {
     }
 
     try {
+        if (!fs.existsSync('public/cards/')) {
+            fs.mkdirSync('public/cards/');
+        }
+
         fs.writeFile(`public/cards/${body.Id}.png`, body.Base64Image.split('base64,')[1], { encoding: 'base64' }, function (err) {
             if (err) {
                 throw err;

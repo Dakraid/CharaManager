@@ -82,14 +82,9 @@ export default defineEventHandler(async (event) => {
     definitions.sort((a, b) => b.id - a.id);
 
     console.log('Matching by string distance...');
-    let fileUrl = '';
-    if (import.meta.dev) {
-        fileUrl = new URL('./../../public/scripts/MatchByDistance.js', import.meta.url).href;
-    } else {
-        fileUrl = new URL('./../public/scripts/MatchByDistance.cjs', import.meta.url).href;
-    }
+
     const pool = new Piscina({
-        filename: fileUrl,
+        filename: import.meta.dev ? new URL('./../../public/scripts/MatchByDistance.mjs', import.meta.url).href : new URL('./../public/scripts/MatchByDistance.cjs', import.meta.url).href,
         maxQueue: 'auto',
     });
 

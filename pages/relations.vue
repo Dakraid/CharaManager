@@ -13,12 +13,12 @@ const updateApplication = async () => {
 
 applicationStore.$subscribe(updateApplication);
 
-const response = await $fetch<ApiResponse>('/api/relations', {
+const { data: response } = await useFetch<ApiResponse>('/api/relations', {
     method: 'GET',
 });
 
 const relations = ref<CharacterRelations[]>([]);
-relations.value = response.Content.toSorted((a: CharacterRelations, b: CharacterRelations) => b.Parent - a.Parent);
+relations.value = response.value?.Content.toSorted((a: CharacterRelations, b: CharacterRelations) => b.Parent - a.Parent);
 
 const total = ref(0);
 total.value = relations.value

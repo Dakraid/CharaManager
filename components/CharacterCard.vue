@@ -105,6 +105,7 @@ const updateRating = async (rating: number) => {
                 <NuxtRating
                     :read-only="false"
                     :rating-value="character.rating"
+                    :rating-count="7"
                     active-color="hsl(var(--primary))"
                     inactive-color="hsl(var(--secondary))"
                     rating-size="24px"
@@ -156,7 +157,7 @@ const updateRating = async (rating: number) => {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction @click="deleteCharacter(character.id, false)">Continue</AlertDialogAction>
+                            <AlertDialogAction @click="deleteCharacter(character.id)">Continue</AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>

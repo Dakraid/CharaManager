@@ -29,14 +29,14 @@ const characterData = ref();
 const characterDump = ref('');
 
 const processCharacterDetails = async () => {
-    const response = await $fetch<ApiResponse>('/api/definition', {
+    const { data: response } = await useFetch<ApiResponse>('/api/definition', {
         method: 'GET',
         query: { id: characterInstance.value?.id },
     });
 
-    if (response.Status === StatusCode.OK) {
+    if (response.value?.Status === StatusCode.OK) {
         try {
-            const parsed = JSON.parse(response.Content.json);
+            const parsed = JSON.parse(response.value?.Content.json);
             characterData.value = Cards.parseToV2(parsed);
         } catch (e) {
             console.error(e);
@@ -45,8 +45,8 @@ const processCharacterDetails = async () => {
         }
     } else {
         toast({
-            title: response.Message,
-            description: response.Content,
+            title: response.value?.Message,
+            description: response.value?.Content,
             variant: 'destructive',
         });
     }
@@ -59,20 +59,20 @@ const addGreeting = async () => {
 };
 
 const saveCharacter = async () => {
-    const response = await $fetch<ApiResponse>('/api/definition', {
+    const { data: response } = await useFetch<ApiResponse>('/api/definition', {
         method: 'PUT',
         body: JSON.stringify(new PutDefinitionRequest(characterInstance.value?.id as number, JSON.stringify(characterData.value))),
     });
 
-    if (response.Status === StatusCode.OK) {
+    if (response.value?.Status === StatusCode.OK) {
         toast({
-            title: response.Message,
-            description: response.Content,
+            title: response.value?.Message,
+            description: response.value?.Content,
         });
     } else {
         toast({
-            title: response.Message,
-            description: response.Content,
+            title: response.value?.Message,
+            description: response.value?.Content,
             variant: 'destructive',
         });
     }
