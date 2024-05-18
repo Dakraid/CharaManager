@@ -15,6 +15,11 @@ export default defineNuxtConfig({
             mode: 'out-in',
         },
     },
+    nitro: {
+        compressPublicAssets: {
+            brotli: true
+        }
+    },
     modules: [
         '@nuxt/eslint',
         '@pinia/nuxt',
@@ -27,6 +32,8 @@ export default defineNuxtConfig({
         'nuxt-rating',
         '@nuxtjs/robots',
         'nuxt-monaco-editor',
+        'nuxt-security',
+        '@nuxtjs/critters'
     ],
     ssr: true,
     devtools: {
@@ -42,5 +49,16 @@ export default defineNuxtConfig({
     shadcn: {
         prefix: '',
         componentDir: './components/ui',
+    },
+    security: {
+        enabled: false,
+        requestSizeLimiter: {
+            maxRequestSizeInBytes: 100000000,
+            maxUploadFileRequestInBytes: 500000000
+        },
+        rateLimiter: {
+            tokensPerInterval: 50,
+            interval: 1000
+        }
     },
 });

@@ -21,6 +21,8 @@ const applicationStore = useApplicationStore();
 const files = ref<FileUpload[]>([]);
 const fileInput = ref<HTMLInputElement>();
 
+const activeAction = ref(false);
+
 const onFileChange = async (e: any) => {
     const fileList = e.target.files || e.dataTransfer.files;
     if (!fileList.length) return;
@@ -43,6 +45,7 @@ const onFileChange = async (e: any) => {
 };
 
 const uploadFiles = async () => {
+    activeAction.value = true;
     if (files.value.length === 0) {
         toast({
             title: 'No images selected',
@@ -87,10 +90,12 @@ const uploadFiles = async () => {
         fileInput.value.value = '';
     }
 
+    activeAction.value = false;
     emit('update-characters');
 };
 
 const synchronizeDefinitions = async () => {
+    activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/database', {
         method: 'POST',
         body: JSON.stringify(new DatabaseRequest(DatabaseAction.Synchronize)),
@@ -102,9 +107,11 @@ const synchronizeDefinitions = async () => {
             description: response.Content,
         });
     }
+    activeAction.value = false;
 };
 
 const synchronizeRelations = async () => {
+    activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/relations', {
         method: 'PUT',
     });
@@ -115,9 +122,11 @@ const synchronizeRelations = async () => {
             description: response.Content,
         });
     }
+    activeAction.value = false;
 };
 
 const deleteCharacters = async () => {
+    activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/database', {
         method: 'DELETE',
     });
@@ -135,6 +144,7 @@ const deleteCharacters = async () => {
         });
     }
 
+    activeAction.value = false;
     emit('update-characters');
 };
 
@@ -187,6 +197,7 @@ const clearChubAiCharacter = async () => {
 };
 
 const updateCharacters = async () => {
+    activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/database', {
         method: 'POST',
         body: JSON.stringify(new DatabaseRequest(DatabaseAction.Update)),
@@ -204,9 +215,11 @@ const updateCharacters = async () => {
             variant: 'destructive',
         });
     }
+    activeAction.value = false;
 };
 
 const renderImages = async () => {
+    activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/images', {
         method: 'POST',
     });
@@ -223,6 +236,7 @@ const renderImages = async () => {
             variant: 'destructive',
         });
     }
+    activeAction.value = false;
 };
 </script>
 
@@ -250,6 +264,10 @@ const renderImages = async () => {
                     <label for="censorNames" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Censor Character Names? </label>
                 </div>
                 <Separator />
+                <div class="h-full" />
+                <div v-if="activeAction" class="h-full flex items-center justify-center">
+                    <Icon class="h-16 w-16" name="line-md:loading-loop" />
+                </div>
                 <div class="h-full" />
                 <Separator />
                 <Label class="text-1xl">Reload Characters from Database</Label>

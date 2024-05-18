@@ -106,6 +106,7 @@ const updateRating = async (rating: number) => {
                     :read-only="false"
                     :rating-value="character.rating"
                     :rating-count="7"
+                    rating-content="◈"
                     active-color="hsl(var(--primary))"
                     inactive-color="hsl(var(--secondary))"
                     rating-size="24px"
