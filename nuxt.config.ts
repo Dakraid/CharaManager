@@ -17,8 +17,8 @@ export default defineNuxtConfig({
     },
     nitro: {
         compressPublicAssets: {
-            brotli: true
-        }
+            brotli: true,
+        },
     },
     modules: [
         '@nuxt/eslint',
@@ -33,7 +33,7 @@ export default defineNuxtConfig({
         '@nuxtjs/robots',
         'nuxt-monaco-editor',
         'nuxt-security',
-        '@nuxtjs/critters'
+        '@nuxtjs/critters',
     ],
     ssr: true,
     devtools: {
@@ -54,11 +54,11 @@ export default defineNuxtConfig({
         enabled: false,
         requestSizeLimiter: {
             maxRequestSizeInBytes: 100000000,
-            maxUploadFileRequestInBytes: 500000000
+            maxUploadFileRequestInBytes: 500000000,
         },
         rateLimiter: {
             tokensPerInterval: 50,
-            interval: 1000
-        }
+            interval: 1000,
+        },
     },
 });
