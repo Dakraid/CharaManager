@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import type { Statistics } from '~/models/OLD/Statistics';
 
+const config = useRuntimeConfig();
+
 const response: Statistics = await $fetch('/api/statistics', {
     method: 'POST',
+    headers: { 'x-api-key': config.public.apiKey },
 });
 
 const statistics = ref();

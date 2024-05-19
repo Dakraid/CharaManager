@@ -3,12 +3,21 @@ import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';
 import { drizzle } from 'db0/integrations/drizzle/index';
 import _ from 'lodash';
+import ApiResponse from '~/models/ApiResponse';
 import type { Statistics } from '~/models/OLD/Statistics';
 import { Author, CharDate, CharTokens } from '~/models/OLD/Statistics';
+import StatusCode from '~/models/enums/StatusCode';
 import { character_definitions, character_details } from '~/utils/drizzle/schema';
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
+    const config = useRuntimeConfig(event);
+
+    const apiKey = event.headers.get('x-api-key');
+    if (!apiKey || apiKey !== config.public.apiKey) {
+        return new ApiResponse(StatusCode.FORBIDDEN, 'Missing or invalid API key given.');
+    }
+
     const db = createDatabase(sqlite({ name: 'CharaManager' }));
 
     const drizzleDb = drizzle(db);

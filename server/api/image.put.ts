@@ -12,6 +12,13 @@ import { character_images } from '~/utils/drizzle/schema';
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
+    const config = useRuntimeConfig(event);
+
+    const apiKey = event.headers.get('x-api-key');
+    if (!apiKey || apiKey !== config.public.apiKey) {
+        return new ApiResponse(StatusCode.FORBIDDEN, 'Missing or invalid API key given.');
+    }
+
     const body = await readBody<PutImageRequest>(event);
     if (!body) {
         return new ApiResponse(StatusCode.BAD_REQUEST, 'The request body is malformed or corrupted.');
@@ -47,6 +54,7 @@ export default defineEventHandler(async (event) => {
     const json = convertBase64PNGToString(body.Base64Image);
     const response = await $fetch<ApiResponse>('/api/definition', {
         method: 'PUT',
+        headers: { 'x-api-key': config.public.apiKey },
         body: JSON.stringify(new PutDefinitionRequest(body.Id, json, true)),
     });
 

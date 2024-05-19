@@ -8,6 +8,13 @@ import { character_images } from '~/utils/drizzle/schema';
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
+    const config = useRuntimeConfig(event);
+
+    const apiKey = event.headers.get('x-api-key');
+    if (!apiKey || apiKey !== config.public.apiKey) {
+        return new ApiResponse(StatusCode.FORBIDDEN, 'Missing or invalid API key given.');
+    }
+
     const query = getQuery(event);
     if (!query.id || !Number(query.id)) {
         return new ApiResponse(StatusCode.BAD_REQUEST, 'Missing route parameter id or non-numeric id transmitted.');

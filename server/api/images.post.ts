@@ -10,6 +10,13 @@ import { character_images } from '~/utils/drizzle/schema';
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
+    const config = useRuntimeConfig(event);
+
+    const apiKey = event.headers.get('x-api-key');
+    if (!apiKey || apiKey !== config.public.apiKey) {
+        return new ApiResponse(StatusCode.FORBIDDEN, 'Missing or invalid API key given.');
+    }
+
     const db = createDatabase(sqlite({ name: 'CharaManager' }));
     const drizzleDb = drizzle(db);
     const images = await drizzleDb.select({ id: character_images.id, content: character_images.content }).from(character_images).all();

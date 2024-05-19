@@ -11,6 +11,13 @@ import { character_definitions, character_details, character_relations } from '~
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
+    const config = useRuntimeConfig(event);
+
+    const apiKey = event.headers.get('x-api-key');
+    if (!apiKey || apiKey !== config.public.apiKey) {
+        return new ApiResponse(StatusCode.FORBIDDEN, 'Missing or invalid API key given.');
+    }
+
     const body = await readBody<PatchRelationsRequest>(event);
     if (!body) {
         return new ApiResponse(StatusCode.BAD_REQUEST, 'The request body is malformed or corrupted.');

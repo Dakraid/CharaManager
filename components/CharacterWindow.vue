@@ -10,6 +10,8 @@ import PutDefinitionRequest from '~/models/PutDefinitionRequest';
 import StatusCode from '~/models/enums/StatusCode';
 import { useApplicationStore } from '~/stores/applicationStore';
 
+const config = useRuntimeConfig();
+
 const { toast } = useToast();
 
 const applicationStore = useApplicationStore();
@@ -31,6 +33,7 @@ const characterDump = ref('');
 const processCharacterDetails = async () => {
     const { data: response } = await useFetch<ApiResponse>('/api/definition', {
         method: 'GET',
+        headers: { 'x-api-key': config.public.apiKey },
         query: { id: characterInstance.value?.id },
     });
 
@@ -61,6 +64,7 @@ const addGreeting = async () => {
 const saveCharacter = async () => {
     const { data: response } = await useFetch<ApiResponse>('/api/definition', {
         method: 'PUT',
+        headers: { 'x-api-key': config.public.apiKey },
         body: JSON.stringify(new PutDefinitionRequest(characterInstance.value?.id as number, JSON.stringify(characterData.value))),
     });
 

@@ -23,12 +23,6 @@ CharaManager is a web application made to manage and maintain your collection of
     - Currently, there no workaround except using a larger screen
   - Fix (in progress):
     - Update styling to work better on smaller screens
-- Server API:
-  - The API is not protected as of now, there is no API key or local only access
-  - Workaround:
-    - When running your app, use something like Caddy with Caddy Security to block access to your app unless authenticated
-  - Fix (in progress):
-    - Integrate API key authentication
 
 ### Upcoming Integrations
 - Lorebook Editing

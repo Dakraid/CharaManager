@@ -11,6 +11,8 @@ import { useCharacterStore } from '~/stores/characterStore';
 
 const emit = defineEmits(['update-characters']);
 
+const config = useRuntimeConfig();
+
 const { toast } = useToast();
 
 const loading = ref(false);
@@ -63,6 +65,7 @@ const uploadFiles = async () => {
 
     const response = await $fetch<ApiResponse>('/api/characters', {
         method: 'PUT',
+        headers: { 'x-api-key': config.public.apiKey },
         body: {
             files: files.value,
         },
@@ -94,10 +97,56 @@ const uploadFiles = async () => {
     emit('update-characters');
 };
 
+const renderImages = async () => {
+    activeAction.value = true;
+    const response = await $fetch<ApiResponse>('/api/images', {
+        method: 'POST',
+        headers: { 'x-api-key': config.public.apiKey },
+    });
+
+    if (response.Status === StatusCode.OK) {
+        toast({
+            title: response.Message,
+            description: response.Content,
+        });
+    } else {
+        toast({
+            title: response.Message,
+            description: response.Content,
+            variant: 'destructive',
+        });
+    }
+    activeAction.value = false;
+};
+
+const updateCharacters = async () => {
+    activeAction.value = true;
+    const response = await $fetch<ApiResponse>('/api/database', {
+        method: 'POST',
+        headers: { 'x-api-key': config.public.apiKey },
+        body: JSON.stringify(new DatabaseRequest(DatabaseAction.Update)),
+    });
+
+    if (response.Status === StatusCode.OK) {
+        toast({
+            title: response.Message,
+            description: response.Content,
+        });
+    } else {
+        toast({
+            title: response.Message,
+            description: response.Content,
+            variant: 'destructive',
+        });
+    }
+    activeAction.value = false;
+};
+
 const synchronizeDefinitions = async () => {
     activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/database', {
         method: 'POST',
+        headers: { 'x-api-key': config.public.apiKey },
         body: JSON.stringify(new DatabaseRequest(DatabaseAction.Synchronize)),
     });
 
@@ -114,6 +163,7 @@ const synchronizeRelations = async () => {
     activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/relations', {
         method: 'PUT',
+        headers: { 'x-api-key': config.public.apiKey },
     });
 
     if (response.Status === StatusCode.OK) {
@@ -129,6 +179,7 @@ const deleteCharacters = async () => {
     activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/database', {
         method: 'DELETE',
+        headers: { 'x-api-key': config.public.apiKey },
     });
 
     if (response.Status === StatusCode.OK) {
@@ -166,6 +217,7 @@ const downloadChubAiCharacter = async () => {
     loading.value = true;
     const response = await $fetch<ApiResponse>('/api/chubai', {
         method: 'POST',
+        headers: { 'x-api-key': config.public.apiKey },
         body: { characterUrl: characterUrl.value },
     });
 
@@ -194,49 +246,6 @@ const saveChubAiCharacter = async () => {
 const clearChubAiCharacter = async () => {
     characterUrl.value = '';
     fetchedCharacter.value = undefined;
-};
-
-const updateCharacters = async () => {
-    activeAction.value = true;
-    const response = await $fetch<ApiResponse>('/api/database', {
-        method: 'POST',
-        body: JSON.stringify(new DatabaseRequest(DatabaseAction.Update)),
-    });
-
-    if (response.Status === StatusCode.OK) {
-        toast({
-            title: response.Message,
-            description: response.Content,
-        });
-    } else {
-        toast({
-            title: response.Message,
-            description: response.Content,
-            variant: 'destructive',
-        });
-    }
-    activeAction.value = false;
-};
-
-const renderImages = async () => {
-    activeAction.value = true;
-    const response = await $fetch<ApiResponse>('/api/images', {
-        method: 'POST',
-    });
-
-    if (response.Status === StatusCode.OK) {
-        toast({
-            title: response.Message,
-            description: response.Content,
-        });
-    } else {
-        toast({
-            title: response.Message,
-            description: response.Content,
-            variant: 'destructive',
-        });
-    }
-    activeAction.value = false;
 };
 </script>
 

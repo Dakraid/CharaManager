@@ -20,6 +20,11 @@ export default defineNuxtConfig({
             brotli: true,
         },
     },
+    runtimeConfig: {
+        public: {
+            apiKey: '',
+        },
+    },
     modules: [
         '@nuxt/eslint',
         '@pinia/nuxt',

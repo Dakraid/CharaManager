@@ -5,16 +5,21 @@ import type GetCharactersRequest from '~/models/GetCharactersRequest';
 import StatusCode from '~/models/enums/StatusCode';
 
 async function getCharacterCount() {
+    const config = useRuntimeConfig();
     const response = await $fetch<ApiResponse>('/api/count', {
         method: 'GET',
+        headers: { 'x-api-key': config.public.apiKey },
     });
 
     return response.Content ?? 0;
 }
 
 async function getCharacters(options: GetCharactersRequest) {
+    const config = useRuntimeConfig();
+
     const response = await $fetch<ApiResponse>('/api/characters', {
         method: 'POST',
+        headers: { 'x-api-key': config.public.apiKey },
         body: JSON.stringify(options),
     });
 
@@ -37,15 +42,21 @@ async function getCharacters(options: GetCharactersRequest) {
 }
 
 async function getCharacter(id: number) {
+    const config = useRuntimeConfig();
+
     return await $fetch<ApiResponse>('/api/character', {
         method: 'GET',
+        headers: { 'x-api-key': config.public.apiKey },
         query: { id: id },
     });
 }
 
 async function deleteCharacter(options: DeleteCharacterRequest) {
+    const config = useRuntimeConfig();
+
     return await $fetch<ApiResponse>('/api/character', {
         method: 'DELETE',
+        headers: { 'x-api-key': config.public.apiKey },
         body: JSON.stringify(options),
     });
 }

@@ -52,6 +52,8 @@ async function ProvisionDatabase(db: Database) {
 }
 
 async function UpdateDatabase(db: Database) {
+    const config = useRuntimeConfig();
+
     const drizzleDb = drizzle(db);
 
     const images = await drizzleDb.select().from(character_images);
@@ -84,6 +86,7 @@ async function UpdateDatabase(db: Database) {
 
     const response = await $fetch<ApiResponse>('/api/images', {
         method: 'POST',
+        headers: { 'x-api-key': config.public.apiKey },
     });
 
     if (response.Status !== StatusCode.OK) {
@@ -116,6 +119,13 @@ async function SynchronizeDatabase(db: Database) {
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
+    const config = useRuntimeConfig(event);
+
+    const apiKey = event.headers.get('x-api-key');
+    if (!apiKey || apiKey !== config.public.apiKey) {
+        return new ApiResponse(StatusCode.FORBIDDEN, 'Missing or invalid API key given.');
+    }
+
     const body = await readBody<DatabaseRequest>(event);
     if (!body) {
         return new ApiResponse(StatusCode.BAD_REQUEST, 'The request body is malformed or corrupted.');
