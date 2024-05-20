@@ -8,7 +8,7 @@ const colorMode = useColorMode();
 </script>
 
 <template>
-    <div class="container flex flex-col gap-2 items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16 lg:px-24 h-min max-w-full">
+    <div class="container flex flex-col gap-2 items-center justify-between space-y-2 py-4 sm:flex-row sm:space-y-0 md:h-16 lg:px-24 h-min max-w-full">
         <Icon class="h-10 w-10" name="radix-icons:avatar" />
         <h2 class="text-lg font-semibold">CharaManager</h2>
         <div class="flex flex-grow justify-center">
@@ -41,7 +41,7 @@ const colorMode = useColorMode();
                 </NavigationMenuList>
             </NavigationMenu>
         </div>
-        <div class="flex justify-end w-168">
+        <div class="flex justify-end w-full w-168">
             <DropdownMenu>
                 <DropdownMenuTrigger as-child>
                     <Button variant="outline">

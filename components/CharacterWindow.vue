@@ -107,7 +107,7 @@ function onDrop(files: File[] | null) {
 
 const { isOverDropZone } = useDropZone(dropZoneRef, {
     onDrop,
-    dataTypes: ['image/png'],
+    dataTypes: ['image/png', 'image/jpeg'],
 });
 
 await updateApplicationState();

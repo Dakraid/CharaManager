@@ -15,8 +15,15 @@ const sortOptions = [
 
 // This isn't a constant as it will be overwritten using custom options based on the width
 let itemsPerPageOptions = [{ value: 5, label: '5' }];
+const itemsPerPage = ref(5);
 
 const applicationStore = useApplicationStore();
+
+const updateApplication = async () => {
+    itemsPerPage.value = applicationStore.itemsPerPage;
+};
+
+applicationStore.$subscribe(updateApplication);
 
 const characterStore = useCharacterStore();
 const characterCount = ref(0);
@@ -70,7 +77,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="grid control-grid w-full items-center justify-items-center gap-2">
+    <div class="grid control-grid w-full items-center justify-items-center gap-2 row-start-1">
         <div class="flex gap-1">
             <div class="relative w-250 max-w-sm items-center">
                 <Input id="search" v-model="applicationStore.searchValue" type="text" placeholder="Search..." class="pl-10" @input="processSearch" />
@@ -83,10 +90,10 @@ onMounted(async () => {
             </Button>
         </div>
 
-        <div class="flex flex-wrap gap-2 w-full items-center justify-center xl:justify-between row-start-2 col-start-1 col-span-3 2xl:row-start-1 2xl:col-start-2 2xl:col-span-1 2xl:justify-center">
+        <div class="flex flex-wrap gap-2 w-full items-center justify-center xl:justify-between row-start-3 2xl:row-start-1 2xl:col-start-2 2xl:col-span-1 2xl:justify-center">
             <Button class="w-200 justify-center" variant="outline"> Number of characters: {{ characterCount }} </Button>
 
-            <Pagination v-slot="{ page }" :total="characterCount" :items-per-page="20" :sibling-count="1" show-edges :default-page="1" @update:page="updatePage">
+            <Pagination v-slot="{ page }" :total="characterCount" :items-per-page="itemsPerPage" :sibling-count="0" show-edges :default-page="1" @update:page="updatePage">
                 <PaginationList v-slot="{ items }" class="flex items-center gap-1">
                     <PaginationFirst />
                     <PaginationPrev />
@@ -137,7 +144,7 @@ onMounted(async () => {
             </Popover>
         </div>
 
-        <div class="flex gap-1 col-start-3">
+        <div class="flex gap-1 row-start-2 2xl:row-start-1">
             <Popover v-model:open="openOrderBy">
                 <PopoverTrigger as-child>
                     <Button :aria-expanded="openOrderBy" class="w-290 justify-between" role="combobox" variant="outline">
