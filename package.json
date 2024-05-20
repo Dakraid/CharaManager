@@ -34,7 +34,7 @@
         "dayjs": "^1.11.11",
         "db0": "^0.1.4",
         "drizzle-orm": "^0.30.10",
-        "embla-carousel": "^8.1.1",
+        "embla-carousel": "^8.1.2",
         "embla-carousel-vue": "^8.1.1",
         "fastest-levenshtein": "^1.0.16",
         "img-diff-js": "^0.5.4",

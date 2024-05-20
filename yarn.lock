@@ -5015,7 +5015,7 @@ __metadata:
     db0: "npm:^0.1.4"
     drizzle-kit: "npm:^0.21.2"
     drizzle-orm: "npm:^0.30.10"
-    embla-carousel: "npm:^8.1.1"
+    embla-carousel: "npm:^8.1.2"
     embla-carousel-vue: "npm:^8.1.1"
     eslint: "npm:^9.3.0"
     eslint-config-prettier: "npm:^9.1.0"
@@ -6668,10 +6668,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"embla-carousel@npm:8.1.1, embla-carousel@npm:^8.1.1":
+"embla-carousel@npm:8.1.1":
   version: 8.1.1
   resolution: "embla-carousel@npm:8.1.1"
   checksum: 10c0/0669ddf6a325fda386a7634d7d512bbb524abbe3d83cd2d13ac03fda6cd3f4b1df0af4c77c5ab104d73208f0cda0c82ae1eba885eb5e0e5e8db7681d32ea8bf1
+  languageName: node
+  linkType: hard
+
+"embla-carousel@npm:^8.1.2":
+  version: 8.1.2
+  resolution: "embla-carousel@npm:8.1.2"
+  checksum: 10c0/c46ced3054c424a808caebcf3d25559a50d77a2ad72e128a6f3b2e6a45c793a07243f33a5dec0fc45cc8e44de539958abd544245ad0ad9dce810f9c54fcff8c0
   languageName: node
   linkType: hard
 
