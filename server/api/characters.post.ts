@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig(event);
 
     const apiKey = event.headers.get('x-api-key');
-    if (!apiKey || apiKey !== config.public.apiKey) {
+    if (!apiKey || apiKey !== config.apiKey) {
         return new ApiResponse(StatusCode.FORBIDDEN, 'Missing or invalid API key given.');
     }
 

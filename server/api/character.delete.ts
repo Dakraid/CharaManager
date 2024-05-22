@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig(event);
 
     const apiKey = event.headers.get('x-api-key');
-    if (!apiKey || apiKey !== config.public.apiKey) {
+    if (!apiKey || apiKey !== config.apiKey) {
         return new ApiResponse(StatusCode.FORBIDDEN, 'Missing or invalid API key given.');
     }
 
@@ -40,7 +40,13 @@ export default defineEventHandler(async (event) => {
     try {
         await drizzleDb.delete(character_relations).where(eq(character_relations.current_id, body.Id));
     } catch {
-        console.log(`Character with ID ${body.Id} had no image?`);
+        console.log(`Character with ID ${body.Id} had no relation.`);
+    }
+
+    try {
+        await drizzleDb.delete(character_relations).where(eq(character_relations.old_id, body.Id));
+    } catch {
+        console.log(`Character with ID ${body.Id} had no relation.`);
     }
 
     try {
@@ -52,7 +58,7 @@ export default defineEventHandler(async (event) => {
     try {
         await drizzleDb.delete(character_images).where(eq(character_images.id, body.Id));
     } catch {
-        console.log(`Character with ID ${body.Id} had no image?`);
+        console.error(`Character with ID ${body.Id} had no image?`);
     }
 
     try {

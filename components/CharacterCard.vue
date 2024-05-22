@@ -12,14 +12,12 @@ const props = defineProps<{
     character: CharacterDetails;
 }>();
 
-const config = useRuntimeConfig();
-
 const { toast } = useToast();
 const imageUri = ref('');
 imageUri.value = `/cards/${props.character.id}.png`;
 
+const keyStore = useKeyStore();
 const characterStore = useCharacterStore();
-
 const applicationStore = useApplicationStore();
 const censorChars = ref(false);
 const censorNames = ref(false);
@@ -60,7 +58,7 @@ const downloadCharacter = async (id: number) => {
     const character = await characterStore.getCharacterById(id);
     const response = await $fetch<ApiResponse>('/api/image', {
         method: 'GET',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
         query: { id: id },
     });
     if (response.Status === StatusCode.OK) {
@@ -84,7 +82,7 @@ const updateRating = async (rating: number) => {
     character.rating = rating;
     const response = await $fetch<ApiResponse>('/api/details', {
         method: 'PATCH',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
         body: JSON.stringify(new PatchDetailsRequest(character)),
     });
     if (response.Status === StatusCode.OK) {

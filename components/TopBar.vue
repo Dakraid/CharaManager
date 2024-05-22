@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
+import { debounce } from 'perfect-debounce';
 import { Button } from '~/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '~/components/ui/dropdown-menu';
 import { cn } from '~/lib/utils';
 
 const colorMode = useColorMode();
+const keyStore = useKeyStore();
 </script>
 
 <template>
@@ -41,7 +43,22 @@ const colorMode = useColorMode();
                 </NavigationMenuList>
             </NavigationMenu>
         </div>
-        <div class="flex justify-end w-full w-168">
+        <div class="flex justify-end w-full gap-4 w-168">
+            <Popover>
+                <PopoverTrigger as-child>
+                    <Button variant="outline">
+                        <span class="sr-only">Set API Key</span>
+                        <Icon class="h-6 w-6" name="radix-icons:lock-open-1" />
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent class="w-80">
+                    <div class="flex flex-col gap-2">
+                        <h4 class="font-medium leading-none">Set the API Key.</h4>
+                        <p class="text-sm text-red-500">Refresh the page afterwards.</p>
+                        <Input id="apiKey" v-model="keyStore.apiKey" type="password" />
+                    </div>
+                </PopoverContent>
+            </Popover>
             <DropdownMenu>
                 <DropdownMenuTrigger as-child>
                     <Button variant="outline">

@@ -86,7 +86,7 @@ async function UpdateDatabase(db: Database) {
 
     const response = await $fetch<ApiResponse>('/api/images', {
         method: 'POST',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': config.apiKey },
     });
 
     if (response.Status !== StatusCode.OK) {
@@ -122,7 +122,7 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig(event);
 
     const apiKey = event.headers.get('x-api-key');
-    if (!apiKey || apiKey !== config.public.apiKey) {
+    if (!apiKey || apiKey !== config.apiKey) {
         return new ApiResponse(StatusCode.FORBIDDEN, 'Missing or invalid API key given.');
     }
 

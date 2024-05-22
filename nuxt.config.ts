@@ -21,13 +21,12 @@ export default defineNuxtConfig({
         },
     },
     runtimeConfig: {
-        public: {
-            apiKey: '',
-        },
+        apiKey: '',
     },
     modules: [
         '@nuxt/eslint',
         '@pinia/nuxt',
+        '@pinia-plugin-persistedstate/nuxt',
         '@nuxtjs/tailwindcss',
         '@nuxtjs/color-mode',
         'shadcn-nuxt',

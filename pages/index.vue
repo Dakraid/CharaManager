@@ -7,6 +7,8 @@ import { useCharacterStore } from '~/stores/characterStore';
 
 const config = useRuntimeConfig();
 
+const keyStore = useKeyStore();
+
 const characterStore = useCharacterStore();
 const characterCount = ref(0);
 const characters = ref([] as CharacterDetails[]);
@@ -36,7 +38,7 @@ const getCharacters = async () => {
 if (!applicationStore.provisioned) {
     await $fetch('/api/database', {
         method: 'POST',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
         body: JSON.stringify(new DatabaseRequest(DatabaseAction.Provision)),
     });
 

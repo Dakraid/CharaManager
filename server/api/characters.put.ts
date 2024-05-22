@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig(event);
 
     const apiKey = event.headers.get('x-api-key');
-    if (!apiKey || apiKey !== config.public.apiKey) {
+    if (!apiKey || apiKey !== config.apiKey) {
         return new ApiResponse(StatusCode.FORBIDDEN, 'Missing or invalid API key given.');
     }
 
@@ -62,7 +62,7 @@ export default defineEventHandler(async (event) => {
 
         const imageApiResponse = await $fetch<ApiResponse>('/api/image', {
             method: 'PUT',
-            headers: { 'x-api-key': config.public.apiKey },
+            headers: { 'x-api-key': config.apiKey },
             body: JSON.stringify(new PutImageRequest(result[0].id, file.content)),
         });
 
@@ -72,7 +72,7 @@ export default defineEventHandler(async (event) => {
 
         await $fetch<ApiResponse>('/api/relations', {
             method: 'PATCH',
-            headers: { 'x-api-key': config.public.apiKey },
+            headers: { 'x-api-key': config.apiKey },
             body: JSON.stringify(new PatchRelationsRequest(result[0].id)),
         });
     }

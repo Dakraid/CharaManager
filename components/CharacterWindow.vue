@@ -12,8 +12,6 @@ import StatusCode from '~/models/enums/StatusCode';
 import { useApplicationStore } from '~/stores/applicationStore';
 import encodeArrayBufferToUrlSafeBase64 from '~/utils/encodeArrayBufferToUrlSafeBase64';
 
-const config = useRuntimeConfig();
-
 const { toast } = useToast();
 
 const imageUri = ref('');
@@ -26,6 +24,7 @@ const characterInstance = ref<CharacterDetails>();
 const showCharacterWindow = ref(false);
 const showCropperWindow = ref(false);
 
+const keyStore = useKeyStore();
 const applicationStore = useApplicationStore();
 
 const updateApplicationState = async () => {
@@ -38,7 +37,7 @@ applicationStore.$subscribe(updateApplicationState);
 const processCharacterDetails = async () => {
     const { data: response } = await useFetch<ApiResponse>('/api/definition', {
         method: 'GET',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
         query: { id: characterInstance.value?.id },
     });
 
@@ -67,7 +66,7 @@ const addGreeting = async () => {
 const saveCharacter = async () => {
     const { data: response } = await useFetch<ApiResponse>('/api/definition', {
         method: 'PUT',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
         body: JSON.stringify(new PutDefinitionRequest(characterInstance.value?.id as number, JSON.stringify(characterData.value))),
     });
 
@@ -123,7 +122,7 @@ const submitCroppedImage = async () => {
 
     const response = await $fetch<ApiResponse>('/api/image', {
         method: 'PATCH',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
         body: {
             Id: characterInstance.value?.id as number,
             File: encodeArrayBufferToUrlSafeBase64(await croppedImage.arrayBuffer()),

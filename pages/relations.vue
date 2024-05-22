@@ -5,8 +5,7 @@ import type ApiResponse from '~/models/ApiResponse';
 import type CharacterRelations from '~/models/CharacterRelations';
 import { useApplicationStore } from '~/stores/applicationStore';
 
-const config = useRuntimeConfig();
-
+const keyStore = useKeyStore();
 const applicationStore = useApplicationStore();
 
 const updateApplication = async () => {
@@ -17,7 +16,7 @@ applicationStore.$subscribe(updateApplication);
 
 const { data: response } = await useFetch<ApiResponse>('/api/relations', {
     method: 'GET',
-    headers: { 'x-api-key': config.public.apiKey },
+    headers: { 'x-api-key': keyStore.apiKey },
 });
 
 const relations = ref<CharacterRelations[]>([]);
@@ -39,12 +38,12 @@ const showDiff = async (parentId: number, childId: number) => {
 
     const parent = await $fetch<ApiResponse>('/api/definition', {
         method: 'GET',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
         query: { id: parentId },
     });
     const child = await $fetch<ApiResponse>('/api/definition', {
         method: 'GET',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
         query: { id: childId },
     });
 

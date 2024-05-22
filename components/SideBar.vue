@@ -7,17 +7,14 @@ import type { FileUpload } from '~/models/OLD/FileUpload';
 import { DatabaseAction } from '~/models/enums/DatabaseAction';
 import StatusCode from '~/models/enums/StatusCode';
 import { useApplicationStore } from '~/stores/applicationStore';
-import { useCharacterStore } from '~/stores/characterStore';
 
 const emit = defineEmits(['update-characters']);
-
-const config = useRuntimeConfig();
 
 const { toast } = useToast();
 
 const loading = ref(false);
 
-const characterStore = useCharacterStore();
+const keyStore = useKeyStore();
 const applicationStore = useApplicationStore();
 
 const files = ref<FileUpload[]>([]);
@@ -65,7 +62,7 @@ const uploadFiles = async () => {
 
     const response = await $fetch<ApiResponse>('/api/characters', {
         method: 'PUT',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
         body: {
             files: files.value,
         },
@@ -101,7 +98,7 @@ const renderImages = async () => {
     activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/images', {
         method: 'POST',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
     });
 
     if (response.Status === StatusCode.OK) {
@@ -123,7 +120,7 @@ const updateCharacters = async () => {
     activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/database', {
         method: 'POST',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
         body: JSON.stringify(new DatabaseRequest(DatabaseAction.Update)),
     });
 
@@ -146,7 +143,7 @@ const synchronizeDefinitions = async () => {
     activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/database', {
         method: 'POST',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
         body: JSON.stringify(new DatabaseRequest(DatabaseAction.Synchronize)),
     });
 
@@ -163,7 +160,7 @@ const synchronizeRelations = async () => {
     activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/relations', {
         method: 'PUT',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
     });
 
     if (response.Status === StatusCode.OK) {
@@ -179,7 +176,7 @@ const deleteCharacters = async () => {
     activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/database', {
         method: 'DELETE',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
     });
 
     if (response.Status === StatusCode.OK) {
@@ -217,7 +214,7 @@ const downloadChubAiCharacter = async () => {
     loading.value = true;
     const response = await $fetch<ApiResponse>('/api/chubai', {
         method: 'POST',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': keyStore.apiKey },
         body: { characterUrl: characterUrl.value },
     });
 

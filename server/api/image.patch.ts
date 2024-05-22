@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig(event);
 
     const apiKey = event.headers.get('x-api-key');
-    if (!apiKey || apiKey !== config.public.apiKey) {
+    if (!apiKey || apiKey !== config.apiKey) {
         return new ApiResponse(StatusCode.FORBIDDEN, 'Missing or invalid API key given.');
     }
 
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
 
     const definition = await $fetch<ApiResponse>('/api/definition', {
         method: 'GET',
-        headers: { 'x-api-key': config.public.apiKey },
+        headers: { 'x-api-key': config.apiKey },
         query: { id: body.Id },
     });
 
