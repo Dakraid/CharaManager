@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useDropZone } from '@vueuse/core';
 import * as Cards from 'character-card-utils';
-import { Cropper } from 'vue-advanced-cropper';
-import 'vue-advanced-cropper/dist/style.css';
+import VuePictureCropper, { cropper } from 'vue-picture-cropper';
 import { Button } from '~/components/ui/button';
 import { useToast } from '~/components/ui/toast';
+import { cn } from '~/lib/utils';
 import type ApiResponse from '~/models/ApiResponse';
 import type { CharacterDetails } from '~/models/CharacterDetails';
 import PutDefinitionRequest from '~/models/PutDefinitionRequest';
@@ -25,8 +25,6 @@ const characterInstance = ref<CharacterDetails>();
 
 const showCharacterWindow = ref(false);
 const showCropperWindow = ref(false);
-
-const cropper = ref();
 
 const applicationStore = useApplicationStore();
 
@@ -106,13 +104,29 @@ async function onDrop(files: File[] | null) {
     }
 
     imageBlob.value = URL.createObjectURL(files[0]);
+    showCropperWindow.value = true;
+}
+
+const submitCroppedImage = async () => {
+    const croppedImage = await cropper?.getFile();
+    if (!croppedImage) {
+        toast({
+            title: 'Cropped image is invalid',
+            variant: 'destructive',
+        });
+        return;
+    }
+
+    showCropperWindow.value = false;
+    URL.revokeObjectURL(imageBlob.value);
+    imageBlob.value = null;
 
     const response = await $fetch<ApiResponse>('/api/image', {
         method: 'PATCH',
         headers: { 'x-api-key': config.public.apiKey },
         body: {
             Id: characterInstance.value?.id as number,
-            File: encodeArrayBufferToUrlSafeBase64(await files[0].arrayBuffer()),
+            File: encodeArrayBufferToUrlSafeBase64(await croppedImage.arrayBuffer()),
         },
     });
 
@@ -130,7 +144,7 @@ async function onDrop(files: File[] | null) {
     }
 
     imageUri.value = `/cards/${characterInstance.value?.id}.png?${new Date().getTime()}`;
-}
+};
 
 const { isOverDropZone } = useDropZone(dropZoneRef, {
     onDrop,
@@ -140,7 +154,6 @@ const { isOverDropZone } = useDropZone(dropZoneRef, {
 await updateApplicationState();
 await processCharacterDetails();
 
-showCropperWindow.value = false;
 imageUri.value = `/cards/${characterInstance.value?.id}.png?${new Date().getTime()}`;
 </script>
 
@@ -152,8 +165,30 @@ imageUri.value = `/cards/${characterInstance.value?.id}.png?${new Date().getTime
         <CardHeader class="flex flex-col p-2 w-full">
             <CardTitle class="font-bold text-4xl">{{ characterData.data.name }}</CardTitle>
         </CardHeader>
-        <CardContent class="p-2 w-full flex-1">
-            <Cropper v-if="showCropperWindow" ref="cropper" class="bg-accent rounded-2xl cropper" :src="imageBlob" imageClass="character-card-cropper" />
+        <CardContent :class="cn('p-2 w-full flex-1 overflow-hidden', showCropperWindow ? 'overflow-hidden' : '')">
+            <div v-if="showCropperWindow" class="flex w-full h-full rounded-2xl overflow-hidden">
+                <client-only>
+                    <VuePictureCropper
+                        class="bg-accent rounded-2xl"
+                        :img="imageBlob"
+                        :boxStyle="{
+                            width: '100%',
+                            height: '100%',
+                            margin: 'auto',
+                        }"
+                        :options="{
+                            viewMode: 1,
+                            dragMode: 'move',
+                            cropBoxResizable: false,
+                            aspectRatio: 2 / 3,
+                        }"
+                        :presetMode="{
+                            mode: 'fixedSize',
+                            width: 512,
+                            height: 768,
+                        }" />
+                </client-only>
+            </div>
             <div v-else class="flex flex-row gap-2 w-full h-full">
                 <div class="flex flex-col justify-center items-center rounded-2xl border border-accent">
                     <div ref="dropZoneRef" class="rounded-2xl dropzone">
@@ -267,14 +302,23 @@ imageUri.value = `/cards/${characterInstance.value?.id}.png?${new Date().getTime
                 </Tabs>
             </div>
         </CardContent>
-        <CardFooter class="flex justify-between w-full p-2">
-            <span class="text-sm text-muted-foreground"
-                >ID: {{ characterInstance?.id }} | Filename: {{ characterInstance?.file_name }} | Last Modified at {{ characterInstance?.formatted_timestamp }}</span
-            >
-            <Button id="save" type="submit" variant="secondary" class="h-16 w-16" @click="saveCharacter">
-                <span class="sr-only">Save</span>
-                <Icon class="h-8 w-8" name="radix-icons:paper-plane" />
-            </Button>
+        <CardFooter class="w-full p-2">
+            <div v-if="showCropperWindow" class="w-full flex justify-between items-center">
+                <span class="text-lg text-foreground"> Please adjust the image to fit. The required size is 512px by 768px as used by SillyTavern. </span>
+                <Button id="crop" type="submit" variant="secondary" class="h-16 w-16" @click="submitCroppedImage">
+                    <span class="sr-only">Crop</span>
+                    <Icon class="h-8 w-8" name="radix-icons:check" />
+                </Button>
+            </div>
+            <div v-else class="w-full flex justify-between items-center">
+                <span class="text-sm text-muted-foreground">
+                    ID: {{ characterInstance?.id }} | Filename: {{ characterInstance?.file_name }} | Last Modified at {{ characterInstance?.formatted_timestamp }}
+                </span>
+                <Button id="save" type="submit" variant="secondary" class="h-16 w-16" @click="saveCharacter">
+                    <span class="sr-only">Save</span>
+                    <Icon class="h-8 w-8" name="radix-icons:paper-plane" />
+                </Button>
+            </div>
         </CardFooter>
     </Card>
 </template>

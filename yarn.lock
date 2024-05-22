@@ -487,6 +487,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bassist/utils@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@bassist/utils@npm:0.4.0"
+  dependencies:
+    "@withtypes/mime": "npm:^0.1.2"
+  checksum: 10c0/e4f0dd16545baccc22f3f722ce33f75d51ee31fa058304b7c7d22c3af2bbb7b0e58f909e0fa543b9c3e289b0f2d510486ea9e37e122a253c6152b5ac5ea6903f
+  languageName: node
+  linkType: hard
+
 "@builder.io/partytown@npm:^0.10.0":
   version: 0.10.2
   resolution: "@builder.io/partytown@npm:0.10.2"
@@ -4628,6 +4637,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@withtypes/mime@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@withtypes/mime@npm:0.1.2"
+  dependencies:
+    mime: "npm:^3.0.0"
+  checksum: 10c0/2e63358d2e3fb8fb3fedf95ef55f552a04b885d42c0a18fa4ec326ef84da8d422a9a3c8f225ed6632fec4e14b4f0b858888be252ca58834ac264356730c2b28b
+  languageName: node
+  linkType: hard
+
 "abbrev@npm:1":
   version: 1.1.1
   resolution: "abbrev@npm:1.1.1"
@@ -5469,7 +5487,7 @@ __metadata:
     nuxt-monaco-editor: "npm:^1.2.9"
     nuxt-rating: "npm:^0.0.15"
     nuxt-security: "npm:^2.0.0-beta.5"
-    p-debounce: "npm:^4.0.0"
+    perfect-debounce: "npm:^1.0.0"
     piscina: "npm:^4.5.0"
     png-chunk-text: "npm:^1.0.0"
     png-chunks-encode: "npm:^1.0.0"
@@ -5485,7 +5503,7 @@ __metadata:
     vaul-vue: "npm:^0.1.2"
     vee-validate: "npm:^4.12.8"
     vue: "npm:^3.4.27"
-    vue-advanced-cropper: "npm:^2.8.8"
+    vue-picture-cropper: "npm:^0.7.0"
     vue-router: "npm:^4.3.2"
     vue-sonner: "npm:^1.1.2"
   languageName: unknown
@@ -5575,13 +5593,6 @@ __metadata:
   dependencies:
     clsx: "npm:2.0.0"
   checksum: 10c0/e11c57edf4bf50ef1c97bae41d68885afbaaedba26c48b7cc5dfb033390fed7012147e9532168d8c4f3497fce4dff15e20e6e60b8c9c9a4b0fe26b0e804513db
-  languageName: node
-  linkType: hard
-
-"classnames@npm:^2.2.6":
-  version: 2.5.1
-  resolution: "classnames@npm:2.5.1"
-  checksum: 10c0/afff4f77e62cea2d79c39962980bf316bacb0d7c49e13a21adaadb9221e1c6b9d3cdb829d8bb1b23c406f4e740507f37e1dcf506f7e3b7113d17c5bab787aa69
   languageName: node
   linkType: hard
 
@@ -5973,6 +5984,13 @@ __metadata:
   bin:
     cronstrue: bin/cli.js
   checksum: 10c0/9fec217cfc83a53842c04cab1103ffb077a33837ea0f03f8a0968fe548509134b6667303ee7188d00b555fb53ad82fef5b6cd0c1886f3ec34b74625b61c6c3d7
+  languageName: node
+  linkType: hard
+
+"cropperjs@npm:^1.6.1":
+  version: 1.6.2
+  resolution: "cropperjs@npm:1.6.2"
+  checksum: 10c0/5002e0cc3a491ceb8a104b2cb7a7c335a03e109fe590653f3aeefa27ca7115466edae62afc8ba21105bbaad4134583f5057ebbf5e8d843c7b2c1c1f0779630e9
   languageName: node
   linkType: hard
 
@@ -6628,13 +6646,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debounce@npm:^1.2.0":
-  version: 1.2.1
-  resolution: "debounce@npm:1.2.1"
-  checksum: 10c0/6c9320aa0973fc42050814621a7a8a78146c1975799b5b3cc1becf1f77ba9a5aa583987884230da0842a03f385def452fad5d60db97c3d1c8b824e38a8edf500
-  languageName: node
-  linkType: hard
-
 "debug@npm:2.6.9":
   version: 2.6.9
   resolution: "debug@npm:2.6.9"
@@ -7082,13 +7093,6 @@ __metadata:
   version: 0.2.0
   resolution: "eastasianwidth@npm:0.2.0"
   checksum: 10c0/26f364ebcdb6395f95124fda411f63137a4bfb5d3a06453f7f23dfe52502905bd84e0488172e0f9ec295fdc45f05c23d5d91baf16bd26f0fe9acd777a188dc39
-  languageName: node
-  linkType: hard
-
-"easy-bem@npm:^1.0.2":
-  version: 1.1.1
-  resolution: "easy-bem@npm:1.1.1"
-  checksum: 10c0/83b54e5c854795612a245fba9bc48053da3593205ff19d8aad38ef9bc0cbf56d2df7af73d90b533602696ead1ffe6beef55d756e2356e981f50156e044a1463e
   languageName: node
   linkType: hard
 
@@ -11489,13 +11493,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"p-debounce@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "p-debounce@npm:4.0.0"
-  checksum: 10c0/2d50bcb53659ad4345ef59b220581ccb40d581528949d8c63547c22b418e9a92f5138617eb2f41cd03bed293ee78a3dbb9b2795f572a4044434b89f058ccdfa2
-  languageName: node
-  linkType: hard
-
 "p-limit@npm:^2.2.0":
   version: 2.3.0
   resolution: "p-limit@npm:2.3.0"
@@ -15168,19 +15165,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-advanced-cropper@npm:^2.8.8":
-  version: 2.8.8
-  resolution: "vue-advanced-cropper@npm:2.8.8"
-  dependencies:
-    classnames: "npm:^2.2.6"
-    debounce: "npm:^1.2.0"
-    easy-bem: "npm:^1.0.2"
-  peerDependencies:
-    vue: ^3.0.0
-  checksum: 10c0/a9d7b48a1fef016730d7695abb41734574409ccbfbb23d5bcaf55c019bcba9c4df2c617b5d3620ea3dda379f65e071b03d275b642a17639bf4f53193d95b5329
-  languageName: node
-  linkType: hard
-
 "vue-bundle-renderer@npm:^2.0.0":
   version: 2.0.0
   resolution: "vue-bundle-renderer@npm:2.0.0"
@@ -15236,6 +15220,18 @@ __metadata:
   peerDependencies:
     vue: ^3.0.0
   checksum: 10c0/1f79576a0e3cefaed8540996f5025e3f5a11001deb78a1f8242dad5c3aec064cc24834ab344ca04447b961d5bb9fc2e18034af3ade6d6829e4a51f5519c0ab72
+  languageName: node
+  linkType: hard
+
+"vue-picture-cropper@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "vue-picture-cropper@npm:0.7.0"
+  dependencies:
+    "@bassist/utils": "npm:^0.4.0"
+    cropperjs: "npm:^1.6.1"
+  peerDependencies:
+    vue: ">=3.2.13"
+  checksum: 10c0/8a7aa5163f2ef94d3398e89e2729892d444e8e9d24ff97d91a82988ebbc72c8f50a6d92bd7087395a9ba95290d775d173c220e06582584d8565b83c3d9b3311c
   languageName: node
   linkType: hard
 

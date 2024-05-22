@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import pDebounce from 'p-debounce';
+import { debounce } from 'perfect-debounce';
 import { cn } from '~/lib/utils';
 import { useApplicationStore } from '~/stores/applicationStore';
 import { useCharacterStore } from '~/stores/characterStore';
@@ -65,10 +65,21 @@ const clearSearch = async () => {
     }
 };
 
-const processSearch = pDebounce(() => {
-    emit('update-characters');
-}, 1000);
-const processResize = pDebounce(onResize, 1000);
+const processSearch = debounce(
+    async () => {
+        emit('update-characters');
+    },
+    500,
+    { trailing: false }
+);
+
+const processResize = debounce(
+    async () => {
+        await onResize();
+    },
+    500,
+    { trailing: false }
+);
 
 onMounted(async () => {
     await onResize();

@@ -48,7 +48,7 @@
         "nuxt-monaco-editor": "^1.2.9",
         "nuxt-rating": "^0.0.15",
         "nuxt-security": "^2.0.0-beta.5",
-        "p-debounce": "^4.0.0",
+        "perfect-debounce": "^1.0.0",
         "piscina": "^4.5.0",
         "png-chunk-text": "^1.0.0",
         "png-chunks-encode": "^1.0.0",
@@ -59,7 +59,7 @@
         "vaul-vue": "^0.1.2",
         "vee-validate": "^4.12.8",
         "vue": "^3.4.27",
-        "vue-advanced-cropper": "^2.8.8",
+        "vue-picture-cropper": "^0.7.0",
         "vue-router": "^4.3.2",
         "vue-sonner": "^1.1.2"
     },
