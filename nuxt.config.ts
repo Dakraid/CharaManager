@@ -56,7 +56,7 @@ export default defineNuxtConfig({
         componentDir: './components/ui',
     },
     security: {
-        enabled: false,
+        enabled: true,
         requestSizeLimiter: {
             maxRequestSizeInBytes: 100000000,
             maxUploadFileRequestInBytes: 500000000,

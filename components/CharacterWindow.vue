@@ -3,17 +3,18 @@ import { useDropZone } from '@vueuse/core';
 import * as Cards from 'character-card-utils';
 import { Button } from '~/components/ui/button';
 import { useToast } from '~/components/ui/toast';
-import { cn } from '~/lib/utils';
 import type ApiResponse from '~/models/ApiResponse';
 import type { CharacterDetails } from '~/models/CharacterDetails';
 import PutDefinitionRequest from '~/models/PutDefinitionRequest';
 import StatusCode from '~/models/enums/StatusCode';
 import { useApplicationStore } from '~/stores/applicationStore';
+import encodeArrayBufferToUrlSafeBase64 from '~/utils/encodeArrayBufferToUrlSafeBase64';
 
 const config = useRuntimeConfig();
 
 const { toast } = useToast();
 
+const imageUri = ref('');
 const applicationStore = useApplicationStore();
 const processing = ref(true);
 const characterInstance = ref<CharacterDetails>();
@@ -55,8 +56,6 @@ const processCharacterDetails = async () => {
     }
 };
 
-const counter = ref(0);
-
 const addGreeting = async () => {
     characterData.value.data.alternate_greetings.push('');
 };
@@ -89,7 +88,7 @@ const closeCharacterWindow = async () => {
 
 const dropZoneRef = ref<HTMLDivElement>();
 
-function onDrop(files: File[] | null) {
+async function onDrop(files: File[] | null) {
     if (!files) {
         return;
     }
@@ -100,20 +99,41 @@ function onDrop(files: File[] | null) {
         });
     }
 
-    console.log('Hello');
+    imageUri.value = '';
 
-    // called when files are dropped on zone
+    const response = await $fetch<ApiResponse>('/api/image', {
+        method: 'PATCH',
+        headers: { 'x-api-key': config.public.apiKey },
+        body: {
+            Id: characterInstance.value?.id as number,
+            File: encodeArrayBufferToUrlSafeBase64(await files[0].arrayBuffer()),
+        },
+    });
+
+    if (response.Status === StatusCode.OK) {
+        toast({
+            title: response.Message,
+            description: response.Content,
+        });
+    } else {
+        toast({
+            title: response.Message,
+            description: response.Content,
+            variant: 'destructive',
+        });
+    }
+
+    imageUri.value = `/cards/${characterInstance.value?.id}.png`;
 }
 
 const { isOverDropZone } = useDropZone(dropZoneRef, {
     onDrop,
-    dataTypes: ['image/png', 'image/jpeg'],
+    dataTypes: ['image/png'],
 });
 
 await updateApplicationState();
 await processCharacterDetails();
 
-const imageUri = ref('');
 imageUri.value = `/cards/${characterInstance.value?.id}.png`;
 </script>
 
@@ -129,7 +149,7 @@ imageUri.value = `/cards/${characterInstance.value?.id}.png`;
         <CardContent class="p-2 w-full">
             <div class="flex flex-row gap-2 w-full h-full">
                 <div ref="dropZoneRef" class="rounded-2xl dropzone trans">
-                    <NuxtImg :key="characterInstance?.file_name" fit="inside" loading="lazy" placeholder :alt="characterInstance?.file_name" :src="imageUri" class="character-card-large rounded-2xl" />
+                    <NuxtImg :key="imageUri" fit="inside" loading="lazy" placeholder :alt="characterInstance?.file_name" :src="imageUri" class="character-card-large rounded-2xl" />
                 </div>
                 <Tabs default-value="general" class="w-full">
                     <TabsList class="w-full flex justify-around">
@@ -239,7 +259,9 @@ imageUri.value = `/cards/${characterInstance.value?.id}.png`;
             </div>
         </CardContent>
         <CardFooter class="flex justify-between w-full p-2">
-            <span class="text-sm text-muted-foreground">Filename: {{ characterInstance?.file_name }} | Last Modified at {{ characterInstance?.formatted_timestamp }}</span>
+            <span class="text-sm text-muted-foreground"
+                >ID: {{ characterInstance?.id }} | Filename: {{ characterInstance?.file_name }} | Last Modified at {{ characterInstance?.formatted_timestamp }}</span
+            >
             <Button id="save" type="submit" variant="secondary" @click="saveCharacter">
                 <span class="sr-only">Save</span>
                 <Icon class="h-6 w-6" name="radix-icons:paper-plane" />

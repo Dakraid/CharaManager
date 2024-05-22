@@ -50,7 +50,7 @@ applicationStore.showCharacterWindow = false;
     <div class="grid character-container h-full overflow-y-hidden py-6 lg:px-6 items-stretch gap-6">
         <div id="main_content" class="flex flex-col h-full gap-2 order-1 mt-0 border-0 p-0 2xl:overflow-y-hidden">
             <ControlBar @update-characters="getCharacters" />
-            <ScrollArea id="scrollArea" class="w-full h-full overflow-y-hidden rounded-md border p-4 pr-6">
+            <ScrollArea id="scrollArea" class="w-full h-full overflow-y-hidden rounded-md border">
                 <Transition>
                     <div
                         v-if="showCharacterWindow"
@@ -67,7 +67,7 @@ applicationStore.showCharacterWindow = false;
                         <Icon class="w-16 h-16" name="radix-icons:question-mark-circled" />
                         <h2 class="font-bold text-xl">Upload characters to see them here</h2>
                     </div>
-                    <div v-else class="flex flex-wrap gap-2 justify-between h-full overflow-hidden pt-4">
+                    <div v-else class="flex flex-wrap gap-2 justify-between h-full overflow-hidden p-8">
                         <CharacterCard v-for="character in characters" :key="character.id" :character="character" />
                     </div>
                 </Transition>

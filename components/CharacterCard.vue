@@ -103,7 +103,7 @@ const updateRating = async (rating: number) => {
 </script>
 
 <template>
-    <Card class="flex flex-col items-center w-60 mb-4 transition-all hover:border-accent-foreground hover:shadow-[0_0_20px_-5px] hover:shadow-accent-foreground hover:transition-all">
+    <Card class="flex flex-col items-center w-60 mb-4 transition-all hover:border-accent-foreground hover:shadow-[0_0_20px_-5px] hover:shadow-accent-foreground hover:scale-105 hover:transition-all">
         <CardHeader class="flex flex-col w-full items-center gap-2 flex-1 p-2">
             <CardDescription class="w-min">
                 <NuxtRating
