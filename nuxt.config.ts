@@ -57,6 +57,13 @@ export default defineNuxtConfig({
     },
     security: {
         enabled: true,
+        headers: {
+            crossOriginEmbedderPolicy: 'unsafe-none',
+            contentSecurityPolicy: {
+                'img-src': ["'self'", 'data:'],
+                'script-src': ["'self'", 'https:', "'unsafe-inline'", "'strict-dynamic'", "'nonce-{{nonce}}'", "'unsafe-eval'"],
+            },
+        },
         requestSizeLimiter: {
             maxRequestSizeInBytes: 100000000,
             maxUploadFileRequestInBytes: 500000000,
