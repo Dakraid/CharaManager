@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useDropZone } from '@vueuse/core';
 import * as Cards from 'character-card-utils';
+import { Cropper } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
 import { Button } from '~/components/ui/button';
 import { useToast } from '~/components/ui/toast';
 import type ApiResponse from '~/models/ApiResponse';
@@ -15,21 +17,25 @@ const config = useRuntimeConfig();
 const { toast } = useToast();
 
 const imageUri = ref('');
-const applicationStore = useApplicationStore();
-const processing = ref(true);
+const imageBlob = ref();
+
+const characterData = ref();
+const characterDump = ref('');
 const characterInstance = ref<CharacterDetails>();
+
 const showCharacterWindow = ref(false);
+const showCropperWindow = ref(false);
+
+const cropper = ref();
+
+const applicationStore = useApplicationStore();
 
 const updateApplicationState = async () => {
-    processing.value = applicationStore.processing;
     characterInstance.value = applicationStore.characterInstance;
     showCharacterWindow.value = applicationStore.showCharacterWindow;
 };
 
 applicationStore.$subscribe(updateApplicationState);
-
-const characterData = ref();
-const characterDump = ref('');
 
 const processCharacterDetails = async () => {
     const { data: response } = await useFetch<ApiResponse>('/api/definition', {
@@ -99,7 +105,7 @@ async function onDrop(files: File[] | null) {
         });
     }
 
-    imageUri.value = '';
+    imageBlob.value = URL.createObjectURL(files[0]);
 
     const response = await $fetch<ApiResponse>('/api/image', {
         method: 'PATCH',
@@ -123,33 +129,36 @@ async function onDrop(files: File[] | null) {
         });
     }
 
-    imageUri.value = `/cards/${characterInstance.value?.id}.png`;
+    imageUri.value = `/cards/${characterInstance.value?.id}.png?${new Date().getTime()}`;
 }
 
 const { isOverDropZone } = useDropZone(dropZoneRef, {
     onDrop,
-    dataTypes: ['image/png'],
+    dataTypes: ['image/png', 'image/jpeg', 'image/bmp', 'image/tiff'],
 });
 
 await updateApplicationState();
 await processCharacterDetails();
 
-imageUri.value = `/cards/${characterInstance.value?.id}.png`;
+showCropperWindow.value = false;
+imageUri.value = `/cards/${characterInstance.value?.id}.png?${new Date().getTime()}`;
 </script>
 
 <template>
-    <Card v-if="characterData" class="flex flex-col flex-1 items-center p-2">
-        <Button variant="outline" size="icon" class="absolute right-20" @click="closeCharacterWindow">
+    <Card v-if="characterData" class="h-full flex flex-col flex-1 items-center p-2 overflow-y-auto">
+        <Button variant="outline" size="icon" class="absolute w-11 h-11 top-16 right-16" @click="closeCharacterWindow">
             <Icon name="radix-icons:cross-1" class="w-4 h-4" />
         </Button>
         <CardHeader class="flex flex-col p-2 w-full">
             <CardTitle class="font-bold text-4xl">{{ characterData.data.name }}</CardTitle>
-            <CardDescription> </CardDescription>
         </CardHeader>
-        <CardContent class="p-2 w-full">
-            <div class="flex flex-row gap-2 w-full h-full">
-                <div ref="dropZoneRef" class="rounded-2xl dropzone trans">
-                    <NuxtImg :key="imageUri" fit="inside" loading="lazy" placeholder :alt="characterInstance?.file_name" :src="imageUri" class="character-card-large rounded-2xl" />
+        <CardContent class="p-2 w-full flex-1">
+            <Cropper v-if="showCropperWindow" ref="cropper" class="bg-accent rounded-2xl cropper" :src="imageBlob" imageClass="character-card-cropper" />
+            <div v-else class="flex flex-row gap-2 w-full h-full">
+                <div class="flex flex-col justify-center items-center rounded-2xl border border-accent">
+                    <div ref="dropZoneRef" class="rounded-2xl dropzone">
+                        <img :key="imageUri" :alt="characterInstance?.file_name" :src="imageUri" class="character-card-large rounded-2xl" />
+                    </div>
                 </div>
                 <Tabs default-value="general" class="w-full">
                     <TabsList class="w-full flex justify-around">
@@ -262,9 +271,9 @@ imageUri.value = `/cards/${characterInstance.value?.id}.png`;
             <span class="text-sm text-muted-foreground"
                 >ID: {{ characterInstance?.id }} | Filename: {{ characterInstance?.file_name }} | Last Modified at {{ characterInstance?.formatted_timestamp }}</span
             >
-            <Button id="save" type="submit" variant="secondary" @click="saveCharacter">
+            <Button id="save" type="submit" variant="secondary" class="h-16 w-16" @click="saveCharacter">
                 <span class="sr-only">Save</span>
-                <Icon class="h-6 w-6" name="radix-icons:paper-plane" />
+                <Icon class="h-8 w-8" name="radix-icons:paper-plane" />
             </Button>
         </CardFooter>
     </Card>

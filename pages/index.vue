@@ -48,16 +48,14 @@ applicationStore.showCharacterWindow = false;
 
 <template>
     <div class="grid character-container h-full overflow-y-hidden py-6 lg:px-6 items-stretch gap-6">
-        <div id="main_content" class="flex flex-col h-full gap-2 order-1 mt-0 border-0 p-0 2xl:overflow-y-hidden">
+        <div id="main_content" class="flex flex-col h-full gap-2 order-1 mt-0 border-0 p-0 items-stretch 2xl:overflow-y-hidden">
+            <Transition>
+                <div v-if="showCharacterWindow" class="absolute backdrop-blur bg-background/50 transition-all w-full h-full inset-0 z-20 p-12 rounded-md overflow-hidden">
+                    <CharacterWindow />
+                </div>
+            </Transition>
             <ControlBar @update-characters="getCharacters" />
             <ScrollArea id="scrollArea" class="w-full h-full overflow-y-hidden rounded-md border">
-                <Transition>
-                    <div
-                        v-if="showCharacterWindow"
-                        class="absolute backdrop-blur bg-background/80 transition-all w-full h-full inset-0 z-10 p-16 rounded-md flex flex-1 justify-center items-center overflow-scroll">
-                        <CharacterWindow />
-                    </div>
-                </Transition>
                 <Transition>
                     <div v-if="processing" class="absolute backdrop-blur bg-background/80 transition-all w-full h-full inset-0 z-10 rounded-md flex flex-1 justify-center items-center">
                         <Icon class="w-16 h-16 animate-spin" name="radix-icons:reload" />

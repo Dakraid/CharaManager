@@ -78,5 +78,5 @@ export default defineEventHandler(async (event) => {
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Image saved to table, but failed to write image to disk.', err);
     }
 
-    return new ApiResponse(StatusCode.OK, 'Updated image successfully.');
+    return new ApiResponse(StatusCode.OK, 'Updated image successfully.', 'To see the updated image in gallery, refresh the page.');
 });

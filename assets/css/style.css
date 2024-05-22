@@ -117,6 +117,14 @@ html.dark input {
     object-fit: cover;
 }
 
+.character-card-cropper {
+    width: 512px !important;
+    max-width: 512px !important;
+    height: 768px !important;
+    max-height: 768px !important;
+    object-fit: cover !important;
+}
+
 .dropzone::before {
     display: flex;
     position: absolute;

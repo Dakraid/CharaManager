@@ -55,12 +55,25 @@ export default defineNuxtConfig({
         prefix: '',
         componentDir: './components/ui',
     },
+    image: {
+        provider: 'ipx',
+        ipx: {
+            maxAge: 1,
+            http: {
+                maxAge: 1,
+                ignoreCacheControl: true,
+            },
+            fs: {
+                maxAge: 1,
+            },
+        },
+    },
     security: {
         enabled: true,
         headers: {
             crossOriginEmbedderPolicy: 'unsafe-none',
             contentSecurityPolicy: {
-                'img-src': ["'self'", 'data:'],
+                'img-src': false,
                 'script-src': ["'self'", 'https:', "'unsafe-inline'", "'strict-dynamic'", "'nonce-{{nonce}}'", "'unsafe-eval'"],
             },
         },

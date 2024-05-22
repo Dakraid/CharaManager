@@ -59,6 +59,7 @@
         "vaul-vue": "^0.1.2",
         "vee-validate": "^4.12.8",
         "vue": "^3.4.27",
+        "vue-advanced-cropper": "^2.8.8",
         "vue-router": "^4.3.2",
         "vue-sonner": "^1.1.2"
     },
