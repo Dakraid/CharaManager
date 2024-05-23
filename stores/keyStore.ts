@@ -4,5 +4,11 @@ export const useKeyStore = defineStore('key', {
             apiKey: '',
         };
     },
-    persist: true,
+    persist: {
+        storage: persistedState.cookiesWithOptions({
+            sameSite: 'strict',
+            expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+            secure: true,
+        }),
+    },
 });

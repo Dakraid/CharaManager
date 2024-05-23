@@ -16,9 +16,32 @@ export default defineNuxtConfig({
         },
     },
     nitro: {
+        experimental: {
+            wasm: true,
+        },
         compressPublicAssets: {
+            gzip: true,
             brotli: true,
         },
+        routeRules: {
+            '/public/cards/**': {
+                headers: {
+                    'cache-control': 'no-cache',
+                },
+                cache: {
+                    headersOnly: true,
+                }
+            },
+            '/cards/**': {
+                headers: {
+                    'cache-control': 'no-cache',
+                },
+                cache: {
+                    headersOnly: true,
+                }
+            },
+        },
+        minify: true,
     },
     runtimeConfig: {
         apiKey: '',
