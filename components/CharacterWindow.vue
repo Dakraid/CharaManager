@@ -191,7 +191,7 @@ imageUri.value = `/cards/${characterInstance.value?.id}.png`;
             <div v-else class="flex flex-row gap-2 w-full h-full">
                 <div class="flex flex-col justify-center items-center rounded-2xl border border-accent">
                     <div ref="dropZoneRef" class="rounded-2xl dropzone">
-                        <img :key="imageUri" :alt="characterInstance?.file_name" :src="imageUri" class="character-card-large rounded-2xl" />
+                        <NuxtImg :key="imageUri" :alt="characterInstance?.file_name" :src="imageUri" class="character-card-large rounded-2xl" />
                     </div>
                 </div>
                 <Tabs default-value="general" class="w-full">
