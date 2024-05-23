@@ -30,7 +30,7 @@ export default defineNuxtConfig({
                 },
                 cache: {
                     headersOnly: true,
-                }
+                },
             },
             '/cards/**': {
                 headers: {
@@ -38,7 +38,7 @@ export default defineNuxtConfig({
                 },
                 cache: {
                     headersOnly: true,
-                }
+                },
             },
         },
         minify: true,
