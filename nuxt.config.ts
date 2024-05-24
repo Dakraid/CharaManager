@@ -17,22 +17,11 @@ export default defineNuxtConfig({
         },
     },
     nitro: {
-        experimental: {
-            wasm: true,
-        },
         compressPublicAssets: {
             gzip: true,
             brotli: true,
         },
         routeRules: {
-            '/public/cards/**': {
-                headers: {
-                    'cache-control': 'no-cache',
-                },
-                cache: {
-                    headersOnly: true,
-                },
-            },
             '/cards/**': {
                 headers: {
                     'cache-control': 'no-cache',
@@ -49,20 +38,20 @@ export default defineNuxtConfig({
     },
     modules: [
         '@nuxt/eslint',
-        '@pinia/nuxt',
-        '@pinia-plugin-persistedstate/nuxt',
-        '@nuxtjs/tailwindcss',
-        '@nuxtjs/color-mode',
-        'shadcn-nuxt',
         '@nuxt/image',
-        'dayjs-nuxt',
-        'nuxt-icon',
-        'nuxt-rating',
-        '@nuxtjs/robots',
-        'nuxt-monaco-editor',
-        'nuxt-security',
+        '@nuxtjs/color-mode',
         '@nuxtjs/critters',
+        '@nuxtjs/robots',
+        '@nuxtjs/tailwindcss',
+        '@pinia-plugin-persistedstate/nuxt',
+        '@pinia/nuxt',
+        'dayjs-nuxt',
         'magic-regexp/nuxt',
+        'nuxt-icon',
+        'nuxt-monaco-editor',
+        'nuxt-rating',
+        'nuxt-security',
+        'shadcn-nuxt',
     ],
     ssr: true,
     devtools: {
@@ -72,11 +61,6 @@ export default defineNuxtConfig({
         },
     },
     sourcemap: true,
-    experimental: {
-        asyncContext: true,
-        asyncEntry: true,
-        sharedPrerenderData: true,
-    },
     colorMode: {
         classSuffix: '',
     },
@@ -84,21 +68,8 @@ export default defineNuxtConfig({
         prefix: '',
         componentDir: './components/ui',
     },
-    image: {
-        provider: 'ipx',
-        ipx: {
-            maxAge: 1,
-            http: {
-                maxAge: 1,
-                ignoreCacheControl: true,
-            },
-            fs: {
-                maxAge: 1,
-            },
-        },
-    },
     security: {
-        enabled: true,
+        enabled: false,
         headers: {
             crossOriginEmbedderPolicy: 'unsafe-none',
             contentSecurityPolicy: {
