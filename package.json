@@ -62,7 +62,8 @@
         "vue": "^3.4.27",
         "vue-picture-cropper": "^0.7.0",
         "vue-router": "^4.3.2",
-        "vue-sonner": "^1.1.2"
+        "vue-sonner": "^1.1.2",
+        "winston": "^3.13.0"
     },
     "devDependencies": {
         "@nuxt/eslint": "^0.3.13",
