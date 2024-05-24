@@ -9,8 +9,10 @@ const emit = defineEmits(['update-characters']);
 const sortOptions = [
     { value: 'time_desc', label: 'DateTime ↓' },
     { value: 'alph_desc', label: 'Alphabetical ↓' },
+    { value: 'id_desc', label: 'Identifier ↓' },
     { value: 'time_asc', label: 'DateTime ↑' },
     { value: 'alph_asc', label: 'Alphabetical ↑' },
+    { value: 'id_asc', label: 'Identifier ↑' },
 ];
 
 // This isn't a constant as it will be overwritten using custom options based on the width

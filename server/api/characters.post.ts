@@ -65,6 +65,22 @@ export default defineEventHandler(async (event) => {
                     .offset(body.Count * (body.Page - 1))
                     .limit(body.Count);
                 break;
+            case 'id_asc':
+                characters = await drizzleDb
+                    .select()
+                    .from(character_details)
+                    .orderBy(asc(character_details.id))
+                    .offset(body.Count * (body.Page - 1))
+                    .limit(body.Count);
+                break;
+            case 'id_desc':
+                characters = await drizzleDb
+                    .select()
+                    .from(character_details)
+                    .orderBy(desc(character_details.id))
+                    .offset(body.Count * (body.Page - 1))
+                    .limit(body.Count);
+                break;
         }
     } else {
         switch (body.Order) {
@@ -100,6 +116,24 @@ export default defineEventHandler(async (event) => {
                     .select()
                     .from(character_details)
                     .orderBy(desc(character_details.timestamp))
+                    .offset(body.Count * (body.Page - 1))
+                    .limit(body.Count)
+                    .where(like(character_details.file_name, '%' + body.Filter + '%'));
+                break;
+            case 'id_asc':
+                characters = await drizzleDb
+                    .select()
+                    .from(character_details)
+                    .orderBy(asc(character_details.id))
+                    .offset(body.Count * (body.Page - 1))
+                    .limit(body.Count)
+                    .where(like(character_details.file_name, '%' + body.Filter + '%'));
+                break;
+            case 'id_desc':
+                characters = await drizzleDb
+                    .select()
+                    .from(character_details)
+                    .orderBy(desc(character_details.id))
                     .offset(body.Count * (body.Page - 1))
                     .limit(body.Count)
                     .where(like(character_details.file_name, '%' + body.Filter + '%'));
