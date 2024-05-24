@@ -77,3 +77,39 @@ jobs:
         with:
           name: build-windows
           path: .output
+
+  Build_Mac:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Enable Corepack before setting up Node
+        run: corepack enable
+
+      - name: Setup node env
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/Iron
+          check-latest: true
+
+      - name: Enable Corepack before setting up Node
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --silent
+
+      - name: Run prepare
+        run: yarn prepare
+
+      - name: Run linter
+        run: yarn lint
+
+      - name: Run build
+        run: yarn build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-macos
+          path: .output
