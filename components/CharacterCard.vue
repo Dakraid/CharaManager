@@ -15,7 +15,7 @@ const props = defineProps<{
 const { toast } = useToast();
 
 const imageUri = ref('');
-imageUri.value = `/cards/${props.character.id}-small.png`;
+imageUri.value = `/cards/${props.character.id}-small.png?=${Math.floor(Date.now() / 1000)}`;
 
 const keyStore = useKeyStore();
 const characterStore = useCharacterStore();

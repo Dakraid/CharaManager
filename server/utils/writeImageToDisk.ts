@@ -8,6 +8,7 @@ export default async function writeImageToDisk(id: number, base64Image: string) 
 
     fs.writeFile(`public/cards/${id}.png`, base64Image, { encoding: 'base64' }, function (err) {
         if (err) {
+            console.error(err);
             throw err;
         }
     });
@@ -18,6 +19,7 @@ export default async function writeImageToDisk(id: number, base64Image: string) 
 
     fs.writeFile(`public/cards/${id}-small.png`, smallImage.toString('base64'), { encoding: 'base64' }, function (err) {
         if (err) {
+            console.error(err);
             throw err;
         }
     });
