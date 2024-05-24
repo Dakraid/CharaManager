@@ -33,7 +33,7 @@ const updateApplication = async () => {
 
     if (props.character.id === applicationStore.updatedImageId) {
         imageUri.value = '';
-        imageUri.value = `/cards/${props.character.id}-small.png?=${new Date()}`;
+        imageUri.value = `/cards/${props.character.id}-small.png?=${Math.floor(Date.now() / 1000)}`;
         applicationStore.updatedImageId = undefined;
     }
 };

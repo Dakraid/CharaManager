@@ -142,7 +142,7 @@ const submitCroppedImage = async () => {
         });
     }
 
-    imageUri.value = `/cards/${characterInstance.value?.id}.png?=${new Date()}`;
+    imageUri.value = `/cards/${characterInstance.value?.id}.png?=${Math.floor(Date.now() / 1000)}`;
     applicationStore.updatedImageId = characterInstance.value?.id;
 };
 
@@ -154,7 +154,7 @@ const { isOverDropZone } = useDropZone(dropZoneRef, {
 await updateApplicationState();
 await processCharacterDetails();
 
-imageUri.value = `/cards/${characterInstance.value?.id}.png?=${new Date()}`;
+imageUri.value = `/cards/${characterInstance.value?.id}.png?=${Math.floor(Date.now() / 1000)}`;
 </script>
 
 <template>

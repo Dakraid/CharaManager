@@ -91,7 +91,9 @@ html.dark input {
 
 .character-card-large {
     width: 512px;
+    max-width: 512px;
     height: 768px;
+    max-height: 768px;
     object-fit: cover;
 }
 

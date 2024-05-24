@@ -4,7 +4,6 @@ import { Toaster } from '~/components/ui/toast';
 </script>
 
 <template>
-    <NuxtPwaAssets />
     <div class="h-full w-full">
         <Toaster />
         <div class="h-screen flex flex-col overflow-y-hidden">
