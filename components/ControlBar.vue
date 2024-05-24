@@ -91,7 +91,7 @@ onMounted(async () => {
 <template>
     <div class="grid control-grid w-full items-center justify-items-center gap-2 row-start-1">
         <div class="flex gap-1">
-            <div class="relative w-250 max-w-sm items-center">
+            <div class="relative w-[250px] max-w-sm items-center">
                 <Input id="search" v-model="applicationStore.searchValue" type="text" placeholder="Search..." class="pl-10" @input="processSearch" />
                 <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
                     <Icon class="h-6 w-6 text-muted-foreground" name="radix-icons:magnifying-glass" />
@@ -103,7 +103,7 @@ onMounted(async () => {
         </div>
 
         <div class="flex flex-wrap gap-2 w-full items-center justify-center xl:justify-between row-start-3 2xl:row-start-1 2xl:col-start-2 2xl:col-span-1 2xl:justify-center">
-            <Button class="w-200 justify-center" variant="outline"> Number of characters: {{ characterCount }} </Button>
+            <Button class="w-[200px] justify-center" variant="outline"> Number of characters: {{ characterCount }} </Button>
 
             <Pagination v-slot="{ page }" :total="characterCount" :items-per-page="itemsPerPage" :sibling-count="0" show-edges :default-page="1" @update:page="updatePage">
                 <PaginationList v-slot="{ items }" class="flex items-center gap-1">
@@ -124,12 +124,12 @@ onMounted(async () => {
 
             <Popover v-model:open="openItemsPerPage">
                 <PopoverTrigger as-child>
-                    <Button :aria-expanded="openItemsPerPage" class="w-200 justify-between" role="combobox" variant="outline">
+                    <Button :aria-expanded="openItemsPerPage" class="w-[200px] justify-between" role="combobox" variant="outline">
                         {{ itemsPerPageOptions ? itemsPerPageOptions.find((option) => option.value === applicationStore.itemsPerPage)?.label : 'Select Items Per Page...' }}
                         <Icon class="ml-2 h-4 w-4 shrink-0 opacity-50" name="radix-icons:caret-sort" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent class="w-200 p-0">
+                <PopoverContent class="w-[200px] p-0">
                     <Command>
                         <CommandList>
                             <CommandGroup>
@@ -159,12 +159,12 @@ onMounted(async () => {
         <div class="flex gap-1 row-start-2 2xl:row-start-1">
             <Popover v-model:open="openOrderBy">
                 <PopoverTrigger as-child>
-                    <Button :aria-expanded="openOrderBy" class="w-290 justify-between" role="combobox" variant="outline">
+                    <Button :aria-expanded="openOrderBy" class="w-[290px] justify-between" role="combobox" variant="outline">
                         {{ applicationStore.orderByValue ? sortOptions.find((option) => option.value === applicationStore.orderByValue)?.label : 'Select Order...' }}
                         <Icon class="ml-2 h-4 w-4 shrink-0 opacity-50" name="radix-icons:caret-sort" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent class="w-290 p-0">
+                <PopoverContent class="w-[290px] p-0">
                     <Command>
                         <CommandInput class="h-9" placeholder="Search Order..." />
                         <CommandList>

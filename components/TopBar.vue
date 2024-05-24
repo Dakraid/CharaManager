@@ -11,8 +11,8 @@ const keyStore = useKeyStore();
 
 <template>
     <div class="container flex flex-col gap-2 items-center justify-between space-y-2 py-4 sm:flex-row sm:space-y-0 md:h-16 lg:px-24 h-min max-w-full">
-        <Icon class="h-10 w-10" name="radix-icons:avatar" />
-        <h2 class="text-lg font-semibold">CharaManager</h2>
+        <img class="h-10 w-10" src="/CharaManager.svg" alt="CharaManagerLogo" />
+        <h2 class="text-xl font-semibold font-mono" style="color: #13fea2">CharaManager</h2>
         <div class="flex flex-grow justify-center">
             <NavigationMenu>
                 <NavigationMenuList>
@@ -43,7 +43,7 @@ const keyStore = useKeyStore();
                 </NavigationMenuList>
             </NavigationMenu>
         </div>
-        <div class="flex justify-end w-full gap-4 w-168">
+        <div class="flex justify-end gap-4 w-[181px]">
             <Popover>
                 <PopoverTrigger as-child>
                     <Button variant="outline">

@@ -62,18 +62,6 @@ html.dark input {
     border-color: hsl(var(--border));
 }
 
-.w-290 {
-    width: 290px;
-}
-
-.w-250 {
-    width: 250px;
-}
-
-.w-200 {
-    width: 200px;
-}
-
 .size-1 {
     height: 1.2rem;
     width: 1.2rem;

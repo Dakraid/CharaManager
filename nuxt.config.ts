@@ -5,9 +5,10 @@ export default defineNuxtConfig({
             htmlAttrs: {
                 lang: 'en',
             },
-            title: 'CharaManager - A Manager for TavernV2 cards',
+            title: 'CharaManager',
             charset: 'utf-8',
-            meta: [],
+            viewport: 'width=device-width, initial-scale=1',
+            meta: [{ name: 'description', content: 'An application to manage your TavernV2 cards.' }],
             link: [],
         },
         pageTransition: {
@@ -62,6 +63,7 @@ export default defineNuxtConfig({
         'nuxt-security',
         '@nuxtjs/critters',
         'magic-regexp/nuxt',
+        '@vite-pwa/nuxt',
     ],
     ssr: true,
     devtools: {
@@ -112,6 +114,30 @@ export default defineNuxtConfig({
         rateLimiter: {
             tokensPerInterval: 50,
             interval: 1000,
+        },
+    },
+    pwa: {
+        includeAssets: ['favicon.ico', 'apple-touch-icon-180x180.png', 'maskable-icon-512x512.png'],
+        manifest: {
+            name: 'CharaManager',
+            short_name: 'CharaManager',
+            description: 'An application to manage your TavernV2 cards.',
+            theme_color: '#ffffff',
+            icons: [
+                {
+                    src: 'pwa-192x192.png',
+                    sizes: '192x192',
+                    type: 'image/png',
+                },
+                {
+                    src: 'pwa-512x512.png',
+                    sizes: '512x512',
+                    type: 'image/png',
+                },
+            ],
+        },
+        devOptions: {
+            enabled: true,
         },
     },
 });
