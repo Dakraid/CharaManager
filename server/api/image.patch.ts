@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import ApiResponse from '~/models/ApiResponse';
 import StatusCode from '~/models/enums/StatusCode';
+import writeImageToDisk from '~/server/utils/writeImageToDisk';
 import { character_images } from '~/utils/drizzle/schema';
 
 // noinspection JSUnusedGlobalSymbols
@@ -65,15 +66,7 @@ export default defineEventHandler(async (event) => {
     }
 
     try {
-        if (!fs.existsSync('public/cards/')) {
-            fs.mkdirSync('public/cards/');
-        }
-
-        fs.writeFile(`public/cards/${body.Id}.png`, updatedImage.split('base64,')[1], { encoding: 'base64' }, function (err) {
-            if (err) {
-                throw err;
-            }
-        });
+        await writeImageToDisk(body.Id, updatedImage.split('base64,')[1]);
     } catch (err) {
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Image saved to table, but failed to write image to disk.', err);
     }

@@ -15,6 +15,8 @@ export const useApplicationStore = defineStore('application', {
             characterInstance: undefined as CharacterDetails | undefined,
             showCharacterWindow: false,
             showDiffWindow: false,
+            updatedImageId: undefined as number | undefined,
+            operationEnabledIds: new Set<number>(),
         };
     },
     getters: {

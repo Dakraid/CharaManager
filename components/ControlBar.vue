@@ -41,6 +41,7 @@ const contentWidth = ref(0);
 
 const updatePage = async (page: number) => {
     applicationStore.currentPage = page;
+    applicationStore.operationEnabledIds.clear();
     emit('update-characters');
 };
 

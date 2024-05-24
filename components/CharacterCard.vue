@@ -13,8 +13,9 @@ const props = defineProps<{
 }>();
 
 const { toast } = useToast();
+
 const imageUri = ref('');
-imageUri.value = `/cards/${props.character.id}.png`;
+imageUri.value = `/cards/${props.character.id}-small.png`;
 
 const keyStore = useKeyStore();
 const characterStore = useCharacterStore();
@@ -29,6 +30,12 @@ const updateApplication = async () => {
     censorNames.value = applicationStore.censorNames;
     characterInstance.value = applicationStore.characterInstance;
     showCharacterWindow.value = applicationStore.showCharacterWindow;
+
+    if (props.character.id === applicationStore.updatedImageId) {
+        imageUri.value = '';
+        imageUri.value = `/cards/${props.character.id}-small.png?=${new Date()}`;
+        applicationStore.updatedImageId = undefined;
+    }
 };
 
 applicationStore.$subscribe(updateApplication);
@@ -98,12 +105,20 @@ const updateRating = async (rating: number) => {
         });
     }
 };
+
+const updateOperationInclude = async (checked: boolean) => {
+    if (checked) {
+        applicationStore.operationEnabledIds.add(props.character.id as number);
+    } else {
+        applicationStore.operationEnabledIds.delete(props.character.id as number);
+    }
+};
 </script>
 
 <template>
     <Card class="flex flex-col items-center w-60 mb-4 transition-all hover:border-accent-foreground hover:shadow-[0_0_20px_-5px] hover:shadow-accent-foreground hover:scale-105 hover:transition-all">
         <CardHeader class="flex flex-col w-full items-center gap-2 flex-1 p-2">
-            <CardDescription class="w-min">
+            <CardDescription class="flex w-full justify-between items-center">
                 <NuxtRating
                     :read-only="false"
                     :rating-value="character.rating"
@@ -113,17 +128,15 @@ const updateRating = async (rating: number) => {
                     inactive-color="hsl(var(--secondary))"
                     rating-size="24px"
                     @rating-selected="updateRating" />
+                <Checkbox class="mt-[3px]" @update:checked="updateOperationInclude" />
             </CardDescription>
-            <CardTitle class="font-bold text-center">
-                {{ censorNames ? character.file_name?.replaceAll(/\w/g, '#') : character.file_name }}
+            <CardTitle>
+                <h1 class="font-bold text-center">{{ censorNames ? character.file_name?.replaceAll(/\w/g, '#') : character.file_name }}</h1>
             </CardTitle>
         </CardHeader>
         <CardContent class="w-full p-2 overflow-hidden">
-            <NuxtImg
+            <img
                 :key="character.file_name"
-                width="300"
-                height="222"
-                fit="inside"
                 loading="lazy"
                 :alt="character.file_name"
                 :src="imageUri"

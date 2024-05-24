@@ -1,6 +1,7 @@
 import { createDatabase } from 'db0';
 import sqlite from 'db0/connectors/better-sqlite3';
 import { drizzle } from 'db0/integrations/drizzle/index';
+import Jimp from 'jimp-compact';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import ApiResponse from '~/models/ApiResponse';
@@ -8,6 +9,7 @@ import PutDefinitionRequest from '~/models/PutDefinitionRequest';
 import type PutImageRequest from '~/models/PutImageRequest';
 import StatusCode from '~/models/enums/StatusCode';
 import convertBase64PNGToString from '~/server/utils/convertBase64PNGToString';
+import writeImageToDisk from '~/server/utils/writeImageToDisk';
 import { character_images } from '~/utils/drizzle/schema';
 
 // noinspection JSUnusedGlobalSymbols
@@ -38,15 +40,7 @@ export default defineEventHandler(async (event) => {
     }
 
     try {
-        if (!fs.existsSync('public/cards/')) {
-            fs.mkdirSync('public/cards/');
-        }
-
-        fs.writeFile(`public/cards/${body.Id}.png`, body.Base64Image.split('base64,')[1], { encoding: 'base64' }, function (err) {
-            if (err) {
-                throw err;
-            }
-        });
+        await writeImageToDisk(body.Id, body.Base64Image.split('base64,')[1]);
     } catch (err) {
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Image saved to table, but failed to write image to disk.', err);
     }

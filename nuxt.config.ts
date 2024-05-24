@@ -61,6 +61,7 @@ export default defineNuxtConfig({
         'nuxt-monaco-editor',
         'nuxt-security',
         '@nuxtjs/critters',
+        'magic-regexp/nuxt',
     ],
     ssr: true,
     devtools: {
@@ -70,6 +71,11 @@ export default defineNuxtConfig({
         },
     },
     sourcemap: true,
+    experimental: {
+        asyncContext: true,
+        asyncEntry: true,
+        sharedPrerenderData: true,
+    },
     colorMode: {
         classSuffix: '',
     },

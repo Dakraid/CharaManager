@@ -248,9 +248,10 @@ const clearChubAiCharacter = async () => {
 
 <template>
     <Tabs default-value="general" class="flex flex-col h-full w-full max-w-sm py-1px">
-        <TabsList class="grid w-full grid-cols-2">
+        <TabsList class="grid w-full grid-cols-3">
             <TabsTrigger value="general"> General </TabsTrigger>
             <TabsTrigger value="download"> Download </TabsTrigger>
+            <TabsTrigger value="operations"> Operations </TabsTrigger>
         </TabsList>
         <TabsContent value="general" class="flex-grow">
             <div class="flex flex-col md:order-2 w-full h-full max-w-sm gap-4">
@@ -350,6 +351,9 @@ const clearChubAiCharacter = async () => {
                     </div>
                 </div>
             </ScrollArea>
+        </TabsContent>
+        <TabsContent value="operations">
+            <CharacterOperations />
         </TabsContent>
     </Tabs>
 </template>
