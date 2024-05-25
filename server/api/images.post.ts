@@ -28,9 +28,16 @@ export default defineEventHandler(async (event) => {
             const hash = createHash('sha256').update(image.content).digest('hex');
             await drizzleDb.update(character_images).set({ hash: hash }).where(eq(character_images.id, image.id));
 
-            await writeImageToDisk(image.id, image.content.split('base64,')[1]);
+            try {
+                event.context.logger.info(`Writing image for character id ${image.id} to disk.`);
+                await writeImageToDisk(image.id, image.content.split('base64,')[1]);
+            } catch (err) {
+                event.context.logger.error(err);
+                return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Error occurred during the writing process.', err);
+            }
         }
     } catch (err) {
+        event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Error occurred during the writing process.', err);
     }
 

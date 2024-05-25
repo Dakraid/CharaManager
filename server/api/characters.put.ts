@@ -49,13 +49,14 @@ export default defineEventHandler(async (event) => {
         if (!content.data) {
             const converted = Cards.v1ToV2(content);
             file.content = convertStringToBase64PNG(file.content, JSON.stringify(converted));
-            console.log('Updated character from v1 to v2: ' + file.name);
+            event.context.logger.info('Updated character from v1 to v2: ' + file.name);
         }
 
         let result: any;
         try {
             result = await drizzleDb.insert(character_details).values(character).returning({ id: character_details.id }).onConflictDoNothing();
         } catch (err) {
+            event.context.logger.error(err);
             errors.push(`Failed to insert character from file ${file.name}: ${err}`);
             continue;
         }
@@ -78,6 +79,7 @@ export default defineEventHandler(async (event) => {
     }
 
     if (errors.length > 0) {
+        event.context.logger.error(`Multiple errors occurred during upload, files might only be partially uploaded. Errors: ${errors.join('\n')}`);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Multiple errors occurred during upload, files might only be partially uploaded.', errors);
     }
 

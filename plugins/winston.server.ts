@@ -10,7 +10,7 @@ export default defineNuxtPlugin({
     async setup(nuxtApp) {
         const { combine, timestamp, json, errors } = format;
         const LOG_PATH = './logs';
-        const FILE_NAME = `log.access.log`;
+        const FILE_NAME = 'application.log';
 
         mkdirIfNotExists(resolve(process.cwd(), LOG_PATH));
 
@@ -33,10 +33,6 @@ export default defineNuxtPlugin({
         };
     },
     hooks: {
-        'app:created'() {
-            const nuxtApp = useNuxtApp()
-            nuxtApp.$logger().info('Created CharaManager.');
-        },
         'page:finish'(pageComponent) {
             const nuxtApp = useNuxtApp();
             nuxtApp.$logger().info('Accessed ' + pageComponent);

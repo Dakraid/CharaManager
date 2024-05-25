@@ -100,6 +100,7 @@ const renderImages = async () => {
         method: 'POST',
         headers: { 'x-api-key': keyStore.apiKey },
     });
+    activeAction.value = false;
 
     if (response.Status === StatusCode.OK) {
         toast({
@@ -113,7 +114,6 @@ const renderImages = async () => {
             variant: 'destructive',
         });
     }
-    activeAction.value = false;
 };
 
 const updateCharacters = async () => {

@@ -34,6 +34,7 @@ export default defineEventHandler(async (event) => {
         const image = await rawImg.getBufferAsync(Jimp.MIME_PNG);
         base64Image = image.toString('base64');
     } catch (err) {
+        event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Failed to convert character image.', err);
     }
 
@@ -52,6 +53,7 @@ export default defineEventHandler(async (event) => {
     try {
         updatedImage = convertStringToBase64PNG(base64Image, definition.Content.json);
     } catch (err) {
+        event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Failed to convert character image.', err);
     }
 
@@ -62,12 +64,15 @@ export default defineEventHandler(async (event) => {
             .values({ id: body.Id, content: updatedImage, hash: hash })
             .onConflictDoUpdate({ target: character_images.id, set: { content: updatedImage } });
     } catch (err) {
+        event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Failed to upsert character image.', err);
     }
 
     try {
+        event.context.logger.info(`Writing image for character id ${body.Id} to disk.`);
         await writeImageToDisk(body.Id, updatedImage.split('base64,')[1]);
     } catch (err) {
+        event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Image saved to table, but failed to write image to disk.', err);
     }
 

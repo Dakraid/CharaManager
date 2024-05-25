@@ -36,12 +36,15 @@ export default defineEventHandler(async (event) => {
             .values({ id: body.Id, content: body.Base64Image, hash: hash })
             .onConflictDoUpdate({ target: character_images.id, set: { content: body.Base64Image } });
     } catch (err) {
+        event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Failed to upsert character image.', err);
     }
 
     try {
+        event.context.logger.info(`Writing image for character id ${body.Id} to disk.`);
         await writeImageToDisk(body.Id, body.Base64Image.split('base64,')[1]);
     } catch (err) {
+        event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Image saved to table, but failed to write image to disk.', err);
     }
 

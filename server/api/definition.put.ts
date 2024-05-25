@@ -50,6 +50,7 @@ export default defineEventHandler(async (event) => {
 
         return new ApiResponse(StatusCode.OK, `Upserted definition for character with ID ${body.Id}`);
     } catch (err) {
+        event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, `Failed to upsert character definition with ID ${body.Id}`, err);
     }
 });

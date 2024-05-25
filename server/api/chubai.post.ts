@@ -35,6 +35,7 @@ export default defineEventHandler(async (event) => {
             });
 
             if (!apiResponse) {
+                event.context.logger.error('Error occurred while trying to download from ChubAI.');
                 return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Error occurred while trying to download from ChubAI');
             }
 
@@ -47,9 +48,11 @@ export default defineEventHandler(async (event) => {
                 });
             }
 
+            event.context.logger.error('Unexpected response from Chub API received. Response: ' + apiResponse);
             // noinspection ExceptionCaughtLocallyJS
             throw 'Unexpected response from Chub API received.';
         } catch (err) {
+            event.context.logger.error(err);
             return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Error occurred while trying to download from ChubAI', err);
         }
     } else {
