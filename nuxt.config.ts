@@ -21,16 +21,6 @@ export default defineNuxtConfig({
             gzip: true,
             brotli: true,
         },
-        routeRules: {
-            '/cards/**': {
-                headers: {
-                    'cache-control': 'no-cache',
-                },
-                cache: {
-                    headersOnly: true,
-                },
-            },
-        },
         minify: true,
     },
     runtimeConfig: {
