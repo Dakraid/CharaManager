@@ -99,8 +99,8 @@ const renderImages = async () => {
     const response = await $fetch<ApiResponse>('/api/images', {
         method: 'POST',
         headers: { 'x-api-key': keyStore.apiKey },
+        timeout: 300000,
     });
-    activeAction.value = false;
 
     if (response.Status === StatusCode.OK) {
         toast({
@@ -114,6 +114,8 @@ const renderImages = async () => {
             variant: 'destructive',
         });
     }
+
+    activeAction.value = false;
 };
 
 const updateCharacters = async () => {

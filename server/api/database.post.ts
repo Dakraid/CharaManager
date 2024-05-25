@@ -109,8 +109,8 @@ async function SynchronizeDatabase(db: Database) {
                 .insert(character_definitions)
                 .values({ id: image.id, hash: hash, json: contentJson })
                 .onConflictDoUpdate({ target: character_definitions.id, set: { hash: hash, json: contentJson } });
-        } catch (e) {
-            console.error('Failed to upsert definition for character with ID ' + image.id + ': ' + e);
+        } catch (err) {
+            console.error('Failed to upsert definition for character with ID ' + image.id + ': ' + err);
         }
     }
 
