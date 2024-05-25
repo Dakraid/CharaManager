@@ -8,7 +8,6 @@
 **/components/ui
 **/utils/drizzle
 **/public/*.ico
-**/public/cards/
 eslint.config.mjs
 server/api/details.patch.ts
 /readme.md

@@ -26,25 +26,6 @@ export default defineEventHandler(async (event) => {
     const drizzleDb = drizzle(db);
 
     try {
-        fs.access(`public/cards/${body.Id}.png`, constants.F_OK, (err) => {
-            if (!err) {
-                fs.rm(`public/cards/${body.Id}.png`, () => {
-                    event.context.logger.info(`Deleted file ${body.Id}.png`);
-                });
-            }
-        });
-        fs.access(`public/cards/${body.Id}-small.png`, constants.F_OK, (err) => {
-            if (!err) {
-                fs.rm(`public/cards/${body.Id}-small.png`, () => {
-                    event.context.logger.info(`Deleted file ${body.Id}-small.png`);
-                });
-            }
-        });
-    } catch (err) {
-        event.context.logger.error(err);
-    }
-
-    try {
         await drizzleDb.delete(character_relations).where(eq(character_relations.current_id, body.Id));
     } catch {
         event.context.logger.info(`Character with ID ${body.Id} had no relation.`);

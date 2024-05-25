@@ -3,6 +3,8 @@ import type { CharacterDetails } from '~/models/CharacterDetails';
 import DeleteCharacterRequest from '~/models/DeleteCharacterRequest';
 import type GetCharactersRequest from '~/models/GetCharactersRequest';
 import StatusCode from '~/models/enums/StatusCode';
+import type CharacterImage from "~/models/CharacterImage";
+import GetImagesRequest from "~/models/GetImagesRequest";
 
 async function getCharacterCount() {
     const keyStore = useKeyStore();
@@ -12,6 +14,29 @@ async function getCharacterCount() {
     });
 
     return response.Content ?? 0;
+}
+
+async function getCharacterImages() {
+    const keyStore = useKeyStore();
+
+    const response = await $fetch<ApiResponse>('/api/images', {
+        method: 'POST',
+        headers: { 'x-api-key': keyStore.apiKey },
+        body: JSON.stringify(new GetImagesRequest(true))
+    });
+
+    const characterImages: CharacterImage[] = [];
+    if (response.Status === StatusCode.OK) {
+        for (const image of response.Content) {
+            characterImages.push({
+                id: image.id,
+                content: image.content,
+                content_small: image.content_small,
+            });
+        }
+    }
+
+    return characterImages;
 }
 
 async function getCharacters(options: GetCharactersRequest) {
@@ -64,6 +89,7 @@ async function deleteCharacter(options: DeleteCharacterRequest) {
 export const useCharacterStore = defineStore('characters', {
     state: () => {
         return {
+            characterImages: [] as CharacterImage[],
             characterList: [] as CharacterDetails[],
             characterCount: 0,
         };
@@ -86,6 +112,7 @@ export const useCharacterStore = defineStore('characters', {
             applicationStore.processing = true;
             this.characterCount = await getCharacterCount();
             this.characterList = await getCharacters(applicationStore.queryOptions);
+            this.characterImages = await getCharacterImages();
             applicationStore.processing = false;
         },
         async deleteCharacter(id: number) {

@@ -6,7 +6,6 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import ApiResponse from '~/models/ApiResponse';
 import StatusCode from '~/models/enums/StatusCode';
-import writeImageToDisk from '~/server/utils/writeImageToDisk';
 import { character_images } from '~/utils/drizzle/schema';
 
 // noinspection JSUnusedGlobalSymbols
@@ -27,6 +26,7 @@ export default defineEventHandler(async (event) => {
     const drizzleDb = drizzle(db);
 
     let base64Image: string;
+    let base64ImageSmall: string;
 
     try {
         const buffer = Buffer.from(body.File, 'base64');
@@ -59,21 +59,19 @@ export default defineEventHandler(async (event) => {
 
     try {
         const hash = createHash('sha256').update(updatedImage).digest('hex');
+
+        const buffer = Buffer.from(body.File, 'base64');
+        const rawImg = await Jimp.read(buffer);
+        const smallImage = await rawImg.resize(Jimp.AUTO, 384).getBufferAsync(Jimp.MIME_PNG);
+        base64ImageSmall = 'data:image/png;base64,' + smallImage.toString('base64');
+
         await drizzleDb
             .insert(character_images)
-            .values({ id: body.Id, content: updatedImage, hash: hash })
-            .onConflictDoUpdate({ target: character_images.id, set: { content: updatedImage } });
+            .values({ id: body.Id, content: updatedImage, content_small: base64ImageSmall, hash: hash })
+            .onConflictDoUpdate({ target: character_images.id, set: { content: updatedImage, content_small: base64ImageSmall } });
     } catch (err) {
         event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Failed to upsert character image.', err);
-    }
-
-    try {
-        event.context.logger.info(`Writing image for character id ${body.Id} to disk.`);
-        await writeImageToDisk(body.Id, updatedImage.split('base64,')[1]);
-    } catch (err) {
-        event.context.logger.error(err);
-        return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Image saved to table, but failed to write image to disk.', err);
     }
 
     return new ApiResponse(StatusCode.OK, 'Updated image successfully.', 'To see the updated image in gallery, refresh the page.');

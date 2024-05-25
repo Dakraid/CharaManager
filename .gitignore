@@ -304,4 +304,3 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/windows,jetbrains+all,node,vue,vuejs,nuxtjs,yarn
 
 .data/*
-public/cards/*.png

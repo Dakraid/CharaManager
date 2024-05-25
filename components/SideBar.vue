@@ -6,7 +6,7 @@ import DatabaseRequest from '~/models/DatabaseRequest';
 import type { FileUpload } from '~/models/OLD/FileUpload';
 import { DatabaseAction } from '~/models/enums/DatabaseAction';
 import StatusCode from '~/models/enums/StatusCode';
-import { useApplicationStore } from '~/stores/applicationStore';
+
 
 const emit = defineEmits(['update-characters']);
 
@@ -94,10 +94,10 @@ const uploadFiles = async () => {
     emit('update-characters');
 };
 
-const renderImages = async () => {
+const generateThumbnails = async () => {
     activeAction.value = true;
     const response = await $fetch<ApiResponse>('/api/images', {
-        method: 'POST',
+        method: 'PATCH',
         headers: { 'x-api-key': keyStore.apiKey },
         timeout: 300000,
     });
@@ -284,9 +284,9 @@ const clearChubAiCharacter = async () => {
                     <span class="sr-only">Reload Character List</span>
                     <Icon class="h-6 w-6" name="radix-icons:symbol" />
                 </Button>
-                <Label class="text-1xl">Render Images</Label>
-                <Button type="submit" variant="outline" @click="renderImages">
-                    <span class="sr-only">Render Images</span>
+                <Label class="text-1xl">Generate Thumbnails</Label>
+                <Button type="submit" variant="outline" @click="generateThumbnails">
+                    <span class="sr-only">Generate Thumbnails</span>
                     <Icon class="h-6 w-6" name="radix-icons:image" />
                 </Button>
                 <Label class="text-1xl" for="update-database">Update all v1 to v2</Label>

@@ -1,19 +1,11 @@
-// noinspection ES6UnusedImports
-
-import {sqliteTable, foreignKey, integer, text, unique} from "drizzle-orm/sqlite-core"
-import type { AnySQLiteColumn } from "drizzle-orm/sqlite-core";
+import { sqliteTable, foreignKey, integer, text } from "drizzle-orm/sqlite-core"
+import type { AnySQLiteColumn } from "drizzle-orm/sqlite-core"
 import { sql } from "drizzle-orm"
 
 export const character_definitions = sqliteTable("character_definitions", {
 	id: integer("id").primaryKey({ autoIncrement: true }).notNull().references(() => character_details.id),
 	hash: text("hash").notNull(),
 	json: text("json").notNull(),
-});
-
-export const character_images = sqliteTable("character_images", {
-	id: integer("id").primaryKey().notNull().references(() => character_details.id),
-	content: text("content").notNull(),
-    hash: text("hash").notNull(),
 });
 
 export const character_details = sqliteTable("character_details", {
@@ -30,6 +22,11 @@ export const character_relations = sqliteTable("character_relations", {
 	id: integer("id").primaryKey({ autoIncrement: true }).notNull(),
 	current_id: integer("current_id").notNull().references(() => character_details.id),
 	old_id: integer("old_id").notNull().references(() => character_details.id),
-}, (t) => ({
-    unq: unique().on(t.current_id, t.old_id),
-}));
+});
+
+export const character_images = sqliteTable("character_images", {
+	id: integer("id").primaryKey().notNull().references(() => character_details.id),
+	content: text("content").notNull(),
+	content_small: text("content_small"),
+	hash: text("hash").notNull(),
+});

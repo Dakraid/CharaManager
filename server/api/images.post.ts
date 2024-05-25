@@ -9,6 +9,8 @@ import ApiResponse from '~/models/ApiResponse';
 import StatusCode from '~/models/enums/StatusCode';
 import writeImageToDisk from '~/server/utils/writeImageToDisk';
 import { character_images } from '~/utils/drizzle/schema';
+import type GetCharactersRequest from "~/models/GetCharactersRequest";
+import GetImagesRequest from "~/models/GetImagesRequest";
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
@@ -19,27 +21,19 @@ export default defineEventHandler(async (event) => {
         return new ApiResponse(StatusCode.FORBIDDEN, 'Missing or invalid API key given.');
     }
 
-    const db = createDatabase(sqlite({ name: 'CharaManager' }));
-    const drizzleDb = drizzle(db);
-    const images = await drizzleDb.select({ id: character_images.id, content: character_images.content }).from(character_images).all();
-
-    try {
-        for (const image of images) {
-            const hash = createHash('sha256').update(image.content).digest('hex');
-            await drizzleDb.update(character_images).set({ hash: hash }).where(eq(character_images.id, image.id));
-
-            try {
-                event.context.logger.info(`Writing image for character id ${image.id} to disk.`);
-                await writeImageToDisk(image.id, image.content.split('base64,')[1]);
-            } catch (err) {
-                event.context.logger.error(err);
-                return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Error occurred during the writing process.', err);
-            }
-        }
-    } catch (err) {
-        event.context.logger.error(err);
-        return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Error occurred during the writing process.', err);
+    const body = await readBody<GetImagesRequest>(event);
+    if (!body) {
+        return new ApiResponse(StatusCode.BAD_REQUEST, 'The request body is malformed or corrupted.');
     }
 
-    return new ApiResponse(StatusCode.OK, 'Wrote all images to disk.');
+    const db = createDatabase(sqlite({ name: 'CharaManager' }));
+    const drizzleDb = drizzle(db);
+
+    if (body.Reduced) {
+        const images = await drizzleDb.select({ id: character_images.id, content_small: character_images.content_small }).from(character_images).all();
+        return new ApiResponse(StatusCode.OK, 'Retrieved images from database.', images);
+    }
+
+    const images = await drizzleDb.select().from(character_images).all();
+    return new ApiResponse(StatusCode.OK, 'Retrieved images from database.', images);
 });

@@ -28,6 +28,7 @@ async function ProvisionDatabase(db: Database) {
     await db.sql`CREATE TABLE IF NOT EXISTS character_images (
           id integer primary key NOT NULL UNIQUE,
           content text NOT NULL,
+          content_small text,
           hash text NOT NULL,
           FOREIGN KEY(id) REFERENCES character_details(id)
 	  )`;

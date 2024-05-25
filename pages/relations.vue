@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import json from 'json-keys-sort';
-import { cn } from '~/lib/utils';
 import type ApiResponse from '~/models/ApiResponse';
 import type CharacterRelations from '~/models/CharacterRelations';
-import { useApplicationStore } from '~/stores/applicationStore';
+
+import {useCharacterStore} from "~/stores/characterStore";
 
 const keyStore = useKeyStore();
+const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
 
 const updateApplication = async () => {
@@ -74,14 +75,11 @@ const showDiff = async (parentId: number, childId: number) => {
                             <CardTitle class="font-bold text-center"> Current: ID#{{ relation.Parent }} </CardTitle>
                         </CardHeader>
                         <CardContent class="w-full p-2 overflow-hidden">
-                            <NuxtImg
+                            <img
                                 :key="relation.Parent"
-                                width="300"
-                                height="222"
-                                fit="inside"
                                 loading="lazy"
                                 :alt="relation.Parent.toString()"
-                                :src="`/cards/${relation.Parent}.png`"
+                                :src="characterStore.characterImages.find(x => x.id === relation.Parent as number)?.content_small ?? ''"
                                 class="character-card rounded-2xl" />
                         </CardContent>
                     </Card>
@@ -92,14 +90,11 @@ const showDiff = async (parentId: number, childId: number) => {
                                 <CardTitle class="font-bold text-center"> Previous: ID#{{ child }} </CardTitle>
                             </CardHeader>
                             <CardContent class="w-full p-2 overflow-hidden">
-                                <NuxtImg
+                                <img
                                     :key="child"
-                                    width="300"
-                                    height="222"
-                                    fit="inside"
                                     loading="lazy"
                                     :alt="child.toString()"
-                                    :src="`/cards/${child}.png`"
+                                    :src="characterStore.characterImages.find(x => x.id === child as number)?.content_small ?? ''"
                                     class="character-card rounded-2xl"
                                     @click="showDiff(relation.Parent, child)" />
                             </CardContent>

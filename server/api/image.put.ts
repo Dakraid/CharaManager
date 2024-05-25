@@ -9,7 +9,6 @@ import PutDefinitionRequest from '~/models/PutDefinitionRequest';
 import type PutImageRequest from '~/models/PutImageRequest';
 import StatusCode from '~/models/enums/StatusCode';
 import convertBase64PNGToString from '~/server/utils/convertBase64PNGToString';
-import writeImageToDisk from '~/server/utils/writeImageToDisk';
 import { character_images } from '~/utils/drizzle/schema';
 
 // noinspection JSUnusedGlobalSymbols
@@ -31,21 +30,19 @@ export default defineEventHandler(async (event) => {
 
     try {
         const hash = createHash('sha256').update(body.Base64Image).digest('hex');
-        await drizzleDb
+
+        const buffer = Buffer.from(body.Base64Image.split('base64,')[1], 'base64');
+        const rawImg = await Jimp.read(buffer);
+        const smallImage = await rawImg.resize(Jimp.AUTO, 384).getBufferAsync(Jimp.MIME_PNG);
+        const smallImageBase64 = 'data:image/png;base64,' + smallImage.toString('base64')
+
+            await drizzleDb
             .insert(character_images)
-            .values({ id: body.Id, content: body.Base64Image, hash: hash })
-            .onConflictDoUpdate({ target: character_images.id, set: { content: body.Base64Image } });
+            .values({ id: body.Id, content: body.Base64Image, content_small: smallImageBase64, hash: hash })
+            .onConflictDoUpdate({ target: character_images.id, set: { content: body.Base64Image, content_small: smallImageBase64 } });
     } catch (err) {
         event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Failed to upsert character image.', err);
-    }
-
-    try {
-        event.context.logger.info(`Writing image for character id ${body.Id} to disk.`);
-        await writeImageToDisk(body.Id, body.Base64Image.split('base64,')[1]);
-    } catch (err) {
-        event.context.logger.error(err);
-        return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Image saved to table, but failed to write image to disk.', err);
     }
 
     const json = convertBase64PNGToString(body.Base64Image);

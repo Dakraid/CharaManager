@@ -8,12 +8,6 @@ CREATE TABLE `character_definitions` (
 	FOREIGN KEY (`id`) REFERENCES `character_details`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `character_images` (
-	`id` integer PRIMARY KEY NOT NULL,
-	`content` text NOT NULL,
-	FOREIGN KEY (`id`) REFERENCES `character_details`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
 CREATE TABLE `character_details` (
 	`id` integer PRIMARY KEY AUTOINCREMENT,
 	`hash` text NOT NULL,
@@ -30,6 +24,14 @@ CREATE TABLE `character_relations` (
 	`old_id` integer NOT NULL,
 	FOREIGN KEY (`old_id`) REFERENCES `character_details`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`current_id`) REFERENCES `character_details`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `character_images` (
+	`id` integer PRIMARY KEY NOT NULL,
+	`content` text NOT NULL,
+	`content_small` text,
+	`hash` text NOT NULL,
+	FOREIGN KEY (`id`) REFERENCES `character_details`(`id`) ON UPDATE no action ON DELETE no action
 );
 
 */
