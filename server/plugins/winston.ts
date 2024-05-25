@@ -1,6 +1,6 @@
-import {createLogger, format, transports} from "winston";
-import {mkdirIfNotExists} from "~/utils/winston";
-import {resolve} from "path";
+import { resolve } from 'path';
+import { createLogger, format, transports } from 'winston';
+import { mkdirIfNotExists } from '~/utils/winston';
 
 export default defineNitroPlugin((nitro) => {
     const { combine, timestamp, json, errors } = format;
@@ -19,7 +19,7 @@ export default defineNitroPlugin((nitro) => {
         ],
     });
 
-    nitro.hooks.hook("error", async (error, { event }) => {
-        loggerWinston.error(`${event?.path} Server Error:`, error)
+    nitro.hooks.hook('error', async (error, { event }) => {
+        loggerWinston.error(`${event?.path} Server Error:`, error);
     });
-})
+});

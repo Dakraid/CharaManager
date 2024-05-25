@@ -1,6 +1,6 @@
-import {createLogger, format, transports} from "winston";
-import {mkdirIfNotExists} from "~/utils/winston";
-import {resolve} from "path";
+import { resolve } from 'path';
+import { createLogger, format, transports } from 'winston';
+import { mkdirIfNotExists } from '~/utils/winston';
 
 export default defineEventHandler((event) => {
     const { combine, timestamp, json, errors } = format;
@@ -11,11 +11,11 @@ export default defineEventHandler((event) => {
 
     event.context.logger = createLogger({
         exitOnError: false,
-        format: combine(timestamp(), errors({stack: true}), json()),
+        format: combine(timestamp(), errors({ stack: true }), json()),
         transports: [
             new transports.File({
                 filename: resolve(LOG_PATH, FILE_NAME),
             }),
         ],
     });
-})
+});
