@@ -2,7 +2,6 @@
 import type { CharacterDetails } from '~/models/CharacterDetails';
 import DatabaseRequest from '~/models/DatabaseRequest';
 import { DatabaseAction } from '~/models/enums/DatabaseAction';
-
 import { useCharacterStore } from '~/stores/characterStore';
 
 const config = useRuntimeConfig();

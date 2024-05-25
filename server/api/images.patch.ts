@@ -26,7 +26,10 @@ export default defineEventHandler(async (event) => {
             const rawImg = await Jimp.read(buffer);
             const smallImage = await rawImg.resize(Jimp.AUTO, 384).getBufferAsync(Jimp.MIME_PNG);
 
-            await drizzleDb.update(character_images).set({ content_small: 'data:image/png;base64,' + smallImage.toString('base64') }).where(eq(character_images.id, image.id));
+            await drizzleDb
+                .update(character_images)
+                .set({ content_small: 'data:image/png;base64,' + smallImage.toString('base64') })
+                .where(eq(character_images.id, image.id));
         }
     } catch (err) {
         event.context.logger.error(err);

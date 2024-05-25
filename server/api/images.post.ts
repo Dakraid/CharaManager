@@ -6,11 +6,11 @@ import Jimp from 'jimp-compact';
 import { createHash } from 'node:crypto';
 import * as fs from 'node:fs';
 import ApiResponse from '~/models/ApiResponse';
+import type GetCharactersRequest from '~/models/GetCharactersRequest';
+import type GetImagesRequest from '~/models/GetImagesRequest';
 import StatusCode from '~/models/enums/StatusCode';
 import writeImageToDisk from '~/server/utils/writeImageToDisk';
 import { character_images } from '~/utils/drizzle/schema';
-import type GetCharactersRequest from "~/models/GetCharactersRequest";
-import GetImagesRequest from "~/models/GetImagesRequest";
 
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {

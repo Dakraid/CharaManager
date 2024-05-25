@@ -43,7 +43,7 @@ const getCharacterImage = async () => {
 
     if (response.value?.Status === StatusCode.OK) {
         imageContent.value = response.value.Content.content;
-        const updatedImages = characterStore.characterImages.filter(x => x.id !== characterInstance.value?.id);
+        const updatedImages = characterStore.characterImages.filter((x) => x.id !== characterInstance.value?.id);
         updatedImages.push({ id: characterInstance.value?.id as number, content: undefined, content_small: response.value.Content.content_small });
         characterStore.characterImages = updatedImages;
     } else {
@@ -53,7 +53,7 @@ const getCharacterImage = async () => {
             variant: 'destructive',
         });
     }
-}
+};
 
 const processCharacterDetails = async () => {
     const { data: response } = await useFetch<ApiResponse>('/api/definition', {
@@ -193,7 +193,7 @@ await processCharacterDetails();
                         :boxStyle="{
                             width: '100%',
                             height: '100%',
-                            margin: 'auto'
+                            margin: 'auto',
                         }"
                         :options="{
                             viewMode: 1,
@@ -204,7 +204,7 @@ await processCharacterDetails();
                         :presetMode="{
                             mode: 'fixedSize',
                             width: 512,
-                            height: 768
+                            height: 768,
                         }" />
                 </client-only>
             </div>

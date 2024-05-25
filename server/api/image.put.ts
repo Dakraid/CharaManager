@@ -34,9 +34,9 @@ export default defineEventHandler(async (event) => {
         const buffer = Buffer.from(body.Base64Image.split('base64,')[1], 'base64');
         const rawImg = await Jimp.read(buffer);
         const smallImage = await rawImg.resize(Jimp.AUTO, 384).getBufferAsync(Jimp.MIME_PNG);
-        const smallImageBase64 = 'data:image/png;base64,' + smallImage.toString('base64')
+        const smallImageBase64 = 'data:image/png;base64,' + smallImage.toString('base64');
 
-            await drizzleDb
+        await drizzleDb
             .insert(character_images)
             .values({ id: body.Id, content: body.Base64Image, content_small: smallImageBase64, hash: hash })
             .onConflictDoUpdate({ target: character_images.id, set: { content: body.Base64Image, content_small: smallImageBase64 } });

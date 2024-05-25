@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { debounce } from 'perfect-debounce';
 import { cn } from '~/lib/utils';
-
 import { useCharacterStore } from '~/stores/characterStore';
 
 const emit = defineEmits(['update-characters']);

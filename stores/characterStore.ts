@@ -1,10 +1,10 @@
 import type ApiResponse from '~/models/ApiResponse';
 import type { CharacterDetails } from '~/models/CharacterDetails';
+import type CharacterImage from '~/models/CharacterImage';
 import DeleteCharacterRequest from '~/models/DeleteCharacterRequest';
 import type GetCharactersRequest from '~/models/GetCharactersRequest';
+import GetImagesRequest from '~/models/GetImagesRequest';
 import StatusCode from '~/models/enums/StatusCode';
-import type CharacterImage from "~/models/CharacterImage";
-import GetImagesRequest from "~/models/GetImagesRequest";
 
 async function getCharacterCount() {
     const keyStore = useKeyStore();
@@ -22,7 +22,7 @@ async function getCharacterImages() {
     const response = await $fetch<ApiResponse>('/api/images', {
         method: 'POST',
         headers: { 'x-api-key': keyStore.apiKey },
-        body: JSON.stringify(new GetImagesRequest(true))
+        body: JSON.stringify(new GetImagesRequest(true)),
     });
 
     const characterImages: CharacterImage[] = [];

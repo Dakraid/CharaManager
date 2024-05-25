@@ -5,7 +5,6 @@ import type ApiResponse from '~/models/ApiResponse';
 import type { CharacterDetails } from '~/models/CharacterDetails';
 import PatchDetailsRequest from '~/models/PatchDetailsRequest';
 import StatusCode from '~/models/enums/StatusCode';
-
 import { useCharacterStore } from '~/stores/characterStore';
 
 const props = defineProps<{
@@ -23,7 +22,7 @@ const characterInstance = ref<CharacterDetails>();
 const imageContent = ref('');
 const showCharacterWindow = ref(false);
 
-imageContent.value = characterStore.characterImages.find(x => x.id === props.character.id as number)?.content_small ?? '';
+imageContent.value = characterStore.characterImages.find((x) => x.id === (props.character.id as number))?.content_small ?? '';
 
 const updateApplication = async () => {
     censorChars.value = applicationStore.censorChars;
@@ -35,7 +34,7 @@ const updateApplication = async () => {
 applicationStore.$subscribe(updateApplication);
 
 const updateCharacter = async () => {
-    imageContent.value = characterStore.characterImages.find(x => x.id === props.character.id as number)?.content_small ?? '';
+    imageContent.value = characterStore.characterImages.find((x) => x.id === (props.character.id as number))?.content_small ?? '';
 };
 
 characterStore.$subscribe(updateCharacter);

@@ -7,7 +7,6 @@ import type { FileUpload } from '~/models/OLD/FileUpload';
 import { DatabaseAction } from '~/models/enums/DatabaseAction';
 import StatusCode from '~/models/enums/StatusCode';
 
-
 const emit = defineEmits(['update-characters']);
 
 const { toast } = useToast();

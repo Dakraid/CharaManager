@@ -2,8 +2,7 @@
 import json from 'json-keys-sort';
 import type ApiResponse from '~/models/ApiResponse';
 import type CharacterRelations from '~/models/CharacterRelations';
-
-import {useCharacterStore} from "~/stores/characterStore";
+import { useCharacterStore } from '~/stores/characterStore';
 
 const keyStore = useKeyStore();
 const characterStore = useCharacterStore();
@@ -79,7 +78,7 @@ const showDiff = async (parentId: number, childId: number) => {
                                 :key="relation.Parent"
                                 loading="lazy"
                                 :alt="relation.Parent.toString()"
-                                :src="characterStore.characterImages.find(x => x.id === relation.Parent as number)?.content_small ?? ''"
+                                :src="characterStore.characterImages.find((x) => x.id === (relation.Parent as number))?.content_small ?? ''"
                                 class="character-card rounded-2xl" />
                         </CardContent>
                     </Card>
@@ -94,7 +93,7 @@ const showDiff = async (parentId: number, childId: number) => {
                                     :key="child"
                                     loading="lazy"
                                     :alt="child.toString()"
-                                    :src="characterStore.characterImages.find(x => x.id === child as number)?.content_small ?? ''"
+                                    :src="characterStore.characterImages.find((x) => x.id === (child as number))?.content_small ?? ''"
                                     class="character-card rounded-2xl"
                                     @click="showDiff(relation.Parent, child)" />
                             </CardContent>
