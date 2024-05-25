@@ -48,43 +48,6 @@
       },
       "uniqueConstraints": {}
     },
-    "character_images": {
-      "name": "character_images",
-      "columns": {
-        "id": {
-          "autoincrement": false,
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "content": {
-          "autoincrement": false,
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "compositePrimaryKeys": {},
-      "indexes": {},
-      "foreignKeys": {
-        "character_images_id_character_details_id_fk": {
-          "name": "character_images_id_character_details_id_fk",
-          "tableFrom": "character_images",
-          "tableTo": "character_details",
-          "columnsFrom": [
-            "id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "uniqueConstraints": {}
-    },
     "character_details": {
       "name": "character_details",
       "columns": {
@@ -191,6 +154,57 @@
           "tableTo": "character_details",
           "columnsFrom": [
             "current_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "character_images": {
+      "name": "character_images",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "content": {
+          "autoincrement": false,
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content_small": {
+          "autoincrement": false,
+          "name": "content_small",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hash": {
+          "autoincrement": false,
+          "name": "hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {
+        "character_images_id_character_details_id_fk": {
+          "name": "character_images_id_character_details_id_fk",
+          "tableFrom": "character_images",
+          "tableTo": "character_details",
+          "columnsFrom": [
+            "id"
           ],
           "columnsTo": [
             "id"

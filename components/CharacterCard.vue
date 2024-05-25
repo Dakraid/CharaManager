@@ -5,7 +5,6 @@ import type ApiResponse from '~/models/ApiResponse';
 import type { CharacterDetails } from '~/models/CharacterDetails';
 import PatchDetailsRequest from '~/models/PatchDetailsRequest';
 import StatusCode from '~/models/enums/StatusCode';
-import { useApplicationStore } from '~/stores/applicationStore';
 import { useCharacterStore } from '~/stores/characterStore';
 
 const props = defineProps<{
@@ -14,31 +13,31 @@ const props = defineProps<{
 
 const { toast } = useToast();
 
-const imageUri = ref('');
-imageUri.value = `/cards/${props.character.id}-small.png?=${Math.floor(Date.now() / 1000)}`;
-
 const keyStore = useKeyStore();
 const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
 const censorChars = ref(false);
 const censorNames = ref(false);
 const characterInstance = ref<CharacterDetails>();
+const imageContent = ref('');
 const showCharacterWindow = ref(false);
+
+imageContent.value = characterStore.characterImages.find((x) => x.id === (props.character.id as number))?.content_small ?? '';
 
 const updateApplication = async () => {
     censorChars.value = applicationStore.censorChars;
     censorNames.value = applicationStore.censorNames;
     characterInstance.value = applicationStore.characterInstance;
     showCharacterWindow.value = applicationStore.showCharacterWindow;
-
-    if (props.character.id === applicationStore.updatedImageId) {
-        imageUri.value = '';
-        imageUri.value = `/cards/${props.character.id}-small.png?=${Math.floor(Date.now() / 1000)}`;
-        applicationStore.updatedImageId = undefined;
-    }
 };
 
 applicationStore.$subscribe(updateApplication);
+
+const updateCharacter = async () => {
+    imageContent.value = characterStore.characterImages.find((x) => x.id === (props.character.id as number))?.content_small ?? '';
+};
+
+characterStore.$subscribe(updateCharacter);
 
 const showCharacter = async () => {
     applicationStore.characterInstance = props.character;
@@ -139,7 +138,7 @@ const updateOperationInclude = async (checked: boolean) => {
                 :key="character.file_name"
                 loading="lazy"
                 :alt="character.file_name"
-                :src="imageUri"
+                :src="imageContent"
                 :class="cn('character-card rounded-2xl', censorChars ? 'blur-2xl rotate-180 grayscale' : '')"
                 @click="showCharacter" />
         </CardContent>

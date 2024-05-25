@@ -26,46 +26,36 @@ export default defineEventHandler(async (event) => {
     const drizzleDb = drizzle(db);
 
     try {
-        fs.access(`public/cards/${body.Id}.png`, constants.F_OK, (err) => {
-            if (!err) {
-                fs.rm(`public/cards/${body.Id}.png`, () => {
-                    console.log(`Deleted file ${body.Id}.png`);
-                });
-            }
-        });
-    } catch (err) {
-        console.error(err);
-    }
-
-    try {
         await drizzleDb.delete(character_relations).where(eq(character_relations.current_id, body.Id));
     } catch {
-        console.log(`Character with ID ${body.Id} had no relation.`);
+        event.context.logger.info(`Character with ID ${body.Id} had no relation.`);
     }
 
     try {
         await drizzleDb.delete(character_relations).where(eq(character_relations.old_id, body.Id));
     } catch {
-        console.log(`Character with ID ${body.Id} had no relation.`);
+        event.context.logger.info(`Character with ID ${body.Id} had no relation.`);
     }
 
     try {
         await drizzleDb.delete(character_definitions).where(eq(character_definitions.id, body.Id));
     } catch {
-        console.log(`Character with ID ${body.Id} had no definition.`);
+        event.context.logger.info(`Character with ID ${body.Id} had no definition.`);
     }
 
     try {
         await drizzleDb.delete(character_images).where(eq(character_images.id, body.Id));
     } catch {
-        console.error(`Character with ID ${body.Id} had no image?`);
+        event.context.logger.error(`Character with ID ${body.Id} had no image?`);
     }
 
     try {
         await drizzleDb.delete(character_details).where(eq(character_details.id, body.Id));
     } catch (err) {
+        event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, `Failed to delete character with ID ${body.Id}.`, err);
     }
 
+    event.context.logger.info(`Deleted character with ID ${body.Id} from tables and disk.`);
     return new ApiResponse(StatusCode.OK, `Deleted character with ID ${body.Id} from tables and disk.`);
 });

@@ -28,6 +28,7 @@ async function ProvisionDatabase(db: Database) {
     await db.sql`CREATE TABLE IF NOT EXISTS character_images (
           id integer primary key NOT NULL UNIQUE,
           content text NOT NULL,
+          content_small text,
           hash text NOT NULL,
           FOREIGN KEY(id) REFERENCES character_details(id)
 	  )`;
@@ -109,8 +110,8 @@ async function SynchronizeDatabase(db: Database) {
                 .insert(character_definitions)
                 .values({ id: image.id, hash: hash, json: contentJson })
                 .onConflictDoUpdate({ target: character_definitions.id, set: { hash: hash, json: contentJson } });
-        } catch (e) {
-            console.error('Failed to upsert definition for character with ID ' + image.id + ': ' + e);
+        } catch (err) {
+            console.error('Failed to upsert definition for character with ID ' + image.id + ': ' + err);
         }
     }
 
@@ -143,6 +144,7 @@ export default defineEventHandler(async (event) => {
                 return await SynchronizeDatabase(db);
         }
     } catch (err) {
+        event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'An unexpected error occurred.', err);
     }
 });

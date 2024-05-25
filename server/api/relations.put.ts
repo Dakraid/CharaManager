@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     const details = await drizzleDb.select().from(character_details).all();
     details.sort((a, b) => b.id - a.id);
 
-    console.log('Matching by name...');
+    event.context.logger.info('Matching by name...');
     for (const detail1 of details) {
         for (const detail2 of details) {
             if (detail1.id === detail2.id || detail2.id > detail1.id) {
@@ -88,7 +88,7 @@ export default defineEventHandler(async (event) => {
     const definitions = await drizzleDb.select().from(character_definitions).all();
     definitions.sort((a, b) => b.id - a.id);
 
-    console.log('Matching by string distance...');
+    event.context.logger.info('Matching by string distance...');
 
     const pool = new Piscina({
         filename: import.meta.dev ? new URL('./../../public/scripts/MatchByDistance.mjs', import.meta.url).href : new URL('./../public/scripts/MatchByDistance.cjs', import.meta.url).href,
@@ -128,7 +128,7 @@ export default defineEventHandler(async (event) => {
 
         const endTime = performance.now();
 
-        console.log(`Done in ${Math.floor((endTime - startTime / 1000) % 60)} seconds.`);
+        event.context.logger.info(`Done in ${Math.floor((endTime - startTime / 1000) % 60)} seconds.`);
         const total = (await drizzleDb.select().from(character_relations).all()).length;
 
         return new ApiResponse(StatusCode.OK, `Added ${newRelations.length} relations. Total count of relations: ${total}.`);

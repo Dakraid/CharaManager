@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Button } from '~/components/ui/button';
-import { useApplicationStore } from '~/stores/applicationStore';
 
 const props = defineProps<{
     currJson: string;

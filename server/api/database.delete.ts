@@ -31,6 +31,7 @@ export default defineEventHandler(async (event) => {
     try {
         return await PurgeDatabase(db);
     } catch (err) {
+        event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'An unexpected error occurred.', err);
     }
 });

@@ -56,6 +56,7 @@ export default defineEventHandler(async (event) => {
 
         return new ApiResponse(StatusCode.OK, 'Updated character successfully.');
     } catch (err) {
+        event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Failed to updated character.', err);
     }
 });

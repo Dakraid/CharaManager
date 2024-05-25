@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
     const details = await drizzleDb.select().from(character_details).all();
     details.sort((a, b) => b.id - a.id);
 
-    console.log('Matching by name...');
+    event.context.logger.info('Matching by name...');
     for (const detail of details) {
         if (itemDetail.id === detail.id || detail.id > itemDetail.id) {
             continue;
@@ -92,8 +92,7 @@ export default defineEventHandler(async (event) => {
     const definitions = await drizzleDb.select().from(character_definitions).all();
     definitions.sort((a, b) => b.id - a.id);
 
-    console.log('Matching by string distance...');
-
+    event.context.logger.info('Matching by string distance...');
     const pool = new Piscina({
         filename: import.meta.dev ? new URL('./../../public/scripts/MatchByDistance.mjs', import.meta.url).href : new URL('./../public/scripts/MatchByDistance.cjs', import.meta.url).href,
     });
@@ -127,6 +126,6 @@ export default defineEventHandler(async (event) => {
         for (const newRelation of relations) {
             await drizzleDb.insert(character_relations).values({ current_id: newRelation.current_id, old_id: newRelation.old_id }).onConflictDoNothing();
         }
-        console.log('Done');
+        event.context.logger.info('Done');
     });
 });

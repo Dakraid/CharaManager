@@ -9,12 +9,11 @@ import type ApiResponse from '~/models/ApiResponse';
 import type { CharacterDetails } from '~/models/CharacterDetails';
 import PutDefinitionRequest from '~/models/PutDefinitionRequest';
 import StatusCode from '~/models/enums/StatusCode';
-import { useApplicationStore } from '~/stores/applicationStore';
 import encodeArrayBufferToUrlSafeBase64 from '~/utils/encodeArrayBufferToUrlSafeBase64';
 
 const { toast } = useToast();
 
-const imageUri = ref('');
+const imageContent = ref('');
 const imageBlob = ref();
 
 const characterData = ref();
@@ -25,6 +24,7 @@ const showCharacterWindow = ref(false);
 const showCropperWindow = ref(false);
 
 const keyStore = useKeyStore();
+const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
 
 const updateApplicationState = async () => {
@@ -33,6 +33,27 @@ const updateApplicationState = async () => {
 };
 
 applicationStore.$subscribe(updateApplicationState);
+
+const getCharacterImage = async () => {
+    const { data: response } = await useFetch<ApiResponse>('/api/image', {
+        method: 'GET',
+        headers: { 'x-api-key': keyStore.apiKey },
+        query: { id: characterInstance.value?.id },
+    });
+
+    if (response.value?.Status === StatusCode.OK) {
+        imageContent.value = response.value.Content.content;
+        const updatedImages = characterStore.characterImages.filter((x) => x.id !== characterInstance.value?.id);
+        updatedImages.push({ id: characterInstance.value?.id as number, content: undefined, content_small: response.value.Content.content_small });
+        characterStore.characterImages = updatedImages;
+    } else {
+        toast({
+            title: response.value?.Message,
+            description: response.value?.Content,
+            variant: 'destructive',
+        });
+    }
+};
 
 const processCharacterDetails = async () => {
     const { data: response } = await useFetch<ApiResponse>('/api/definition', {
@@ -64,21 +85,21 @@ const addGreeting = async () => {
 };
 
 const saveCharacter = async () => {
-    const { data: response } = await useFetch<ApiResponse>('/api/definition', {
+    const response = await $fetch<ApiResponse>('/api/definition', {
         method: 'PUT',
         headers: { 'x-api-key': keyStore.apiKey },
         body: JSON.stringify(new PutDefinitionRequest(characterInstance.value?.id as number, JSON.stringify(characterData.value))),
     });
 
-    if (response.value?.Status === StatusCode.OK) {
+    if (response.Status === StatusCode.OK) {
         toast({
-            title: response.value?.Message,
-            description: response.value?.Content,
+            title: response.Message,
+            description: response.Content,
         });
     } else {
         toast({
-            title: response.value?.Message,
-            description: response.value?.Content,
+            title: response.Message,
+            description: response.Content,
             variant: 'destructive',
         });
     }
@@ -142,8 +163,7 @@ const submitCroppedImage = async () => {
         });
     }
 
-    imageUri.value = `/cards/${characterInstance.value?.id}.png?=${Math.floor(Date.now() / 1000)}`;
-    applicationStore.updatedImageId = characterInstance.value?.id;
+    await getCharacterImage();
 };
 
 const { isOverDropZone } = useDropZone(dropZoneRef, {
@@ -152,9 +172,8 @@ const { isOverDropZone } = useDropZone(dropZoneRef, {
 });
 
 await updateApplicationState();
+await getCharacterImage();
 await processCharacterDetails();
-
-imageUri.value = `/cards/${characterInstance.value?.id}.png?=${Math.floor(Date.now() / 1000)}`;
 </script>
 
 <template>
@@ -192,7 +211,7 @@ imageUri.value = `/cards/${characterInstance.value?.id}.png?=${Math.floor(Date.n
             <div v-else class="flex flex-row gap-2 w-full h-full">
                 <div class="flex flex-col justify-center items-center rounded-2xl border border-accent">
                     <div ref="dropZoneRef" class="rounded-2xl dropzone">
-                        <img :key="imageUri" :alt="characterInstance?.file_name" :src="imageUri" class="character-card-large rounded-2xl" />
+                        <img :alt="characterInstance?.file_name" :src="imageContent" class="character-card-large rounded-2xl" />
                     </div>
                 </div>
                 <Tabs default-value="general" class="w-full">
