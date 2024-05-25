@@ -162,6 +162,7 @@ const synchronizeRelations = async () => {
     const response = await $fetch<ApiResponse>('/api/relations', {
         method: 'PUT',
         headers: { 'x-api-key': keyStore.apiKey },
+        timeout: 900000,
     });
 
     if (response.Status === StatusCode.OK) {
