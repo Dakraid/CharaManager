@@ -10,6 +10,7 @@ CharaManager is a web application made to manage and maintain your collection of
 - Hash-based duplicate detection
 - Automatic conversion of v1 to v2 card specification
 - Character card editor
+  - Replacing of character images and cropping 
   - Allows editing of all fields except embedded lorebooks, latter coming soon
 - Automatic hierarchy and relation detection using name and string distance matching
 - Comparison of definition content between related cards using a full diff editor
@@ -27,7 +28,6 @@ CharaManager is a web application made to manage and maintain your collection of
 ### Upcoming Integrations
 - Lorebook Editing
 - Character Renaming
-- Image Replacement
 - SillyTavern Synchronization
 
 ## Running from Pre-Built
