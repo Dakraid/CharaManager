@@ -1,6 +1,6 @@
 import type { CharacterDetails } from '~/models/CharacterDetails';
 import GetCharactersRequest from '~/models/GetCharactersRequest';
-import GetImagesRequest from "~/models/GetImagesRequest";
+import GetImagesRequest from '~/models/GetImagesRequest';
 
 export const useApplicationStore = defineStore('application', {
     state: () => {

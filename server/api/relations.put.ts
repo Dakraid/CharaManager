@@ -9,7 +9,7 @@ import StatusCode from '~/models/enums/StatusCode';
 import { character_definitions, character_details, character_relations } from '~/utils/drizzle/schema';
 
 function Sleep(milliseconds: number) {
-    return new Promise(resolve => setTimeout(resolve, milliseconds));
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
 // noinspection JSUnusedGlobalSymbols

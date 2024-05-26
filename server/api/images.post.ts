@@ -24,10 +24,18 @@ export default defineEventHandler(async (event) => {
     const drizzleDb = drizzle(db);
 
     if (body.Reduced) {
-        const images = await drizzleDb.select({ id: character_images.id, content_small: character_images.content_small }).from(character_images).all()
-        return new ApiResponse(StatusCode.OK, 'Retrieved images from database.', images.filter((image) =>  body.Ids.includes(image.id)));
+        const images = await drizzleDb.select({ id: character_images.id, content_small: character_images.content_small }).from(character_images).all();
+        return new ApiResponse(
+            StatusCode.OK,
+            'Retrieved images from database.',
+            images.filter((image) => body.Ids.includes(image.id))
+        );
     }
 
-    const images = await drizzleDb.select().from(character_images).all()
-    return new ApiResponse(StatusCode.OK, 'Retrieved images from database.', images.filter((image) => body.Ids.includes(image.id)));
+    const images = await drizzleDb.select().from(character_images).all();
+    return new ApiResponse(
+        StatusCode.OK,
+        'Retrieved images from database.',
+        images.filter((image) => body.Ids.includes(image.id))
+    );
 });
