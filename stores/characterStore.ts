@@ -16,13 +16,13 @@ async function getCharacterCount() {
     return response.Content ?? 0;
 }
 
-async function getCharacterImages() {
+async function getCharacterImages(ids: number[]) {
     const keyStore = useKeyStore();
 
     const response = await $fetch<ApiResponse>('/api/images', {
         method: 'POST',
         headers: { 'x-api-key': keyStore.apiKey },
-        body: JSON.stringify(new GetImagesRequest(true)),
+        body: JSON.stringify(new GetImagesRequest(true, ids)),
     });
 
     const characterImages: CharacterImage[] = [];
@@ -111,8 +111,8 @@ export const useCharacterStore = defineStore('characters', {
             const applicationStore = useApplicationStore();
             applicationStore.processing = true;
             this.characterCount = await getCharacterCount();
-            this.characterList = await getCharacters(applicationStore.queryOptions);
-            this.characterImages = await getCharacterImages();
+            this.characterList = await getCharacters(applicationStore.characterQueryOptions);
+            this.characterImages = await getCharacterImages(this.characterList.map((char) => char.id as number));
             applicationStore.processing = false;
         },
         async deleteCharacter(id: number) {

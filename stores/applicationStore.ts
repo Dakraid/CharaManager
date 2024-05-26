@@ -1,5 +1,6 @@
 import type { CharacterDetails } from '~/models/CharacterDetails';
 import GetCharactersRequest from '~/models/GetCharactersRequest';
+import GetImagesRequest from "~/models/GetImagesRequest";
 
 export const useApplicationStore = defineStore('application', {
     state: () => {
@@ -20,6 +21,6 @@ export const useApplicationStore = defineStore('application', {
         };
     },
     getters: {
-        queryOptions: (state: any) => new GetCharactersRequest(state.currentPage, state.itemsPerPage, state.orderByValue, state.searchValue),
+        characterQueryOptions: (state: any) => new GetCharactersRequest(state.currentPage, state.itemsPerPage, state.orderByValue, state.searchValue),
     },
 });
