@@ -81,7 +81,7 @@
         "@vee-validate/nuxt": "^4.12.8",
         "@vue/compiler-sfc": "^3.4.27",
         "dayjs-nuxt": "^2.1.9",
-        "drizzle-kit": "^0.21.2",
+        "drizzle-kit": "^0.21.4",
         "eslint": "^9.3.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-prettier": "^5.1.3",

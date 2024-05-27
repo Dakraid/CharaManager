@@ -6880,7 +6880,7 @@ __metadata:
     dayjs: "npm:^1.11.11"
     dayjs-nuxt: "npm:^2.1.9"
     db0: "npm:^0.1.4"
-    drizzle-kit: "npm:^0.21.2"
+    drizzle-kit: "npm:^0.21.4"
     drizzle-orm: "npm:^0.30.10"
     embla-carousel: "npm:^8.1.3"
     embla-carousel-vue: "npm:^8.1.3"
@@ -8422,9 +8422,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-kit@npm:^0.21.2":
-  version: 0.21.2
-  resolution: "drizzle-kit@npm:0.21.2"
+"drizzle-kit@npm:^0.21.4":
+  version: 0.21.4
+  resolution: "drizzle-kit@npm:0.21.4"
   dependencies:
     "@esbuild-kit/esm-loader": "npm:^2.5.5"
     commander: "npm:^9.4.1"
@@ -8437,7 +8437,7 @@ __metadata:
     zod: "npm:^3.20.2"
   bin:
     drizzle-kit: bin.cjs
-  checksum: 10c0/d6464f33edee9be44f985e350329d51ae3871966287f92c7b58be85d934f1152d2168e9e7b0957bca630e962fe9577a64ac20092d4b0af02adbcfcadea438c13
+  checksum: 10c0/40917b55525f978665ae77602ed78394dfcacf1ad525a0c3197248d3426f9bae38a52fc0a5120ee4bff44e2e8745f59fc1ae043b5968fdd8f59c2a156da67840
   languageName: node
   linkType: hard
 
