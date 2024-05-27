@@ -30,9 +30,6 @@ export default defineNuxtConfig({
             brotli: true,
         },
         minify: true,
-        prerender: {
-            crawlLinks: true,
-        },
     },
     future: {
         typescriptBundlerResolution: true,
