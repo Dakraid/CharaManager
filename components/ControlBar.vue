@@ -86,7 +86,7 @@ const processResize = debounce(
 );
 
 onMounted(async () => {
-    await onResize(false);
+    await onResize(true);
     window.addEventListener('resize', processResize);
 });
 </script>

@@ -18,7 +18,7 @@ const updateCharacters = async () => {
 characterStore.$subscribe(updateCharacters);
 
 const applicationStore = useApplicationStore();
-const processing = ref(false);
+const processing = ref(true);
 const showCharacterWindow = ref(false);
 
 const updateApplication = async () => {
@@ -43,10 +43,6 @@ if (!applicationStore.provisioned) {
 }
 
 applicationStore.showCharacterWindow = false;
-
-onMounted(async () => {
-    await getCharacters();
-});
 </script>
 
 <template>
@@ -63,7 +59,7 @@ onMounted(async () => {
                     <div v-if="processing" class="absolute backdrop-blur bg-background/80 transition-all w-full h-full inset-0 z-10 rounded-md flex flex-1 justify-center items-center">
                         <Icon class="w-16 h-16 animate-spin" name="radix-icons:reload" />
                     </div>
-                    <div v-else-if="characters.length === 0" class="flex flex-1 flex-col gap-2 justify-center items-center">
+                    <div v-else-if="characters.length === 0" class="w-full h-full flex flex-1 flex-col gap-2 justify-center items-center">
                         <h1 class="font-bold text-2xl">No characters found</h1>
                         <Icon class="w-16 h-16" name="radix-icons:question-mark-circled" />
                         <h2 class="font-bold text-xl">Upload characters to see them here</h2>
