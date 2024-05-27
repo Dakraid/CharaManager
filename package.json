@@ -51,7 +51,7 @@
         "nuxt-rating": "^0.0.15",
         "nuxt-security": "^2.0.0-beta.5",
         "perfect-debounce": "^1.0.0",
-        "piscina": "^4.5.0",
+        "piscina": "^4.5.1",
         "png-chunk-text": "^1.0.0",
         "png-chunks-encode": "^1.0.0",
         "png-chunks-extract": "^1.0.0",

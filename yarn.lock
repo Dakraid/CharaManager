@@ -6903,7 +6903,7 @@ __metadata:
     nuxt-rating: "npm:^0.0.15"
     nuxt-security: "npm:^2.0.0-beta.5"
     perfect-debounce: "npm:^1.0.0"
-    piscina: "npm:^4.5.0"
+    piscina: "npm:^4.5.1"
     png-chunk-text: "npm:^1.0.0"
     png-chunks-encode: "npm:^1.0.0"
     png-chunks-extract: "npm:^1.0.0"
@@ -13529,15 +13529,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"piscina@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "piscina@npm:4.5.0"
+"piscina@npm:^4.5.1":
+  version: 4.5.1
+  resolution: "piscina@npm:4.5.1"
   dependencies:
     nice-napi: "npm:^1.0.2"
   dependenciesMeta:
     nice-napi:
       optional: true
-  checksum: 10c0/8eaf07dbd49fdbd9d6447585fa6ab005c0b226ace1a836a09d66021850fa6cca9cd479671fb0dd10784b4544363f08348642950caee9b80fd14f5d6ce6e45af0
+  checksum: 10c0/609ff88843e28aea21cc204c8dafaa4facd10c170966a0f7ec25e0fee9c0a4af2e6dd8bf76abab200d1305417d796b374ec768f9a384d6e872df1fd736cf6988
   languageName: node
   linkType: hard
 
