@@ -29,6 +29,15 @@ total.value = relations.value
         return acc + curr;
     }, 0);
 
+let ids: number[] = [];
+ids = ids.concat(relations.value.map((x) => x.Parent));
+for (const relation of relations.value) {
+    relation.Children.forEach((child) => {
+        ids.push(child);
+    });
+}
+await characterStore.getCharacterImages(ids);
+
 const showDiffWindow = ref(false);
 const parentJsonString = ref('');
 const childJsonString = ref('');

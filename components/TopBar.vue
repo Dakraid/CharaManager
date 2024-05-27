@@ -40,6 +40,14 @@ const keyStore = useKeyStore();
                             </NavigationMenuLink>
                         </NuxtLink>
                     </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NuxtLink to="/logs">
+                            <NavigationMenuLink :class="cn(navigationMenuTriggerStyle(), 'flex gap-2', $route.path === '/logs' ? 'bg-accent' : '')">
+                                <Icon class="h-5 w-5" name="radix-icons:reader" />
+                                <span>Logs</span>
+                            </NavigationMenuLink>
+                        </NuxtLink>
+                    </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
         </div>

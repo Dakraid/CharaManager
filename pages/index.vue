@@ -4,8 +4,6 @@ import DatabaseRequest from '~/models/DatabaseRequest';
 import { DatabaseAction } from '~/models/enums/DatabaseAction';
 import { useCharacterStore } from '~/stores/characterStore';
 
-const config = useRuntimeConfig();
-
 const keyStore = useKeyStore();
 
 const characterStore = useCharacterStore();
@@ -20,7 +18,7 @@ const updateCharacters = async () => {
 characterStore.$subscribe(updateCharacters);
 
 const applicationStore = useApplicationStore();
-const processing = ref(true);
+const processing = ref(false);
 const showCharacterWindow = ref(false);
 
 const updateApplication = async () => {
@@ -45,6 +43,10 @@ if (!applicationStore.provisioned) {
 }
 
 applicationStore.showCharacterWindow = false;
+
+onMounted(async () => {
+    await getCharacters();
+});
 </script>
 
 <template>

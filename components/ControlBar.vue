@@ -46,7 +46,7 @@ const updatePage = async (page: number) => {
     emit('update-characters');
 };
 
-const onResize = async () => {
+const onResize = async (reloadChars: boolean = true) => {
     if (document.getElementById('main_content')?.offsetWidth !== contentWidth.value) {
         contentWidth.value = document.getElementById('main_content')?.offsetWidth ?? 0;
 
@@ -55,7 +55,9 @@ const onResize = async () => {
             applicationStore.itemsPerPage = itemsPerRow.maxItemsPerRow * 3;
             itemsPerPageOptions = itemsPerRow.newOptions;
 
-            emit('update-characters');
+            if (reloadChars) {
+                emit('update-characters');
+            }
         }
     }
 };
@@ -84,7 +86,7 @@ const processResize = debounce(
 );
 
 onMounted(async () => {
-    await onResize();
+    await onResize(false);
     window.addEventListener('resize', processResize);
 });
 </script>

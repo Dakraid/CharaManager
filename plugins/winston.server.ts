@@ -37,13 +37,9 @@ export default defineNuxtPlugin({
             const nuxtApp = useNuxtApp();
             nuxtApp.$logger().info('Accessed ' + pageComponent);
         },
-        'app:error'(error) {
+        'vue:error'(err, target, info) {
             const nuxtApp = useNuxtApp();
-            nuxtApp.$logger().error(error);
-        },
-        'vue:error'(error, target, info) {
-            const nuxtApp = useNuxtApp();
-            nuxtApp.$logger().error(error + ' ' + target + ' ' + info);
+            nuxtApp.$logger().error(err);
         },
     },
     env: {

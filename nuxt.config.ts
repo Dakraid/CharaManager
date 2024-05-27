@@ -1,4 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+const sw = process.env.SW === 'true';
+
 export default defineNuxtConfig({
     app: {
         head: {
@@ -17,11 +20,28 @@ export default defineNuxtConfig({
         },
     },
     nitro: {
+        esbuild: {
+            options: {
+                target: 'esnext',
+            },
+        },
         compressPublicAssets: {
             gzip: true,
             brotli: true,
         },
         minify: true,
+        prerender: {
+            crawlLinks: true,
+        },
+    },
+    future: {
+        typescriptBundlerResolution: true,
+    },
+    experimental: {
+        watcher: 'parcel',
+    },
+    imports: {
+        autoImport: true,
     },
     runtimeConfig: {
         apiKey: '',
@@ -78,7 +98,10 @@ export default defineNuxtConfig({
         },
     },
     pwa: {
-        includeAssets: ['favicon.ico', 'apple-touch-icon-180x180.png', 'maskable-icon-512x512.png'],
+        strategies: sw ? 'injectManifest' : 'generateSW',
+        srcDir: sw ? 'service-worker' : undefined,
+        filename: sw ? 'sw.ts' : undefined,
+        registerType: 'autoUpdate',
         manifest: {
             name: 'CharaManager',
             short_name: 'CharaManager',
@@ -95,10 +118,30 @@ export default defineNuxtConfig({
                     sizes: '512x512',
                     type: 'image/png',
                 },
+                {
+                    src: 'pwa-512x512.png',
+                    sizes: '512x512',
+                    type: 'image/png',
+                    purpose: 'any maskable',
+                },
             ],
+        },
+        workbox: {
+            globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+        },
+        injectManifest: {
+            globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+        },
+        client: {
+            installPrompt: true,
+            periodicSyncForUpdates: 3600,
         },
         devOptions: {
             enabled: true,
+            suppressWarnings: true,
+            navigateFallback: '/',
+            navigateFallbackAllowlist: [/^\/$/],
+            type: 'module',
         },
     },
 });

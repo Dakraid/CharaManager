@@ -8,10 +8,6 @@ import ApiResponse from '~/models/ApiResponse';
 import StatusCode from '~/models/enums/StatusCode';
 import { character_definitions, character_details, character_relations } from '~/utils/drizzle/schema';
 
-function Sleep(milliseconds: number) {
-    return new Promise((resolve) => setTimeout(resolve, milliseconds));
-}
-
 // noinspection JSUnusedGlobalSymbols
 export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig(event);
@@ -111,7 +107,7 @@ export default defineEventHandler(async (event) => {
                 }
             }
 
-            await Sleep(1000);
+            await sleep(1000);
             const result = await pool.run({ definition1: definition1, definition2: definition2, relations: relations, parentList: parentList, childList: childList });
 
             if (result && result.relations.length > 0) {
