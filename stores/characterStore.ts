@@ -7,21 +7,21 @@ import GetImagesRequest from '~/models/GetImagesRequest';
 import StatusCode from '~/models/enums/StatusCode';
 
 async function getCharacterCount() {
-    const keyStore = useKeyStore();
+    const settingsStore = useSettingsStore();
     const response = await $fetch<ApiResponse>('/api/count', {
         method: 'GET',
-        headers: { 'x-api-key': keyStore.apiKey },
+        headers: { 'x-api-key': settingsStore.apiKey },
     });
 
     return response.Content ?? 0;
 }
 
 async function getCharacterImages(ids: number[], reduce: boolean = true) {
-    const keyStore = useKeyStore();
+    const settingsStore = useSettingsStore();
 
     const response = await $fetch<ApiResponse>('/api/images', {
         method: 'POST',
-        headers: { 'x-api-key': keyStore.apiKey },
+        headers: { 'x-api-key': settingsStore.apiKey },
         body: JSON.stringify(new GetImagesRequest(reduce, ids)),
     });
 
@@ -40,11 +40,11 @@ async function getCharacterImages(ids: number[], reduce: boolean = true) {
 }
 
 async function getCharacters(options: GetCharactersRequest) {
-    const keyStore = useKeyStore();
+    const settingsStore = useSettingsStore();
 
     const response = await $fetch<ApiResponse>('/api/characters', {
         method: 'POST',
-        headers: { 'x-api-key': keyStore.apiKey },
+        headers: { 'x-api-key': settingsStore.apiKey },
         body: JSON.stringify(options),
     });
 
@@ -66,22 +66,33 @@ async function getCharacters(options: GetCharactersRequest) {
     return characters;
 }
 
-async function getCharacter(id: number) {
-    const keyStore = useKeyStore();
+async function getCharacter(characters: CharacterDetails[], id: number) {
+    const settingsStore = useSettingsStore();
 
-    return await $fetch<ApiResponse>('/api/character', {
+    const index = characters.findIndex((item) => item.id === id);
+    if (index !== -1) {
+        return characters[index];
+    }
+
+    const response = await $fetch<ApiResponse>('/api/character', {
         method: 'GET',
-        headers: { 'x-api-key': keyStore.apiKey },
+        headers: { 'x-api-key': settingsStore.apiKey },
         query: { id: id },
     });
+
+    if (response.Status === StatusCode.OK) {
+        return response.Content;
+    }
+
+    return undefined;
 }
 
 async function deleteCharacter(options: DeleteCharacterRequest) {
-    const keyStore = useKeyStore();
+    const settingsStore = useSettingsStore();
 
     return await $fetch<ApiResponse>('/api/character', {
         method: 'DELETE',
-        headers: { 'x-api-key': keyStore.apiKey },
+        headers: { 'x-api-key': settingsStore.apiKey },
         body: JSON.stringify(options),
     });
 }
@@ -97,33 +108,28 @@ export const useCharacterStore = defineStore('characters', {
     getters: {},
     actions: {
         async getCharacterById(id: number) {
-            const result = await getCharacter(id);
-            if (result.Status === StatusCode.OK) {
-                return result.Content as CharacterDetails;
-            } else {
-                return undefined;
-            }
+            return await getCharacter(this.characterList, id);
         },
         async getCharacterImages(ids: number[]) {
             const applicationStore = useApplicationStore();
-            applicationStore.processing = true;
+            applicationStore.loadingCharacters = true;
             this.characterImages = await getCharacterImages(ids);
-            applicationStore.processing = false;
+            applicationStore.loadingCharacters = false;
         },
         async getCharacters() {
             const applicationStore = useApplicationStore();
-            applicationStore.processing = true;
+            applicationStore.loadingCharacters = true;
             this.characterCount = await getCharacterCount();
             this.characterList = await getCharacters(applicationStore.characterQueryOptions);
             this.characterImages = await getCharacterImages(this.characterList.map((char) => char.id as number));
-            applicationStore.processing = false;
+            applicationStore.loadingCharacters = false;
         },
         async deleteCharacter(id: number) {
             const applicationStore = useApplicationStore();
-            applicationStore.processing = true;
+            applicationStore.loadingCharacters = true;
             const response = await deleteCharacter(new DeleteCharacterRequest(id));
             this.getCharacters();
-            applicationStore.processing = false;
+            applicationStore.loadingCharacters = false;
             return response;
         },
     },

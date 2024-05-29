@@ -1,14 +1,21 @@
 <script lang="ts" setup>
 import '~/assets/css/style.css';
 import { Toaster } from '~/components/ui/toast';
+
+const nuxtApp = useNuxtApp();
+const characters = useCharacterStore();
+
+nuxtApp.hooks.hook('refresh:characters', async () => {
+    await characters.getCharacters();
+});
 </script>
 
 <template>
     <NuxtPwaAssets />
-    <div class="h-full w-full">
+    <div>
         <Toaster />
-        <div class="h-screen flex flex-col overflow-y-hidden">
-            <TopBar />
+        <div class="h-screen w-screen flex flex-col">
+            <NavigationBar />
             <Separator />
             <NuxtPage />
         </div>

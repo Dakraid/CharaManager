@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { Statistics } from '~/models/OLD/Statistics';
 
-const keyStore = useKeyStore();
+const settingsStore = useSettingsStore();
 
 const response: Statistics = await $fetch('/api/statistics', {
     method: 'POST',
-    headers: { 'x-api-key': keyStore.apiKey },
+    headers: { 'x-api-key': settingsStore.apiKey },
 });
 
 const statistics = ref();

@@ -1,7 +1,14 @@
-export const useKeyStore = defineStore('key', {
+export const useSettingsStore = defineStore('settings', {
     state: () => {
         return {
             apiKey: '',
+            compressData: true,
+            censorChars: false,
+            censorNames: false,
+            openMenu: false,
+            orderByValue: 'time_desc',
+            rowsPerPageIndex: 2,
+            itemsPerPage: 5,
         };
     },
     persist: {

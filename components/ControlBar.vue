@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { debounce } from 'perfect-debounce';
 import { cn } from '~/lib/utils';
-import { useCharacterStore } from '~/stores/characterStore';
 
 const emit = defineEmits(['update-characters']);
 
@@ -16,29 +15,27 @@ const sortOptions = [
 
 // This isn't a constant as it will be overwritten using custom options based on the width
 let itemsPerPageOptions = [{ value: 5, label: '5' }];
-const itemsPerPage = ref(5);
 
+const settingStore = useSettingsStore();
+const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
+const characterCount = ref(0);
+const itemsPerPage = ref(5);
+const contentWidth = ref(0);
+const openOrderBy = ref(false);
+const openItemsPerPage = ref(false);
 
-const updateApplication = async () => {
-    itemsPerPage.value = applicationStore.itemsPerPage;
+const updateSettings = async () => {
+    itemsPerPage.value = settingStore.itemsPerPage;
 };
 
-applicationStore.$subscribe(updateApplication);
-
-const characterStore = useCharacterStore();
-const characterCount = ref(0);
+settingStore.$subscribe(updateSettings);
 
 const updateCharacters = async () => {
     characterCount.value = characterStore.characterCount;
 };
 
 characterStore.$subscribe(updateCharacters);
-
-const openOrderBy = ref(false);
-const openItemsPerPage = ref(false);
-
-const contentWidth = ref(0);
 
 const updatePage = async (page: number) => {
     applicationStore.currentPage = page;
@@ -52,7 +49,7 @@ const onResize = async (reloadChars: boolean = true) => {
 
         if (contentWidth.value !== 0) {
             const itemsPerRow = calculateItemsPerRow(contentWidth.value);
-            applicationStore.itemsPerPage = itemsPerRow.maxItemsPerRow * 3;
+            settingStore.itemsPerPage = itemsPerRow.maxItemsPerRow * 3;
             itemsPerPageOptions = itemsPerRow.newOptions;
 
             if (reloadChars) {
@@ -128,7 +125,7 @@ onMounted(async () => {
             <Popover v-model:open="openItemsPerPage">
                 <PopoverTrigger as-child>
                     <Button :aria-expanded="openItemsPerPage" class="w-[200px] justify-between" role="combobox" variant="outline">
-                        {{ itemsPerPageOptions ? itemsPerPageOptions.find((option) => option.value === applicationStore.itemsPerPage)?.label : 'Select Items Per Page...' }}
+                        {{ itemsPerPageOptions ? itemsPerPageOptions.find((option) => option.value === settingStore.itemsPerPage)?.label : 'Select Items Per Page...' }}
                         <Icon class="ml-2 h-4 w-4 shrink-0 opacity-50" name="radix-icons:caret-sort" />
                     </Button>
                 </PopoverTrigger>
@@ -143,14 +140,14 @@ onMounted(async () => {
                                     @select="
                                         async (ev) => {
                                             if (typeof ev.detail.value === 'number') {
-                                                applicationStore.itemsPerPage = ev.detail.value;
+                                                settingStore.itemsPerPage = ev.detail.value;
                                             }
                                             openItemsPerPage = false;
                                             $emit('update-characters');
                                         }
                                     ">
                                     {{ option.label }}
-                                    <Icon :class="cn('ml-auto h-4 w-4', applicationStore.itemsPerPage === option.value ? 'opacity-100' : 'opacity-0')" name="radix-icons:check" />
+                                    <Icon :class="cn('ml-auto h-4 w-4', settingStore.itemsPerPage === option.value ? 'opacity-100' : 'opacity-0')" name="radix-icons:check" />
                                 </CommandItem>
                             </CommandGroup>
                         </CommandList>
@@ -163,7 +160,7 @@ onMounted(async () => {
             <Popover v-model:open="openOrderBy">
                 <PopoverTrigger as-child>
                     <Button :aria-expanded="openOrderBy" class="w-[290px] justify-between" role="combobox" variant="outline">
-                        {{ applicationStore.orderByValue ? sortOptions.find((option) => option.value === applicationStore.orderByValue)?.label : 'Select Order...' }}
+                        {{ settingStore.orderByValue ? sortOptions.find((option) => option.value === settingStore.orderByValue)?.label : 'Select Order...' }}
                         <Icon class="ml-2 h-4 w-4 shrink-0 opacity-50" name="radix-icons:caret-sort" />
                     </Button>
                 </PopoverTrigger>
@@ -179,14 +176,14 @@ onMounted(async () => {
                                     @select="
                                         async (ev) => {
                                             if (typeof ev.detail.value === 'string') {
-                                                applicationStore.orderByValue = ev.detail.value;
+                                                settingStore.orderByValue = ev.detail.value;
                                             }
                                             openOrderBy = false;
                                             $emit('update-characters');
                                         }
                                     ">
                                     {{ option.label }}
-                                    <Icon :class="cn('ml-auto h-4 w-4', applicationStore.orderByValue === option.value ? 'opacity-100' : 'opacity-0')" name="radix-icons:check" />
+                                    <Icon :class="cn('ml-auto h-4 w-4', settingStore.orderByValue === option.value ? 'opacity-100' : 'opacity-0')" name="radix-icons:check" />
                                 </CommandItem>
                             </CommandGroup>
                         </CommandList>

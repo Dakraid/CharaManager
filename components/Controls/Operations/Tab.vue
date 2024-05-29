@@ -9,7 +9,7 @@ import StatusCode from '~/models/enums/StatusCode';
 
 const { toast } = useToast();
 
-const keyStore = useKeyStore();
+const settingsStore = useSettingsStore();
 const applicationStore = useApplicationStore();
 
 const selectedProps = ref([]);
@@ -33,7 +33,7 @@ const applyStringReplace = async () => {
     for (const id of applicationStore.operationEnabledIds) {
         const response = await $fetch<ApiResponse>('/api/definition', {
             method: 'GET',
-            headers: { 'x-api-key': keyStore.apiKey },
+            headers: { 'x-api-key': settingsStore.apiKey },
             query: { id: id },
         });
 
@@ -70,7 +70,7 @@ const applyStringReplace = async () => {
 
             const response = await $fetch<ApiResponse>('/api/definition', {
                 method: 'PUT',
-                headers: { 'x-api-key': keyStore.apiKey },
+                headers: { 'x-api-key': settingsStore.apiKey },
                 body: JSON.stringify(new PutDefinitionRequest(definition.id as number, JSON.stringify(character))),
             });
 
@@ -106,7 +106,7 @@ const applyRegexReplace = async () => {
     for (const id of applicationStore.operationEnabledIds) {
         const response = await $fetch<ApiResponse>('/api/definition', {
             method: 'GET',
-            headers: { 'x-api-key': keyStore.apiKey },
+            headers: { 'x-api-key': settingsStore.apiKey },
             query: { id: id },
         });
 
@@ -145,7 +145,7 @@ const applyRegexReplace = async () => {
 
             const response = await $fetch<ApiResponse>('/api/definition', {
                 method: 'PUT',
-                headers: { 'x-api-key': keyStore.apiKey },
+                headers: { 'x-api-key': settingsStore.apiKey },
                 body: JSON.stringify(new PutDefinitionRequest(definition.id as number, JSON.stringify(character))),
             });
 

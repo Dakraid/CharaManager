@@ -6,13 +6,9 @@ export const useApplicationStore = defineStore('application', {
     state: () => {
         return {
             provisioned: false,
-            processing: true,
-            censorChars: false,
-            censorNames: false,
+            loadingCharacters: true,
             searchValue: '',
-            orderByValue: 'time_desc',
             currentPage: 1,
-            itemsPerPage: 5,
             characterInstance: undefined as CharacterDetails | undefined,
             showCharacterWindow: false,
             showDiffWindow: false,
@@ -21,6 +17,9 @@ export const useApplicationStore = defineStore('application', {
         };
     },
     getters: {
-        characterQueryOptions: (state: any) => new GetCharactersRequest(state.currentPage, state.itemsPerPage, state.orderByValue, state.searchValue),
+        characterQueryOptions: (state: any) => {
+            const settings = useSettingsStore();
+            return new GetCharactersRequest(state.currentPage, state.searchValue, settings.itemsPerPage, settings.orderByValue);
+        },
     },
 });

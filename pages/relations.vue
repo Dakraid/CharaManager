@@ -4,7 +4,7 @@ import type ApiResponse from '~/models/ApiResponse';
 import type CharacterRelations from '~/models/CharacterRelations';
 import { useCharacterStore } from '~/stores/characterStore';
 
-const keyStore = useKeyStore();
+const settingsStore = useSettingsStore();
 const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
 
@@ -16,7 +16,7 @@ applicationStore.$subscribe(updateApplication);
 
 const { data: response } = await useFetch<ApiResponse>('/api/relations', {
     method: 'GET',
-    headers: { 'x-api-key': keyStore.apiKey },
+    headers: { 'x-api-key': settingsStore.apiKey },
 });
 
 const relations = ref<CharacterRelations[]>([]);
@@ -47,12 +47,12 @@ const showDiff = async (parentId: number, childId: number) => {
 
     const parent = await $fetch<ApiResponse>('/api/definition', {
         method: 'GET',
-        headers: { 'x-api-key': keyStore.apiKey },
+        headers: { 'x-api-key': settingsStore.apiKey },
         query: { id: parentId },
     });
     const child = await $fetch<ApiResponse>('/api/definition', {
         method: 'GET',
-        headers: { 'x-api-key': keyStore.apiKey },
+        headers: { 'x-api-key': settingsStore.apiKey },
         query: { id: childId },
     });
 
@@ -118,7 +118,7 @@ const showDiff = async (parentId: number, childId: number) => {
 <style scoped>
 .v-enter-active,
 .v-leave-active {
-    transition: opacity 0.5s ease;
+    transition: opacity 0.25s ease;
 }
 
 .v-enter-from,

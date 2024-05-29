@@ -5,7 +5,6 @@ import type ApiResponse from '~/models/ApiResponse';
 import type { CharacterDetails } from '~/models/CharacterDetails';
 import PatchDetailsRequest from '~/models/PatchDetailsRequest';
 import StatusCode from '~/models/enums/StatusCode';
-import { useCharacterStore } from '~/stores/characterStore';
 
 const props = defineProps<{
     character: CharacterDetails;
@@ -13,20 +12,26 @@ const props = defineProps<{
 
 const { toast } = useToast();
 
-const keyStore = useKeyStore();
+const settingsStore = useSettingsStore();
 const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
+
+const characterInstance = ref<CharacterDetails>();
+const showCharacterWindow = ref(false);
 const censorChars = ref(false);
 const censorNames = ref(false);
-const characterInstance = ref<CharacterDetails>();
 const imageContent = ref('');
-const showCharacterWindow = ref(false);
 
 imageContent.value = characterStore.characterImages.find((x) => x.id === (props.character.id as number))?.content_small ?? '';
 
+const updateSettings = async () => {
+    censorChars.value = settingsStore.censorChars;
+    censorNames.value = settingsStore.censorNames;
+};
+
+settingsStore.$subscribe(updateSettings);
+
 const updateApplication = async () => {
-    censorChars.value = applicationStore.censorChars;
-    censorNames.value = applicationStore.censorNames;
     characterInstance.value = applicationStore.characterInstance;
     showCharacterWindow.value = applicationStore.showCharacterWindow;
 };
@@ -64,7 +69,7 @@ const downloadCharacter = async (id: number) => {
     const character = await characterStore.getCharacterById(id);
     const response = await $fetch<ApiResponse>('/api/image', {
         method: 'GET',
-        headers: { 'x-api-key': keyStore.apiKey },
+        headers: { 'x-api-key': settingsStore.apiKey },
         query: { id: id },
     });
     if (response.Status === StatusCode.OK) {
@@ -88,7 +93,7 @@ const updateRating = async (rating: number) => {
     character.rating = rating;
     const response = await $fetch<ApiResponse>('/api/details', {
         method: 'PATCH',
-        headers: { 'x-api-key': keyStore.apiKey },
+        headers: { 'x-api-key': settingsStore.apiKey },
         body: JSON.stringify(new PatchDetailsRequest(character)),
     });
     if (response.Status === StatusCode.OK) {
