@@ -3,6 +3,7 @@ import { Button } from '~/components/ui/button';
 import { toast } from '~/components/ui/toast';
 import type ApiResponse from '~/models/ApiResponse';
 import StatusCode from '~/models/enums/StatusCode';
+import type {FileUpload} from "~/models/OLD/FileUpload";
 
 const nuxtApp = useNuxtApp();
 
@@ -46,8 +47,9 @@ const downloadChubAiCharacter = async () => {
 
 const saveChubAiCharacter = async () => {
     if (fetchedCharacter.value) {
-        controlComponentStore.files.length = 0;
-        controlComponentStore.files.push(fetchedCharacter.value);
+        const newArray: FileUpload[] = [];
+        newArray.push(fetchedCharacter.value);
+        controlComponentStore.files = newArray;
 
         await nuxtApp.hooks.callHook('action:upload');
 
