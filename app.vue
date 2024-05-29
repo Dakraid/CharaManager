@@ -5,6 +5,8 @@ import { Toaster } from '~/components/ui/toast';
 const nuxtApp = useNuxtApp();
 const characters = useCharacterStore();
 
+await characters.getCharacters();
+
 nuxtApp.hooks.hook('refresh:characters', async () => {
     await characters.getCharacters();
 });

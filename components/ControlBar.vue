@@ -2,7 +2,7 @@
 import { debounce } from 'perfect-debounce';
 import { cn } from '~/lib/utils';
 
-const emit = defineEmits(['update-characters']);
+const nuxtApp = useNuxtApp();
 
 const sortOptions = [
     { value: 'time_desc', label: 'DateTime ↓' },
@@ -25,11 +25,11 @@ const contentWidth = ref(0);
 const openOrderBy = ref(false);
 const openItemsPerPage = ref(false);
 
-const updateSettings = async () => {
-    itemsPerPage.value = settingStore.itemsPerPage;
+const updateApplication = async () => {
+    itemsPerPage.value = applicationStore.itemsPerPage;
 };
 
-settingStore.$subscribe(updateSettings);
+applicationStore.$subscribe(updateApplication);
 
 const updateCharacters = async () => {
     characterCount.value = characterStore.characterCount;
@@ -40,7 +40,7 @@ characterStore.$subscribe(updateCharacters);
 const updatePage = async (page: number) => {
     applicationStore.currentPage = page;
     applicationStore.operationEnabledIds.clear();
-    emit('update-characters');
+    await nuxtApp.hooks.callHook('refresh:characters');
 };
 
 const onResize = async (reloadChars: boolean = true) => {
@@ -49,11 +49,11 @@ const onResize = async (reloadChars: boolean = true) => {
 
         if (contentWidth.value !== 0) {
             const itemsPerRow = calculateItemsPerRow(contentWidth.value);
-            settingStore.itemsPerPage = itemsPerRow.maxItemsPerRow * 3;
+            applicationStore.itemsPerPage = itemsPerRow.maxItemsPerRow * 3;
             itemsPerPageOptions = itemsPerRow.newOptions;
 
             if (reloadChars) {
-                emit('update-characters');
+                await nuxtApp.hooks.callHook('refresh:characters');
             }
         }
     }
@@ -62,13 +62,13 @@ const onResize = async (reloadChars: boolean = true) => {
 const clearSearch = async () => {
     if (applicationStore.searchValue.length > 0) {
         applicationStore.searchValue = '';
-        emit('update-characters');
+        await nuxtApp.hooks.callHook('refresh:characters');
     }
 };
 
 const processSearch = debounce(
     async () => {
-        emit('update-characters');
+        await nuxtApp.hooks.callHook('refresh:characters');
     },
     500,
     { trailing: false }
@@ -81,6 +81,10 @@ const processResize = debounce(
     500,
     { trailing: false }
 );
+
+nuxtApp.hooks.hook('action:menu', async () => {
+    await onResize();
+})
 
 onMounted(async () => {
     await onResize(true);
@@ -125,7 +129,7 @@ onMounted(async () => {
             <Popover v-model:open="openItemsPerPage">
                 <PopoverTrigger as-child>
                     <Button :aria-expanded="openItemsPerPage" class="w-[200px] justify-between" role="combobox" variant="outline">
-                        {{ itemsPerPageOptions ? itemsPerPageOptions.find((option) => option.value === settingStore.itemsPerPage)?.label : 'Select Items Per Page...' }}
+                        {{ itemsPerPageOptions ? itemsPerPageOptions.find((option) => option.value === applicationStore.itemsPerPage)?.label : 'Select Items Per Page...' }}
                         <Icon class="ml-2 h-4 w-4 shrink-0 opacity-50" name="radix-icons:caret-sort" />
                     </Button>
                 </PopoverTrigger>
@@ -140,14 +144,14 @@ onMounted(async () => {
                                     @select="
                                         async (ev) => {
                                             if (typeof ev.detail.value === 'number') {
-                                                settingStore.itemsPerPage = ev.detail.value;
+                                                applicationStore.itemsPerPage = ev.detail.value;
                                             }
                                             openItemsPerPage = false;
                                             $emit('update-characters');
                                         }
                                     ">
                                     {{ option.label }}
-                                    <Icon :class="cn('ml-auto h-4 w-4', settingStore.itemsPerPage === option.value ? 'opacity-100' : 'opacity-0')" name="radix-icons:check" />
+                                    <Icon :class="cn('ml-auto h-4 w-4', applicationStore.itemsPerPage === option.value ? 'opacity-100' : 'opacity-0')" name="radix-icons:check" />
                                 </CommandItem>
                             </CommandGroup>
                         </CommandList>

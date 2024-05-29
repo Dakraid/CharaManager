@@ -14,12 +14,13 @@ export const useApplicationStore = defineStore('application', {
             showDiffWindow: false,
             updatedImageId: undefined as number | undefined,
             operationEnabledIds: new Set<number>(),
+            itemsPerPage: 5,
         };
     },
     getters: {
         characterQueryOptions: (state: any) => {
             const settings = useSettingsStore();
-            return new GetCharactersRequest(state.currentPage, state.searchValue, settings.itemsPerPage, settings.orderByValue);
+            return new GetCharactersRequest(state.currentPage, state.searchValue, state.itemsPerPage, settings.orderByValue);
         },
     },
 });

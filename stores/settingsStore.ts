@@ -7,8 +7,6 @@ export const useSettingsStore = defineStore('settings', {
             censorNames: false,
             openMenu: false,
             orderByValue: 'time_desc',
-            rowsPerPageIndex: 2,
-            itemsPerPage: 5,
         };
     },
     persist: {

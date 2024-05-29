@@ -77,7 +77,7 @@ export default defineNuxtConfig({
         componentDir: './components/ui',
     },
     security: {
-        enabled: true,
+        enabled: false,
         headers: {
             crossOriginEmbedderPolicy: 'unsafe-none',
             contentSecurityPolicy: {
