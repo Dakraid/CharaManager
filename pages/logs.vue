@@ -10,7 +10,6 @@ const response = await $fetch<ApiResponse>('/api/logs', {
     headers: { 'x-api-key': settingsStore.apiKey },
 });
 
-// {"level":"info","message":"Matching by name...","timestamp":"2024-05-25T20:57:49.225Z"}
 const logs = ref();
 logs.value = [];
 

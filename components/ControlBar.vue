@@ -147,7 +147,7 @@ onMounted(async () => {
                                                 applicationStore.itemsPerPage = ev.detail.value;
                                             }
                                             openItemsPerPage = false;
-                                            $emit('update-characters');
+                                            await nuxtApp.hooks.callHook('refresh:characters');
                                         }
                                     ">
                                     {{ option.label }}
@@ -183,7 +183,7 @@ onMounted(async () => {
                                                 settingStore.orderByValue = ev.detail.value;
                                             }
                                             openOrderBy = false;
-                                            $emit('update-characters');
+                                            await nuxtApp.hooks.callHook('refresh:characters');
                                         }
                                     ">
                                     {{ option.label }}

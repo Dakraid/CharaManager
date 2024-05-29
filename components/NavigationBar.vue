@@ -17,8 +17,8 @@ const toggleMenu = async () => {
 </script>
 
 <template>
-    <div class="container flex flex-col gap-2 items-center justify-between space-y-2 py-4 sm:flex-row sm:space-y-0 md:h-16 lg:px-24 h-min max-w-full">
-        <div class="flex items-center justify-start gap-2 w-[220px]">
+    <div class="container h-min max-w-full flex flex-col gap-2 space-y-0 items-center justify-between py-4 lg:h-16 lg:flex-row lg:space-y-2 lg:px-24">
+        <div class="flex items-center justify-center gap-2 w-[220px] lg:justify-start">
             <img class="h-10 w-10" src="/CharaManager.svg" alt="CharaManagerLogo" />
             <h2 class="text-xl font-semibold font-mono" style="color: #13fea2">CharaManager</h2>
         </div>
@@ -62,7 +62,7 @@ const toggleMenu = async () => {
                 </NavigationMenu>
             </ClientOnly>
         </div>
-        <div class="flex justify-end gap-4 w-[220px]">
+        <div class="flex justify-center gap-4 w-[220px] lg:justify-end">
             <Popover>
                 <PopoverTrigger as-child>
                     <Button variant="outline">

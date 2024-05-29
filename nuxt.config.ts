@@ -68,7 +68,7 @@ export default defineNuxtConfig({
             enabled: true,
         },
     },
-    sourcemap: true,
+    sourcemap: process.env.NODE_ENV === 'development',
     colorMode: {
         classSuffix: '',
     },
@@ -77,12 +77,12 @@ export default defineNuxtConfig({
         componentDir: './components/ui',
     },
     security: {
-        enabled: false,
+        enabled: true,
         headers: {
             crossOriginEmbedderPolicy: 'unsafe-none',
             contentSecurityPolicy: {
                 'img-src': false,
-                'script-src': ["'self'", 'https:', "'unsafe-inline'", "'strict-dynamic'", "'nonce-{{nonce}}'", "'unsafe-eval'"],
+                'script-src': ["'self'", 'https:', "'unsafe-inline'", "'strict-dynamic'", "'nonce'", "'unsafe-eval'"],
             },
         },
         requestSizeLimiter: {
