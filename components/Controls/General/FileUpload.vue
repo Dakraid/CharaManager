@@ -13,12 +13,6 @@ const controlComponentStore = useControlComponentStore();
 const files = ref<FileUpload[]>([]);
 const fileInput = ref<HTMLInputElement>();
 
-const updateStore = async () => {
-    files.value = controlComponentStore.files;
-};
-
-controlComponentStore.$subscribe(updateStore);
-
 const onFileChange = async (e: any) => {
     const fileList = e.target.files || e.dataTransfer.files;
     if (!fileList.length) return;
