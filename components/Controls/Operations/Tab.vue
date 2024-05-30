@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import * as Cards from 'character-card-utils';
-import { convert } from 'magic-regexp/converter';
 import { Button } from '~/components/ui/button';
 import { useToast } from '~/components/ui/toast';
 import type ApiResponse from '~/models/ApiResponse';

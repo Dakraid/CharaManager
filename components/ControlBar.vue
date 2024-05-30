@@ -25,18 +25,6 @@ const contentWidth = ref(0);
 const openOrderBy = ref(false);
 const openItemsPerPage = ref(false);
 
-const updateApplication = async () => {
-    itemsPerPage.value = applicationStore.itemsPerPage;
-};
-
-applicationStore.$subscribe(updateApplication);
-
-const updateCharacters = async () => {
-    characterCount.value = characterStore.characterCount;
-};
-
-characterStore.$subscribe(updateCharacters);
-
 const updatePage = async (page: number) => {
     applicationStore.currentPage = page;
     applicationStore.operationEnabledIds.clear();
@@ -87,6 +75,20 @@ nuxtApp.hooks.hook('action:menu', async () => {
 });
 
 onMounted(async () => {
+    const updateApplication = async () => {
+        itemsPerPage.value = applicationStore.itemsPerPage;
+    };
+
+    const updateCharacters = async () => {
+        characterCount.value = characterStore.characterCount;
+    };
+
+    applicationStore.$subscribe(updateApplication);
+    characterStore.$subscribe(updateCharacters);
+
+    await updateApplication();
+    await updateCharacters();
+
     await onResize(true);
     window.addEventListener('resize', processResize);
 });

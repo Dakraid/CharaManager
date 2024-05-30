@@ -28,13 +28,6 @@ const settingsStore = useSettingsStore();
 const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
 
-const updateApplicationState = async () => {
-    characterInstance.value = applicationStore.characterInstance;
-    showCharacterWindow.value = applicationStore.showCharacterWindow;
-};
-
-applicationStore.$subscribe(updateApplicationState);
-
 const getCharacterImage = async () => {
     const { data: response } = await useFetch<ApiResponse>('/api/image', {
         method: 'GET',
@@ -176,6 +169,13 @@ const { isOverDropZone } = useDropZone(dropZoneRef, {
 });
 
 onMounted(async () => {
+    const updateApplicationState = async () => {
+        characterInstance.value = applicationStore.characterInstance;
+        showCharacterWindow.value = applicationStore.showCharacterWindow;
+    };
+
+    applicationStore.$subscribe(updateApplicationState);
+
     await updateApplicationState();
     await getCharacterImage();
     await processCharacterDetails();

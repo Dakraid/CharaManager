@@ -15,12 +15,6 @@ const fetchedCharacter = ref();
 const showSkeleton = ref(false);
 const processing = ref(false);
 
-const updateStore = async () => {
-    processing.value = controlComponentStore.processing;
-};
-
-controlComponentStore.$subscribe(updateStore);
-
 const downloadChubAiCharacter = async () => {
     if (characterUrl.value.trim().length === 0 || (!characterUrl.value.includes('chub.ai/characters/') && !characterUrl.value.includes('characterhub.org/characters/'))) {
         toast({
@@ -88,6 +82,15 @@ const clearChubAiCharacter = async () => {
     characterUrl.value = '';
     fetchedCharacter.value = undefined;
 };
+
+onMounted(async () => {
+    const updateStore = async () => {
+        processing.value = controlComponentStore.processing;
+    };
+
+    controlComponentStore.$subscribe(updateStore);
+    await updateStore();
+});
 </script>
 
 <template>

@@ -8,12 +8,6 @@ const settingsStore = useSettingsStore();
 const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
 
-const updateApplication = async () => {
-    showDiffWindow.value = applicationStore.showDiffWindow;
-};
-
-applicationStore.$subscribe(updateApplication);
-
 const { data: response } = await useFetch<ApiResponse>('/api/relations', {
     method: 'GET',
     headers: { 'x-api-key': settingsStore.apiKey },
@@ -66,6 +60,16 @@ const showDiff = async (parentId: number, childId: number) => {
 
     applicationStore.showDiffWindow = true;
 };
+
+onMounted(async () => {
+    const updateApplication = async () => {
+        showDiffWindow.value = applicationStore.showDiffWindow;
+    };
+
+    applicationStore.$subscribe(updateApplication);
+
+    await updateApplication();
+});
 </script>
 
 <template>

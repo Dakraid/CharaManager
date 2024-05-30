@@ -15,26 +15,6 @@ const loadingCharacters = ref(true);
 const showCharacterWindow = ref(false);
 const openMenu = ref(false);
 
-const updateSettings = async () => {
-    openMenu.value = settingsStore.openMenu;
-};
-
-settingsStore.$subscribe(updateSettings);
-
-const updateCharacters = async () => {
-    characterCount.value = characterStore.characterCount;
-    characters.value = characterStore.characterList;
-};
-
-characterStore.$subscribe(updateCharacters);
-
-const updateApplication = async () => {
-    loadingCharacters.value = applicationStore.loadingCharacters;
-    showCharacterWindow.value = applicationStore.showCharacterWindow;
-};
-
-applicationStore.$subscribe(updateApplication);
-
 if (!applicationStore.provisioned) {
     await $fetch('/api/database', {
         method: 'POST',
@@ -46,6 +26,30 @@ if (!applicationStore.provisioned) {
 }
 
 applicationStore.showCharacterWindow = false;
+
+onMounted(async () => {
+    const updateSettings = async () => {
+        openMenu.value = settingsStore.openMenu;
+    };
+
+    const updateCharacters = async () => {
+        characterCount.value = characterStore.characterCount;
+        characters.value = characterStore.characterList;
+    };
+
+    const updateApplication = async () => {
+        loadingCharacters.value = applicationStore.loadingCharacters;
+        showCharacterWindow.value = applicationStore.showCharacterWindow;
+    };
+
+    settingsStore.$subscribe(updateSettings);
+    characterStore.$subscribe(updateCharacters);
+    applicationStore.$subscribe(updateApplication);
+
+    await updateSettings();
+    await updateCharacters();
+    await updateApplication();
+});
 </script>
 
 <template>

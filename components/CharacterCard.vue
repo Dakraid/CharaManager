@@ -24,26 +24,6 @@ const imageContent = ref('');
 
 imageContent.value = characterStore.characterImages.find((x) => x.id === (props.character.id as number))?.content_small ?? '';
 
-const updateSettings = async () => {
-    censorChars.value = settingsStore.censorChars;
-    censorNames.value = settingsStore.censorNames;
-};
-
-settingsStore.$subscribe(updateSettings);
-
-const updateApplication = async () => {
-    characterInstance.value = applicationStore.characterInstance;
-    showCharacterWindow.value = applicationStore.showCharacterWindow;
-};
-
-applicationStore.$subscribe(updateApplication);
-
-const updateCharacter = async () => {
-    imageContent.value = characterStore.characterImages.find((x) => x.id === (props.character.id as number))?.content_small ?? '';
-};
-
-characterStore.$subscribe(updateCharacter);
-
 const showCharacter = async () => {
     applicationStore.characterInstance = props.character;
     applicationStore.showCharacterWindow = true;
@@ -117,6 +97,30 @@ const updateOperationInclude = async (checked: boolean) => {
         applicationStore.operationEnabledIds.delete(props.character.id as number);
     }
 };
+
+onMounted(async () => {
+    const updateSettings = async () => {
+        censorChars.value = settingsStore.censorChars;
+        censorNames.value = settingsStore.censorNames;
+    };
+
+    const updateApplication = async () => {
+        characterInstance.value = applicationStore.characterInstance;
+        showCharacterWindow.value = applicationStore.showCharacterWindow;
+    };
+
+    const updateCharacter = async () => {
+        imageContent.value = characterStore.characterImages.find((x) => x.id === (props.character.id as number))?.content_small ?? '';
+    };
+
+    settingsStore.$subscribe(updateSettings);
+    applicationStore.$subscribe(updateApplication);
+    characterStore.$subscribe(updateCharacter);
+
+    await updateSettings();
+    await updateApplication();
+    await updateCharacter();
+});
 </script>
 
 <template>

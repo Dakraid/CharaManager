@@ -13,12 +13,6 @@ const controlComponentStore = useControlComponentStore();
 
 const processing = ref(false);
 
-const updateStore = async () => {
-    processing.value = controlComponentStore.processing;
-};
-
-controlComponentStore.$subscribe(updateStore);
-
 const generateThumbnails = async () => {
     controlComponentStore.processing = true;
 
@@ -131,6 +125,15 @@ const deleteCharacters = async () => {
     controlComponentStore.processing = false;
     await nuxtApp.hooks.callHook('refresh:characters');
 };
+
+onMounted(async () => {
+    const updateStore = async () => {
+        processing.value = controlComponentStore.processing;
+    };
+
+    controlComponentStore.$subscribe(updateStore);
+    await updateStore();
+});
 </script>
 
 <template>
