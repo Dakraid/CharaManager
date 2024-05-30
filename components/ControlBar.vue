@@ -84,7 +84,7 @@ const processResize = debounce(
 
 nuxtApp.hooks.hook('action:menu', async () => {
     await onResize();
-})
+});
 
 onMounted(async () => {
     await onResize(true);

@@ -2,8 +2,8 @@
 import { Button } from '~/components/ui/button';
 import { toast } from '~/components/ui/toast';
 import type ApiResponse from '~/models/ApiResponse';
+import type { FileUpload } from '~/models/OLD/FileUpload';
 import StatusCode from '~/models/enums/StatusCode';
-import type {FileUpload} from "~/models/OLD/FileUpload";
 
 const nuxtApp = useNuxtApp();
 
