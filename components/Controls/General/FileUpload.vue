@@ -86,10 +86,6 @@ const uploadFiles = async () => {
     controlComponentStore.processing = false;
     await nuxtApp.hooks.callHook('refresh:characters');
 };
-
-nuxtApp.hooks.hook('action:upload', async () => {
-    await uploadFiles();
-});
 </script>
 
 <template>

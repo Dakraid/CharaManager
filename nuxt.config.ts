@@ -82,7 +82,7 @@ export default defineNuxtConfig({
             crossOriginEmbedderPolicy: 'unsafe-none',
             contentSecurityPolicy: {
                 'img-src': false,
-                'script-src': ["'self'", 'https:', "'unsafe-inline'", "'strict-dynamic'", "'nonce'", "'unsafe-eval'"],
+                'script-src': false,
             },
         },
         requestSizeLimiter: {

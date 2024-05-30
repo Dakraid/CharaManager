@@ -10,9 +10,16 @@ const nuxtApp = useNuxtApp();
 const settingsStore = useSettingsStore();
 const controlComponentStore = useControlComponentStore();
 
-const showSkeleton = ref(false);
 const characterUrl = ref('');
 const fetchedCharacter = ref();
+const showSkeleton = ref(false);
+const processing = ref(false);
+
+const updateStore = async () => {
+    processing.value = controlComponentStore.processing;
+};
+
+controlComponentStore.$subscribe(updateStore);
 
 const downloadChubAiCharacter = async () => {
     if (characterUrl.value.trim().length === 0 || (!characterUrl.value.includes('chub.ai/characters/') && !characterUrl.value.includes('characterhub.org/characters/'))) {
@@ -47,14 +54,33 @@ const downloadChubAiCharacter = async () => {
 
 const saveChubAiCharacter = async () => {
     if (fetchedCharacter.value) {
-        const newArray: FileUpload[] = [];
-        newArray.push(fetchedCharacter.value);
-        controlComponentStore.files = newArray;
+        controlComponentStore.processing = true;
+        const response = await $fetch<ApiResponse>('/api/characters', {
+            method: 'PUT',
+            headers: { 'x-api-key': settingsStore.apiKey },
+            body: {
+                files: [fetchedCharacter.value],
+            },
+        });
 
-        await nuxtApp.hooks.callHook('action:upload');
+        if (response.Status === StatusCode.OK) {
+            toast({
+                title: response.Message,
+                description: response.Content,
+            });
+        } else {
+            toast({
+                title: response.Message,
+                description: response.Content,
+                variant: 'destructive',
+            });
+        }
 
         characterUrl.value = '';
         fetchedCharacter.value = undefined;
+        controlComponentStore.processing = false;
+
+        await nuxtApp.hooks.callHook('refresh:characters');
     }
 };
 
@@ -89,6 +115,12 @@ const clearChubAiCharacter = async () => {
                     </Button>
                 </div>
             </div>
+            <Separator />
+            <div class="h-full" />
+            <div v-if="processing" class="h-full flex items-center justify-center">
+                <Icon class="h-16 w-16" name="line-md:loading-loop" />
+            </div>
+            <div class="h-full" />
         </div>
     </ScrollArea>
 </template>
