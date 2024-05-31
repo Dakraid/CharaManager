@@ -68,7 +68,7 @@ export default defineNuxtConfig({
             enabled: true,
         },
     },
-    sourcemap: process.env.NODE_ENV === 'development',
+    sourcemap: true,
     colorMode: {
         classSuffix: '',
     },
