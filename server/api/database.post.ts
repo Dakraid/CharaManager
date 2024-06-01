@@ -135,6 +135,8 @@ export default defineEventHandler(async (event) => {
     const db = createDatabase(sqlite({ name: 'CharaManager' }));
 
     try {
+        await db.exec('PRAGMA journal_mode=WAL;');
+
         switch (body.Action) {
             case DatabaseAction.Provision:
                 return await ProvisionDatabase(db);
