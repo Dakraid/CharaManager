@@ -79,12 +79,17 @@ onMounted(async () => {
         </div>
         <ScrollArea v-else class="w-full h-full overflow-y-hidden rounded-md border p-4 pr-6 transition-all">
             <h1 class="text-xl font-bold text-center">Total Count of Child Relations: {{ total }}</h1>
+            <h2 class="text-xl text-center text-muted-foreground">Click on a child to see the differences</h2>
             <Separator class="my-4" />
-            <div v-for="relation in relations" :key="relation.Parent" class="flex flex-col gap-4 mt-4">
-                <div class="flex gap-8">
+            <div v-for="relation in relations" :key="relation.Parent" class="flex flex-col gap-4">
+                <div class="flex gap-8 p-6">
                     <Card class="flex flex-col items-center w-60">
                         <CardHeader class="flex flex-col w-full items-center gap-2 flex-1 p-2">
-                            <CardTitle class="font-bold text-center"> Current: ID#{{ relation.Parent }} </CardTitle>
+                            <CardTitle class="flex flex-col gap-2 text-center items-center">
+                                <span class="text-muted-foreground">Current:</span>
+                                <span class="font-bold">ID#{{ relation.Parent }}</span>
+                                <span class="text-muted-foreground">{{ characterStore.characterList.find((x) => x.id === relation.Parent)?.full_name }}</span>
+                            </CardTitle>
                         </CardHeader>
                         <CardContent class="w-full p-2 overflow-hidden">
                             <img
@@ -96,10 +101,15 @@ onMounted(async () => {
                         </CardContent>
                     </Card>
                     <Icon class="h-8 w-8 my-auto" name="radix-icons:double-arrow-right" />
-                    <div class="flex gap-2">
-                        <Card v-for="child in relation.Children" class="flex flex-col items-center w-60">
+                    <div class="flex gap-6">
+                        <Card
+                            v-for="child in relation.Children"
+                            class="flex flex-col items-center w-60 transition-all hover:border-accent-foreground hover:shadow-[0_0_20px_-5px] hover:shadow-accent-foreground hover:scale-105 hover:transition-all">
                             <CardHeader class="flex flex-col w-full items-center gap-2 flex-1 p-2">
-                                <CardTitle class="font-bold text-center"> Previous: ID#{{ child }} </CardTitle>
+                                <CardTitle class="flex flex-col gap-2 text-center items-center">
+                                    <span class="text-muted-foreground">Previous:</span>
+                                    <span class="font-bold">ID#{{ child }}</span>
+                                </CardTitle>
                             </CardHeader>
                             <CardContent class="w-full p-2 overflow-hidden">
                                 <img

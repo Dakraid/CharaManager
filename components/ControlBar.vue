@@ -88,7 +88,7 @@ onMounted(async () => {
 
     await updateApplication();
     await updateCharacters();
-
+    await sleep(500);
     await onResize(true);
     window.addEventListener('resize', processResize);
 });

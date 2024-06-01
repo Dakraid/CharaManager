@@ -166,7 +166,7 @@ onMounted(async () => {
                         </TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
-                <span class="flex-1 text-sm text-center opacity-50 whitespace-break-spaces">{{ character.formatted_timestamp }}</span>
+                <span class="flex-1 text-sm text-center my-auto opacity-50 whitespace-break-spaces">#{{ character.id }}</span>
                 <AlertDialog>
                     <AlertDialogTrigger as-child>
                         <Button type="submit" variant="destructive" class="flex justify-center items-center px-2">
