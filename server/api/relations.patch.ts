@@ -126,6 +126,7 @@ export default defineEventHandler(async (event) => {
         for (const newRelation of relations) {
             await drizzleDb.insert(character_relations).values({ current_id: newRelation.current_id, old_id: newRelation.old_id }).onConflictDoNothing();
         }
-        event.context.logger.info('Done');
+        console.log('Relation matching done.');
+        event.context.logger.info('Relation matching done.');
     });
 });

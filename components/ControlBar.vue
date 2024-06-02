@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { debounce } from 'perfect-debounce';
 import { cn } from '~/lib/utils';
-import { useCharacterStore } from '~/stores/characterStore';
 
-const emit = defineEmits(['update-characters']);
+const nuxtApp = useNuxtApp();
 
 const sortOptions = [
     { value: 'time_desc', label: 'DateTime ↓' },
@@ -16,34 +15,20 @@ const sortOptions = [
 
 // This isn't a constant as it will be overwritten using custom options based on the width
 let itemsPerPageOptions = [{ value: 5, label: '5' }];
-const itemsPerPage = ref(5);
 
-const applicationStore = useApplicationStore();
-
-const updateApplication = async () => {
-    itemsPerPage.value = applicationStore.itemsPerPage;
-};
-
-applicationStore.$subscribe(updateApplication);
-
+const settingStore = useSettingsStore();
 const characterStore = useCharacterStore();
+const applicationStore = useApplicationStore();
 const characterCount = ref(0);
-
-const updateCharacters = async () => {
-    characterCount.value = characterStore.characterCount;
-};
-
-characterStore.$subscribe(updateCharacters);
-
+const itemsPerPage = ref(5);
+const contentWidth = ref(0);
 const openOrderBy = ref(false);
 const openItemsPerPage = ref(false);
-
-const contentWidth = ref(0);
 
 const updatePage = async (page: number) => {
     applicationStore.currentPage = page;
     applicationStore.operationEnabledIds.clear();
-    emit('update-characters');
+    await nuxtApp.hooks.callHook('refresh:characters');
 };
 
 const onResize = async (reloadChars: boolean = true) => {
@@ -56,7 +41,7 @@ const onResize = async (reloadChars: boolean = true) => {
             itemsPerPageOptions = itemsPerRow.newOptions;
 
             if (reloadChars) {
-                emit('update-characters');
+                await nuxtApp.hooks.callHook('refresh:characters');
             }
         }
     }
@@ -65,13 +50,13 @@ const onResize = async (reloadChars: boolean = true) => {
 const clearSearch = async () => {
     if (applicationStore.searchValue.length > 0) {
         applicationStore.searchValue = '';
-        emit('update-characters');
+        await nuxtApp.hooks.callHook('refresh:characters');
     }
 };
 
 const processSearch = debounce(
     async () => {
-        emit('update-characters');
+        await nuxtApp.hooks.callHook('refresh:characters');
     },
     500,
     { trailing: false }
@@ -85,7 +70,25 @@ const processResize = debounce(
     { trailing: false }
 );
 
+nuxtApp.hooks.hook('action:menu', async () => {
+    await onResize();
+});
+
 onMounted(async () => {
+    const updateApplication = async () => {
+        itemsPerPage.value = applicationStore.itemsPerPage;
+    };
+
+    const updateCharacters = async () => {
+        characterCount.value = characterStore.characterCount;
+    };
+
+    applicationStore.$subscribe(updateApplication);
+    characterStore.$subscribe(updateCharacters);
+
+    await updateApplication();
+    await updateCharacters();
+    await sleep(500);
     await onResize(true);
     window.addEventListener('resize', processResize);
 });
@@ -146,7 +149,7 @@ onMounted(async () => {
                                                 applicationStore.itemsPerPage = ev.detail.value;
                                             }
                                             openItemsPerPage = false;
-                                            $emit('update-characters');
+                                            await nuxtApp.hooks.callHook('refresh:characters');
                                         }
                                     ">
                                     {{ option.label }}
@@ -163,7 +166,7 @@ onMounted(async () => {
             <Popover v-model:open="openOrderBy">
                 <PopoverTrigger as-child>
                     <Button :aria-expanded="openOrderBy" class="w-[290px] justify-between" role="combobox" variant="outline">
-                        {{ applicationStore.orderByValue ? sortOptions.find((option) => option.value === applicationStore.orderByValue)?.label : 'Select Order...' }}
+                        {{ settingStore.orderByValue ? sortOptions.find((option) => option.value === settingStore.orderByValue)?.label : 'Select Order...' }}
                         <Icon class="ml-2 h-4 w-4 shrink-0 opacity-50" name="radix-icons:caret-sort" />
                     </Button>
                 </PopoverTrigger>
@@ -179,14 +182,14 @@ onMounted(async () => {
                                     @select="
                                         async (ev) => {
                                             if (typeof ev.detail.value === 'string') {
-                                                applicationStore.orderByValue = ev.detail.value;
+                                                settingStore.orderByValue = ev.detail.value;
                                             }
                                             openOrderBy = false;
-                                            $emit('update-characters');
+                                            await nuxtApp.hooks.callHook('refresh:characters');
                                         }
                                     ">
                                     {{ option.label }}
-                                    <Icon :class="cn('ml-auto h-4 w-4', applicationStore.orderByValue === option.value ? 'opacity-100' : 'opacity-0')" name="radix-icons:check" />
+                                    <Icon :class="cn('ml-auto h-4 w-4', settingStore.orderByValue === option.value ? 'opacity-100' : 'opacity-0')" name="radix-icons:check" />
                                 </CommandItem>
                             </CommandGroup>
                         </CommandList>

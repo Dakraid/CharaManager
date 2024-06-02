@@ -129,6 +129,7 @@ export default defineEventHandler(async (event) => {
 
         const endTime = performance.now();
 
+        console.log(`Done in ${Math.floor((endTime - startTime / 1000) % 60)} seconds.`);
         event.context.logger.info(`Done in ${Math.floor((endTime - startTime / 1000) % 60)} seconds.`);
         const total = (await drizzleDb.select().from(character_relations).all()).length;
 

@@ -3,14 +3,13 @@ import _ from 'lodash';
 import { cn } from '~/lib/utils';
 import type ApiResponse from '~/models/ApiResponse';
 
-const keyStore = useKeyStore();
+const settingsStore = useSettingsStore();
 
 const response = await $fetch<ApiResponse>('/api/logs', {
     method: 'GET',
-    headers: { 'x-api-key': keyStore.apiKey },
+    headers: { 'x-api-key': settingsStore.apiKey },
 });
 
-// {"level":"info","message":"Matching by name...","timestamp":"2024-05-25T20:57:49.225Z"}
 const logs = ref();
 logs.value = [];
 

@@ -1,22 +1,19 @@
 <script setup lang="ts">
 import json from 'json-keys-sort';
+import { toast } from '~/components/ui/toast';
 import type ApiResponse from '~/models/ApiResponse';
+import type CharacterDetails from '~/models/CharacterDetails';
 import type CharacterRelations from '~/models/CharacterRelations';
+import StatusCode from '~/models/enums/StatusCode';
 import { useCharacterStore } from '~/stores/characterStore';
 
-const keyStore = useKeyStore();
+const settingsStore = useSettingsStore();
 const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
 
-const updateApplication = async () => {
-    showDiffWindow.value = applicationStore.showDiffWindow;
-};
-
-applicationStore.$subscribe(updateApplication);
-
 const { data: response } = await useFetch<ApiResponse>('/api/relations', {
     method: 'GET',
-    headers: { 'x-api-key': keyStore.apiKey },
+    headers: { 'x-api-key': settingsStore.apiKey },
 });
 
 const relations = ref<CharacterRelations[]>([]);
@@ -39,20 +36,63 @@ for (const relation of relations.value) {
 await characterStore.getCharacterImages(ids);
 
 const showDiffWindow = ref(false);
+const showCharacterWindow = ref(false);
 const parentJsonString = ref('');
 const childJsonString = ref('');
+const characters = ref([] as CharacterDetails[]);
+
+const getCharacters = async () => {
+    const response = await $fetch<ApiResponse>('/api/characters', {
+        method: 'GET',
+        headers: { 'x-api-key': settingsStore.apiKey },
+        query: { ids: ids },
+    });
+
+    if (response.Status !== StatusCode.OK) {
+        toast({
+            title: response.Message,
+            description: response.Content,
+            variant: 'destructive',
+        });
+
+        return;
+    }
+
+    characters.value = response.Content;
+};
+
+const showCharacter = async (parentId: number) => {
+    const response = await $fetch<ApiResponse>('/api/character', {
+        method: 'GET',
+        headers: { 'x-api-key': settingsStore.apiKey },
+        query: { id: parentId },
+    });
+
+    if (response.Status !== StatusCode.OK) {
+        toast({
+            title: response.Message,
+            description: response.Content,
+            variant: 'destructive',
+        });
+
+        return;
+    }
+
+    applicationStore.characterInstance = response.Content;
+    applicationStore.showCharacterWindow = true;
+};
 
 const showDiff = async (parentId: number, childId: number) => {
     applicationStore.showDiffWindow = false;
 
     const parent = await $fetch<ApiResponse>('/api/definition', {
         method: 'GET',
-        headers: { 'x-api-key': keyStore.apiKey },
+        headers: { 'x-api-key': settingsStore.apiKey },
         query: { id: parentId },
     });
     const child = await $fetch<ApiResponse>('/api/definition', {
         method: 'GET',
-        headers: { 'x-api-key': keyStore.apiKey },
+        headers: { 'x-api-key': settingsStore.apiKey },
         query: { id: childId },
     });
 
@@ -66,21 +106,50 @@ const showDiff = async (parentId: number, childId: number) => {
 
     applicationStore.showDiffWindow = true;
 };
+
+await getCharacters();
+applicationStore.showDiffWindow = false;
+applicationStore.showCharacterWindow = false;
+
+onMounted(async () => {
+    const updateApplication = async () => {
+        showDiffWindow.value = applicationStore.showDiffWindow;
+        showCharacterWindow.value = applicationStore.showCharacterWindow;
+    };
+
+    applicationStore.$subscribe(updateApplication);
+
+    await updateApplication();
+});
 </script>
 
 <template>
     <div class="flex-col h-full overflow-y-hidden py-6 lg:px-24 items-stretch">
-        <div v-if="showDiffWindow" class="w-full h-full rounded-md border p-4">
-            <CharacterDiff :curr-json="parentJsonString" :old-json="childJsonString" />
-        </div>
-        <ScrollArea v-else class="w-full h-full overflow-y-hidden rounded-md border p-4 pr-6 transition-all">
+        <Transition>
+            <div v-if="showCharacterWindow" class="absolute backdrop-blur bg-background/50 transition-all w-full h-full inset-0 z-20 p-12 rounded-md overflow-hidden">
+                <CharacterWindow />
+            </div>
+        </Transition>
+        <Transition>
+            <div v-if="showDiffWindow" class="absolute backdrop-blur bg-background/50 transition-all w-full h-full inset-0 z-20 p-12 rounded-md">
+                <CharacterDiff :curr-json="parentJsonString" :old-json="childJsonString" />
+            </div>
+        </Transition>
+        <ScrollArea class="w-full h-full overflow-y-hidden rounded-md border p-4 pr-6 transition-all">
             <h1 class="text-xl font-bold text-center">Total Count of Child Relations: {{ total }}</h1>
+            <h2 class="text-xl text-center text-muted-foreground">Click on a child to see the differences</h2>
             <Separator class="my-4" />
-            <div v-for="relation in relations" :key="relation.Parent" class="flex flex-col gap-4 mt-4">
-                <div class="flex gap-8">
-                    <Card class="flex flex-col items-center w-60">
+            <div v-for="relation in relations" :key="relation.Parent" class="flex flex-col gap-4">
+                <h1 class="font-bold">Character Filename: {{ characters.find((x) => x.id === relation.Parent)?.file_name }}</h1>
+                <div class="flex gap-8 p-6">
+                    <Card
+                        class="flex flex-col items-center w-60 transition-all hover:border-accent-foreground hover:shadow-[0_0_20px_-5px] hover:shadow-accent-foreground hover:scale-105 hover:transition-all">
                         <CardHeader class="flex flex-col w-full items-center gap-2 flex-1 p-2">
-                            <CardTitle class="font-bold text-center"> Current: ID#{{ relation.Parent }} </CardTitle>
+                            <CardTitle class="flex flex-col gap-2 text-center items-center">
+                                <span class="text-muted-foreground">Current:</span>
+                                <span class="font-bold">ID#{{ relation.Parent }}</span>
+                                <span class="text-muted-foreground">{{ characters.find((x) => x.id === relation.Parent)?.formatted_timestamp }}</span>
+                            </CardTitle>
                         </CardHeader>
                         <CardContent class="w-full p-2 overflow-hidden">
                             <img
@@ -88,14 +157,21 @@ const showDiff = async (parentId: number, childId: number) => {
                                 loading="lazy"
                                 :alt="relation.Parent.toString()"
                                 :src="characterStore.characterImages.find((x) => x.id === (relation.Parent as number))?.content_small ?? ''"
-                                class="character-card rounded-2xl" />
+                                class="character-card rounded-2xl"
+                                @click="showCharacter(relation.Parent)" />
                         </CardContent>
                     </Card>
                     <Icon class="h-8 w-8 my-auto" name="radix-icons:double-arrow-right" />
-                    <div class="flex gap-2">
-                        <Card v-for="child in relation.Children" class="flex flex-col items-center w-60">
+                    <div class="flex gap-6">
+                        <Card
+                            v-for="child in relation.Children"
+                            class="flex flex-col items-center w-60 transition-all hover:border-accent-foreground hover:shadow-[0_0_20px_-5px] hover:shadow-accent-foreground hover:scale-105 hover:transition-all">
                             <CardHeader class="flex flex-col w-full items-center gap-2 flex-1 p-2">
-                                <CardTitle class="font-bold text-center"> Previous: ID#{{ child }} </CardTitle>
+                                <CardTitle class="flex flex-col gap-2 text-center items-center">
+                                    <span class="text-muted-foreground">Previous:</span>
+                                    <span class="font-bold">ID#{{ child }}</span>
+                                    <span class="text-muted-foreground">{{ characters.find((x) => x.id === child)?.formatted_timestamp }}</span>
+                                </CardTitle>
                             </CardHeader>
                             <CardContent class="w-full p-2 overflow-hidden">
                                 <img
@@ -118,7 +194,7 @@ const showDiff = async (parentId: number, childId: number) => {
 <style scoped>
 .v-enter-active,
 .v-leave-active {
-    transition: opacity 0.5s ease;
+    transition: opacity 0.25s ease;
 }
 
 .v-enter-from,
