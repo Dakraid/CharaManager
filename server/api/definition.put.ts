@@ -37,14 +37,13 @@ export default defineEventHandler(async (event) => {
             .values({ id: body.Id, hash: hash, json: cleanedContent })
             .onConflictDoUpdate({ target: character_definitions.id, set: { hash: hash, json: cleanedContent } });
 
-        const image = (await drizzleDb.select().from(character_images).where(eq(character_images.id, body.Id)))[0];
-        const content = JSON.parse(convertBase64PNGToString(image.content));
-        if (content && !body.DefinitionOnly) {
-            image.content = convertStringToBase64PNG(image.content, cleanedContent);
+        if (!body.DefinitionOnly) {
+            const image = (await drizzleDb.select().from(character_images).where(eq(character_images.id, body.Id)))[0];
+
             await $fetch<ApiResponse>('/api/image', {
                 method: 'PUT',
                 headers: { 'x-api-key': config.apiKey },
-                body: JSON.stringify(new PutImageRequest(body.Id, image.content)),
+                body: JSON.stringify(new PutImageRequest(body.Id, convertStringToBase64PNG(image.content.toString('base64'), cleanedContent))),
             });
         }
 

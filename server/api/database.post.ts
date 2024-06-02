@@ -61,11 +61,15 @@ async function UpdateDatabase(db: Database) {
 
     const updatedItems = [];
     for (const image of images) {
-        const content = JSON.parse(convertBase64PNGToString(image.content));
+        const content = JSON.parse(convertBase64PNGToString(image.content.toString('base64')));
         if (!content.data) {
             const converted = Cards.v1ToV2(content);
-            image.content = convertStringToBase64PNG(image.content, JSON.stringify(converted));
-            updatedItems.push(image);
+            const newItem = {
+                id: image.id,
+                hash: image.hash,
+                content: Buffer.from(convertStringToBase64PNG(image.content.toString('base64'), JSON.stringify(converted))),
+            };
+            updatedItems.push(newItem);
         }
     }
 
@@ -103,7 +107,7 @@ async function SynchronizeDatabase(db: Database) {
     const images = await drizzleDb.select().from(character_images).all();
     for (const image of images) {
         try {
-            const contentString = convertBase64PNGToString(image.content);
+            const contentString = convertBase64PNGToString(image.content.toString('base64'));
             const contentJson = await cleanCharacterBook(contentString);
             const hash = createHash('sha256').update(contentJson).digest('hex');
             await drizzleDb

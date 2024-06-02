@@ -1,4 +1,4 @@
-import { sqliteTable, foreignKey, integer, text } from "drizzle-orm/sqlite-core"
+import {sqliteTable, foreignKey, integer, text, blob} from "drizzle-orm/sqlite-core"
 import type { AnySQLiteColumn } from "drizzle-orm/sqlite-core"
 import { sql } from "drizzle-orm"
 
@@ -26,7 +26,7 @@ export const character_relations = sqliteTable("character_relations", {
 
 export const character_images = sqliteTable("character_images", {
 	id: integer("id").primaryKey().notNull().references(() => character_details.id),
-	content: text("content").notNull(),
-	content_small: text("content_small"),
+	content: blob("content", { mode: 'buffer' }).notNull(),
+	content_small: blob("content_small", { mode: 'buffer' }).notNull(),
 	hash: text("hash").notNull(),
 });

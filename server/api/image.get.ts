@@ -24,11 +24,13 @@ export default defineEventHandler(async (event) => {
     const db = createDatabase(sqlite({ name: 'CharaManager' }));
     const drizzleDb = drizzle(db);
 
-    const result = await drizzleDb.select({ content: character_images.content, small_content: character_images.content_small }).from(character_images).where(eq(character_images.id, id));
+    const images = await drizzleDb.select({ content: character_images.content, content_small: character_images.content_small }).from(character_images).where(eq(character_images.id, id));
 
-    if (result.length === 0) {
+    if (images.length === 0) {
         return new ApiResponse(StatusCode.NOT_FOUND, `No character with ID ${id} found.`);
     }
 
-    return new ApiResponse(StatusCode.OK, 'Character image retrieved.', result[0]);
+    const result = { content: 'data:image/png;base64,' + images[0].content.toString('base64'), content_small: 'data:image/png;base64,' + images[0].content_small.toString('base64') };
+
+    return new ApiResponse(StatusCode.OK, 'Character image retrieved.', result);
 });

@@ -4,11 +4,12 @@ import extractChunks from 'png-chunks-extract';
 import b64EncodeUnicode from '~/server/utils/b64EncodeUnicode';
 
 export default function convertStringToBase64PNG(image: string, newContent: string) {
-    let fileString = image;
-    if (fileString.includes('base64')) {
-        fileString = image.split('base64,')[1];
+    let imageString = image;
+    if (imageString.includes('base64')) {
+        imageString = image.split('base64,')[1];
     }
-    const contentArray = Buffer.from(fileString, 'base64');
+
+    const contentArray = Buffer.from(imageString, 'base64');
     const chunks = extractChunks(contentArray);
     const modifiedText = b64EncodeUnicode(newContent);
 

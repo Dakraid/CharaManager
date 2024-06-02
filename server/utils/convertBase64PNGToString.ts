@@ -3,7 +3,12 @@ import extractChunks from 'png-chunks-extract';
 import b64DecodeUnicode from '~/server/utils/b64DecodeUnicode';
 
 export default function convertBase64PNGToString(image: string) {
-    const contentArray = Buffer.from(image.split('base64,')[1], 'base64');
+    let imageString = image;
+    if (imageString.includes('base64,')) {
+        imageString = imageString.split('base64,')[1];
+    }
+
+    const contentArray = Buffer.from(imageString, 'base64');
     const chunks = extractChunks(contentArray);
 
     const textChunks = chunks

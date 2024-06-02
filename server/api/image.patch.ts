@@ -60,15 +60,14 @@ export default defineEventHandler(async (event) => {
     try {
         const hash = createHash('sha256').update(updatedImage).digest('hex');
 
-        const buffer = Buffer.from(body.File, 'base64');
-        const rawImg = await Jimp.read(buffer);
-        const smallImage = await rawImg.resize(Jimp.AUTO, 384).getBufferAsync(Jimp.MIME_PNG);
-        base64ImageSmall = 'data:image/png;base64,' + smallImage.toString('base64');
+        const image = Buffer.from(updatedImage.split('base64,')[1], 'base64');
+        const rawImg = await Jimp.read(image);
+        const thumbnail = await rawImg.resize(Jimp.AUTO, 384).getBufferAsync(Jimp.MIME_PNG);
 
         await drizzleDb
             .insert(character_images)
-            .values({ id: body.Id, content: updatedImage, content_small: base64ImageSmall, hash: hash })
-            .onConflictDoUpdate({ target: character_images.id, set: { content: updatedImage, content_small: base64ImageSmall } });
+            .values({ id: body.Id, content: image, content_small: thumbnail, hash: hash })
+            .onConflictDoUpdate({ target: character_images.id, set: { content: image, content_small: thumbnail } });
     } catch (err) {
         event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Failed to upsert character image.', err);

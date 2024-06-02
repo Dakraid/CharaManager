@@ -28,24 +28,27 @@ export default defineEventHandler(async (event) => {
     const db = createDatabase(sqlite({ name: 'CharaManager' }));
     const drizzleDb = drizzle(db);
 
+    let imageString = body.Base64Image;
+    if (imageString.includes('base64,')) {
+        imageString = imageString.split('base64,')[1];
+    }
+
     try {
         const hash = createHash('sha256').update(body.Base64Image).digest('hex');
-
-        const buffer = Buffer.from(body.Base64Image.split('base64,')[1], 'base64');
-        const rawImg = await Jimp.read(buffer);
-        const smallImage = await rawImg.resize(Jimp.AUTO, 384).getBufferAsync(Jimp.MIME_PNG);
-        const smallImageBase64 = 'data:image/png;base64,' + smallImage.toString('base64');
+        const image = Buffer.from(imageString, 'base64');
+        const rawImg = await Jimp.read(image);
+        const thumbnail = await rawImg.resize(Jimp.AUTO, 384).getBufferAsync(Jimp.MIME_PNG);
 
         await drizzleDb
             .insert(character_images)
-            .values({ id: body.Id, content: body.Base64Image, content_small: smallImageBase64, hash: hash })
-            .onConflictDoUpdate({ target: character_images.id, set: { content: body.Base64Image, content_small: smallImageBase64 } });
+            .values({ id: body.Id, content: image, content_small: thumbnail, hash: hash })
+            .onConflictDoUpdate({ target: character_images.id, set: { content: image, content_small: thumbnail } });
     } catch (err) {
         event.context.logger.error(err);
         return new ApiResponse(StatusCode.INTERNAL_SERVER_ERROR, 'Failed to upsert character image.', err);
     }
 
-    const json = convertBase64PNGToString(body.Base64Image);
+    const json = convertBase64PNGToString(imageString);
     const response = await $fetch<ApiResponse>('/api/definition', {
         method: 'PUT',
         headers: { 'x-api-key': config.apiKey },
