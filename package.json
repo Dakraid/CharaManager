@@ -84,7 +84,7 @@
         "@types/png-chunk-text": "^1.0.3",
         "@types/png-chunks-encode": "^1.0.2",
         "@types/png-chunks-extract": "^1.0.2",
-        "@vee-validate/nuxt": "^4.12.8",
+        "@vee-validate/nuxt": "^4.13.0",
         "@vue/compiler-sfc": "^3.4.27",
         "dayjs-nuxt": "^2.1.9",
         "drizzle-kit": "^0.22.1",
