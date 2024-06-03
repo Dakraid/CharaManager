@@ -28,7 +28,7 @@
         "@radix-icons/vue": "^1.0.0",
         "@unovis/ts": "^1.4.1",
         "@unovis/vue": "^1.4.1",
-        "@vee-validate/zod": "^4.12.8",
+        "@vee-validate/zod": "^4.13.0",
         "@vite-pwa/nuxt": "^0.8.0",
         "@vueuse/core": "^10.10.0",
         "better-sqlite3": "^11.0.0",

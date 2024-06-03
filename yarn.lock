@@ -5616,14 +5616,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vee-validate/zod@npm:^4.12.8":
-  version: 4.12.8
-  resolution: "@vee-validate/zod@npm:4.12.8"
+"@vee-validate/zod@npm:^4.13.0":
+  version: 4.13.0
+  resolution: "@vee-validate/zod@npm:4.13.0"
   dependencies:
     type-fest: "npm:^4.8.3"
-    vee-validate: "npm:4.12.8"
+    vee-validate: "npm:4.13.0"
     zod: "npm:^3.22.4"
-  checksum: 10c0/9c6168806ec34b198a40390d965f3effb168b6f781fda2e99dd9b7709d88d6dceb6676f1222126347e5c782da0540b13f2a4c4380f0d320b7d984cc7cfee5a89
+  checksum: 10c0/aa40f3f83875b3cfaf883f8c74f0ecd4938599fb982017936ed5c4c2f4e6340fc784fa33e786a90954eba99857e136a0fcf6c080ef6b97a04e965c4cbcee98ed
   languageName: node
   linkType: hard
 
@@ -6928,7 +6928,7 @@ __metadata:
     "@unovis/ts": "npm:^1.4.1"
     "@unovis/vue": "npm:^1.4.1"
     "@vee-validate/nuxt": "npm:^4.12.8"
-    "@vee-validate/zod": "npm:^4.12.8"
+    "@vee-validate/zod": "npm:^4.13.0"
     "@vite-pwa/nuxt": "npm:^0.8.0"
     "@vue/compiler-sfc": "npm:^3.4.27"
     "@vueuse/core": "npm:^10.10.0"
@@ -16920,6 +16920,18 @@ __metadata:
   peerDependencies:
     vue: ^3.4.26
   checksum: 10c0/3fd6817ac2498607e466e69522fec395e853af9b3e6cd642b88f538eef4ffb550f25342c451098fff109e766c51ccb3ea2a444fd566e330d395e36a30c9a7c38
+  languageName: node
+  linkType: hard
+
+"vee-validate@npm:4.13.0":
+  version: 4.13.0
+  resolution: "vee-validate@npm:4.13.0"
+  dependencies:
+    "@vue/devtools-api": "npm:^6.6.1"
+    type-fest: "npm:^4.8.3"
+  peerDependencies:
+    vue: ^3.4.26
+  checksum: 10c0/a7ebbcc3c263c86e0ad378b3bdee9c4e4162512e05aebfb87a8190b2a1946ccc24b3224628a2ebfaa8be84cec95d652d6a87f5616b08f107f9e105ec21c341ab
   languageName: node
   linkType: hard
 
