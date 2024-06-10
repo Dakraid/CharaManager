@@ -5605,14 +5605,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vee-validate/nuxt@npm:^4.12.8":
-  version: 4.12.8
-  resolution: "@vee-validate/nuxt@npm:4.12.8"
+"@vee-validate/nuxt@npm:^4.13.1":
+  version: 4.13.1
+  resolution: "@vee-validate/nuxt@npm:4.13.1"
   dependencies:
     "@nuxt/kit": "npm:^3.8.2"
     local-pkg: "npm:^0.5.0"
-    vee-validate: "npm:4.12.8"
-  checksum: 10c0/12c14ed97e7476c8d547ff58409d0baf9dbad06032e5eb2dfc3fc53e417cd59fbab9c4a3fd0f654f3ebfdc109f6d765fed82a11c1d4446240970d2055b40e2c8
+    vee-validate: "npm:4.13.1"
+  checksum: 10c0/2900bbaec86fbbefc10b8c22848a03c98e0dc26a466b2f1b23c6d545e6da3672b12cdf5ba207328933dc3e317cf1685fa5eba4e03bb4dfe1edf03236cd6bd15c
   languageName: node
   linkType: hard
 
@@ -6927,7 +6927,7 @@ __metadata:
     "@types/png-chunks-extract": "npm:^1.0.2"
     "@unovis/ts": "npm:^1.4.1"
     "@unovis/vue": "npm:^1.4.1"
-    "@vee-validate/nuxt": "npm:^4.12.8"
+    "@vee-validate/nuxt": "npm:^4.13.1"
     "@vee-validate/zod": "npm:^4.12.8"
     "@vite-pwa/nuxt": "npm:^0.8.0"
     "@vue/compiler-sfc": "npm:^3.4.27"
@@ -16920,6 +16920,18 @@ __metadata:
   peerDependencies:
     vue: ^3.4.26
   checksum: 10c0/3fd6817ac2498607e466e69522fec395e853af9b3e6cd642b88f538eef4ffb550f25342c451098fff109e766c51ccb3ea2a444fd566e330d395e36a30c9a7c38
+  languageName: node
+  linkType: hard
+
+"vee-validate@npm:4.13.1":
+  version: 4.13.1
+  resolution: "vee-validate@npm:4.13.1"
+  dependencies:
+    "@vue/devtools-api": "npm:^6.6.1"
+    type-fest: "npm:^4.8.3"
+  peerDependencies:
+    vue: ^3.4.26
+  checksum: 10c0/0081d9f731a413ae5d1beed4394094c2ea2a9a6f00119d85eb6cfca1e0c60f47a7bd886735a470b45a1fd914969663cbc8fcc10635da912288e3e1defd128028
   languageName: node
   linkType: hard
 
