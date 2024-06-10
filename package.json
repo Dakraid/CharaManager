@@ -65,7 +65,7 @@
         "remove": "^0.1.5",
         "v-calendar": "^3.1.2",
         "vaul-vue": "^0.1.2",
-        "vee-validate": "^4.12.8",
+        "vee-validate": "^4.13.1",
         "vue": "^3.4.27",
         "vue-picture-cropper": "^0.7.0",
         "vue-router": "^4.3.2",

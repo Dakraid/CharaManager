@@ -6979,7 +6979,7 @@ __metadata:
     typescript: "npm:^5.4.5"
     v-calendar: "npm:^3.1.2"
     vaul-vue: "npm:^0.1.2"
-    vee-validate: "npm:^4.12.8"
+    vee-validate: "npm:^4.13.1"
     vue: "npm:^3.4.27"
     vue-picture-cropper: "npm:^0.7.0"
     vue-router: "npm:^4.3.2"
@@ -16911,7 +16911,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vee-validate@npm:4.12.8, vee-validate@npm:^4.12.8":
+"vee-validate@npm:4.12.8":
   version: 4.12.8
   resolution: "vee-validate@npm:4.12.8"
   dependencies:
@@ -16920,6 +16920,18 @@ __metadata:
   peerDependencies:
     vue: ^3.4.26
   checksum: 10c0/3fd6817ac2498607e466e69522fec395e853af9b3e6cd642b88f538eef4ffb550f25342c451098fff109e766c51ccb3ea2a444fd566e330d395e36a30c9a7c38
+  languageName: node
+  linkType: hard
+
+"vee-validate@npm:^4.13.1":
+  version: 4.13.1
+  resolution: "vee-validate@npm:4.13.1"
+  dependencies:
+    "@vue/devtools-api": "npm:^6.6.1"
+    type-fest: "npm:^4.8.3"
+  peerDependencies:
+    vue: ^3.4.26
+  checksum: 10c0/0081d9f731a413ae5d1beed4394094c2ea2a9a6f00119d85eb6cfca1e0c60f47a7bd886735a470b45a1fd914969663cbc8fcc10635da912288e3e1defd128028
   languageName: node
   linkType: hard
 
