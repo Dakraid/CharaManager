@@ -19,10 +19,6 @@ const imageBlob = ref();
 const loading = ref(true);
 const characterData = ref();
 const characterDump = ref('');
-const characterInstance = ref<CharacterDetails>();
-
-const showCharacterWindow = ref(false);
-const showCropperWindow = ref(false);
 
 const settingsStore = useSettingsStore();
 const characterStore = useCharacterStore();
@@ -32,13 +28,13 @@ const getCharacterImage = async () => {
     const { data: response } = await useFetch<ApiResponse>('/api/image', {
         method: 'GET',
         headers: { 'x-api-key': settingsStore.apiKey },
-        query: { id: characterInstance.value?.id },
+        query: { id: applicationStore.getCharacterInstance().id },
     });
 
     if (response.value?.Status === StatusCode.OK) {
         imageContent.value = response.value.Content.content;
-        const updatedImages = characterStore.characterImages.filter((x) => x.id !== characterInstance.value?.id);
-        updatedImages.push({ id: characterInstance.value?.id as number, content: undefined, content_small: response.value.Content.content_small });
+        const updatedImages = characterStore.characterImages.filter((x) => x.id !== applicationStore.getCharacterInstance().id);
+        updatedImages.push({ id: applicationStore.getCharacterInstance().id, content: undefined, content_small: response.value.Content.content_small });
         characterStore.characterImages = updatedImages;
     } else {
         toast({
@@ -53,7 +49,7 @@ const processCharacterDetails = async () => {
     const { data: response } = await useFetch<ApiResponse>('/api/definition', {
         method: 'GET',
         headers: { 'x-api-key': settingsStore.apiKey },
-        query: { id: characterInstance.value?.id },
+        query: { id: applicationStore.getCharacterInstance().id },
     });
 
     if (response.value?.Status === StatusCode.OK) {
@@ -85,7 +81,7 @@ const saveCharacter = async () => {
     const response = await $fetch<ApiResponse>('/api/definition', {
         method: 'PUT',
         headers: { 'x-api-key': settingsStore.apiKey },
-        body: JSON.stringify(new PutDefinitionRequest(characterInstance.value?.id as number, JSON.stringify(characterData.value))),
+        body: JSON.stringify(new PutDefinitionRequest(applicationStore.getCharacterInstance().id, JSON.stringify(characterData.value))),
     });
 
     if (response.Status === StatusCode.OK) {
@@ -121,7 +117,7 @@ async function onDrop(files: File[] | null) {
     }
 
     imageBlob.value = URL.createObjectURL(files[0]);
-    showCropperWindow.value = true;
+    applicationStore.showCropperWindow = true;
 }
 
 const submitCroppedImage = async () => {
@@ -134,7 +130,7 @@ const submitCroppedImage = async () => {
         return;
     }
 
-    showCropperWindow.value = false;
+    applicationStore.showCropperWindow = false;
     URL.revokeObjectURL(imageBlob.value);
     imageBlob.value = null;
 
@@ -142,7 +138,7 @@ const submitCroppedImage = async () => {
         method: 'PATCH',
         headers: { 'x-api-key': settingsStore.apiKey },
         body: {
-            Id: characterInstance.value?.id as number,
+            Id: applicationStore.getCharacterInstance().id,
             File: encodeArrayBufferToUrlSafeBase64(await croppedImage.arrayBuffer()),
         },
     });
@@ -168,18 +164,8 @@ const { isOverDropZone } = useDropZone(dropZoneRef, {
     dataTypes: ['image/png', 'image/jpeg', 'image/bmp', 'image/tiff'],
 });
 
-onMounted(async () => {
-    const updateApplicationState = async () => {
-        characterInstance.value = applicationStore.characterInstance;
-        showCharacterWindow.value = applicationStore.showCharacterWindow;
-    };
-
-    applicationStore.$subscribe(updateApplicationState);
-
-    await updateApplicationState();
-    await getCharacterImage();
-    await processCharacterDetails();
-});
+await getCharacterImage();
+await processCharacterDetails();
 </script>
 
 <template>
@@ -192,8 +178,8 @@ onMounted(async () => {
             <CardHeader class="flex flex-col p-2 w-full">
                 <CardTitle class="font-bold text-4xl">{{ characterData.data.name }}</CardTitle>
             </CardHeader>
-            <CardContent :class="cn('p-2 w-full flex-1 overflow-hidden', showCropperWindow ? 'overflow-hidden' : '')">
-                <div v-if="showCropperWindow" class="flex w-full h-full rounded-2xl overflow-hidden">
+            <CardContent :class="cn('p-2 w-full flex-1 overflow-hidden', applicationStore.showCropperWindow ? 'overflow-hidden' : '')">
+                <div v-if="applicationStore.showCropperWindow" class="flex w-full h-full rounded-2xl overflow-hidden">
                     <client-only>
                         <VuePictureCropper
                             class="bg-accent rounded-2xl"
@@ -219,7 +205,7 @@ onMounted(async () => {
                 <div v-else class="flex flex-row gap-2 w-full h-full">
                     <div class="flex flex-col justify-center items-center rounded-2xl border border-accent">
                         <div ref="dropZoneRef" class="rounded-2xl dropzone">
-                            <img :alt="characterInstance?.file_name" :src="imageContent" class="character-card-large rounded-2xl" />
+                            <img :alt="applicationStore.getCharacterInstance().file_name" :src="imageContent" class="character-card-large rounded-2xl" />
                         </div>
                     </div>
                     <Tabs default-value="general" class="w-full">
@@ -330,7 +316,7 @@ onMounted(async () => {
                 </div>
             </CardContent>
             <CardFooter class="w-full p-2">
-                <div v-if="showCropperWindow" class="w-full flex justify-between items-center">
+                <div v-if="applicationStore.showCropperWindow" class="w-full flex justify-between items-center">
                     <span class="text-lg text-foreground"> Please adjust the image to fit. The required size is 512px by 768px as used by SillyTavern. </span>
                     <Button id="crop" type="submit" variant="secondary" class="h-16 w-16" @click="submitCroppedImage">
                         <span class="sr-only">Crop</span>
@@ -339,7 +325,8 @@ onMounted(async () => {
                 </div>
                 <div v-else class="w-full flex justify-between items-center">
                     <span class="text-sm text-muted-foreground">
-                        ID: {{ characterInstance?.id }} | Filename: {{ characterInstance?.file_name }} | Last Modified at {{ characterInstance?.formatted_timestamp }}
+                        ID: {{ applicationStore.getCharacterInstance().id }} | Filename: {{ applicationStore.getCharacterInstance().file_name }} | Last Modified at
+                        {{ applicationStore.getCharacterInstance().formatted_timestamp }}
                     </span>
                     <Button id="save" type="submit" variant="secondary" class="h-16 w-16" @click="saveCharacter">
                         <span class="sr-only">Save</span>

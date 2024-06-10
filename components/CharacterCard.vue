@@ -16,13 +16,13 @@ const settingsStore = useSettingsStore();
 const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
 
-const characterInstance = ref<CharacterDetails>();
-const showCharacterWindow = ref(false);
-const censorChars = ref(false);
-const censorNames = ref(false);
 const imageContent = ref('');
-
 imageContent.value = characterStore.characterImages.find((x) => x.id === (props.character.id as number))?.content_small ?? '';
+
+const updateCharacter = async () => {
+    imageContent.value = characterStore.characterImages.find((x) => x.id === (props.character.id as number))?.content_small ?? '';
+};
+characterStore.$subscribe(updateCharacter);
 
 const showCharacter = async () => {
     applicationStore.characterInstance = props.character;
@@ -97,30 +97,6 @@ const updateOperationInclude = async (checked: boolean) => {
         applicationStore.operationEnabledIds.delete(props.character.id as number);
     }
 };
-
-onMounted(async () => {
-    const updateSettings = async () => {
-        censorChars.value = settingsStore.censorChars;
-        censorNames.value = settingsStore.censorNames;
-    };
-
-    const updateApplication = async () => {
-        characterInstance.value = applicationStore.characterInstance;
-        showCharacterWindow.value = applicationStore.showCharacterWindow;
-    };
-
-    const updateCharacter = async () => {
-        imageContent.value = characterStore.characterImages.find((x) => x.id === (props.character.id as number))?.content_small ?? '';
-    };
-
-    settingsStore.$subscribe(updateSettings);
-    applicationStore.$subscribe(updateApplication);
-    characterStore.$subscribe(updateCharacter);
-
-    await updateSettings();
-    await updateApplication();
-    await updateCharacter();
-});
 </script>
 
 <template>
@@ -139,7 +115,7 @@ onMounted(async () => {
                 <Checkbox class="mt-[3px]" @update:checked="updateOperationInclude" />
             </CardDescription>
             <CardTitle>
-                <h1 class="font-bold text-center">{{ censorNames ? character.file_name?.replaceAll(/\w/g, '#') : character.file_name }}</h1>
+                <h1 class="font-bold text-center">{{ settingsStore.censorNames ? character.file_name?.replaceAll(/\w/g, '#') : character.file_name }}</h1>
             </CardTitle>
         </CardHeader>
         <CardContent class="w-full p-2 overflow-hidden">
@@ -148,7 +124,7 @@ onMounted(async () => {
                 loading="lazy"
                 :alt="character.file_name"
                 :src="imageContent"
-                :class="cn('character-card rounded-2xl', censorChars ? 'blur-2xl rotate-180 grayscale' : '')"
+                :class="cn('character-card rounded-2xl', settingsStore.censorChars ? 'blur-2xl rotate-180 grayscale' : '')"
                 @click="showCharacter" />
         </CardContent>
         <CardFooter class="flex flex-col w-full gap-2 p-2">

@@ -3,12 +3,12 @@ import '~/assets/css/style.css';
 import { Toaster } from '~/components/ui/toast';
 
 const nuxtApp = useNuxtApp();
-const characters = useCharacterStore();
+const characterStore = useCharacterStore();
 
-await characters.getCharacters();
+await characterStore.getCharacters();
 
 nuxtApp.hooks.hook('refresh:characters', async () => {
-    await characters.getCharacters();
+    await processCharacters();
 });
 </script>
 

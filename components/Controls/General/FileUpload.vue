@@ -85,10 +85,12 @@ const uploadFiles = async () => {
 <template>
     <Label class="text-1xl" for="file-input">Upload</Label>
     <Input id="file-input" ref="fileInput" class="min-h-9" accept="image/png" multiple name="files[]" type="file" @change="onFileChange" />
-    <Button type="submit" variant="secondary" @click="uploadFiles">
-        <span class="sr-only">Upload File(s)</span>
-        <Icon class="h-6 w-6" name="radix-icons:upload" />
-    </Button>
+    <Transition>
+        <Button v-if="files.length > 0" type="submit" variant="secondary" @click="uploadFiles">
+            <span class="sr-only">Upload File(s)</span>
+            <Icon class="h-6 w-6" name="radix-icons:upload" />
+        </Button>
+    </Transition>
 </template>
 
 <style scoped></style>

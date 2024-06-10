@@ -5,7 +5,6 @@ import type ApiResponse from '~/models/ApiResponse';
 import type CharacterDetails from '~/models/CharacterDetails';
 import type CharacterRelations from '~/models/CharacterRelations';
 import StatusCode from '~/models/enums/StatusCode';
-import { useCharacterStore } from '~/stores/characterStore';
 
 const settingsStore = useSettingsStore();
 const characterStore = useCharacterStore();
@@ -35,8 +34,6 @@ for (const relation of relations.value) {
 }
 await characterStore.getCharacterImages(ids);
 
-const showDiffWindow = ref(false);
-const showCharacterWindow = ref(false);
 const parentJsonString = ref('');
 const childJsonString = ref('');
 const characters = ref([] as CharacterDetails[]);
@@ -108,30 +105,20 @@ const showDiff = async (parentId: number, childId: number) => {
 };
 
 await getCharacters();
+
 applicationStore.showDiffWindow = false;
 applicationStore.showCharacterWindow = false;
-
-onMounted(async () => {
-    const updateApplication = async () => {
-        showDiffWindow.value = applicationStore.showDiffWindow;
-        showCharacterWindow.value = applicationStore.showCharacterWindow;
-    };
-
-    applicationStore.$subscribe(updateApplication);
-
-    await updateApplication();
-});
 </script>
 
 <template>
     <div class="flex-col h-full overflow-y-hidden py-6 lg:px-24 items-stretch">
         <Transition>
-            <div v-if="showCharacterWindow" class="absolute backdrop-blur bg-background/50 transition-all w-full h-full inset-0 z-20 p-12 rounded-md overflow-hidden">
+            <div v-if="applicationStore.showCharacterWindow" class="absolute backdrop-blur bg-background/50 transition-all w-full h-full inset-0 z-20 p-12 rounded-md overflow-hidden">
                 <CharacterWindow />
             </div>
         </Transition>
         <Transition>
-            <div v-if="showDiffWindow" class="absolute backdrop-blur bg-background/50 transition-all w-full h-full inset-0 z-20 p-12 rounded-md">
+            <div v-if="applicationStore.showDiffWindow" class="absolute backdrop-blur bg-background/50 transition-all w-full h-full inset-0 z-20 p-12 rounded-md">
                 <CharacterDiff :curr-json="parentJsonString" :old-json="childJsonString" />
             </div>
         </Transition>

@@ -19,9 +19,9 @@ let itemsPerPageOptions = [{ value: 5, label: '5' }];
 const settingStore = useSettingsStore();
 const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
-const characterCount = ref(0);
-const itemsPerPage = ref(5);
+
 const contentWidth = ref(0);
+
 const openOrderBy = ref(false);
 const openItemsPerPage = ref(false);
 
@@ -54,14 +54,6 @@ const clearSearch = async () => {
     }
 };
 
-const processSearch = debounce(
-    async () => {
-        await nuxtApp.hooks.callHook('refresh:characters');
-    },
-    500,
-    { trailing: false }
-);
-
 const processResize = debounce(
     async () => {
         await onResize();
@@ -75,19 +67,6 @@ nuxtApp.hooks.hook('action:menu', async () => {
 });
 
 onMounted(async () => {
-    const updateApplication = async () => {
-        itemsPerPage.value = applicationStore.itemsPerPage;
-    };
-
-    const updateCharacters = async () => {
-        characterCount.value = characterStore.characterCount;
-    };
-
-    applicationStore.$subscribe(updateApplication);
-    characterStore.$subscribe(updateCharacters);
-
-    await updateApplication();
-    await updateCharacters();
     await sleep(500);
     await onResize(true);
     window.addEventListener('resize', processResize);
@@ -109,9 +88,16 @@ onMounted(async () => {
         </div>
 
         <div class="flex flex-wrap gap-2 w-full items-center justify-center xl:justify-between row-start-3 2xl:row-start-1 2xl:col-start-2 2xl:col-span-1 2xl:justify-center">
-            <Button class="w-[200px] justify-center" variant="outline"> Number of characters: {{ characterCount }} </Button>
+            <Button class="w-[200px] justify-center" variant="outline"> Number of characters: {{ characterStore.characterCount }} </Button>
 
-            <Pagination v-slot="{ page }" :total="characterCount" :items-per-page="itemsPerPage" :sibling-count="0" show-edges :default-page="1" @update:page="updatePage">
+            <Pagination
+                v-slot="{ page }"
+                :total="characterStore.characterCount"
+                :items-per-page="applicationStore.itemsPerPage"
+                :sibling-count="0"
+                show-edges
+                :default-page="1"
+                @update:page="updatePage">
                 <PaginationList v-slot="{ items }" class="flex items-center gap-1">
                     <PaginationFirst />
                     <PaginationPrev />

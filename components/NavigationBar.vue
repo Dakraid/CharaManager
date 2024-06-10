@@ -11,7 +11,7 @@ const settingsStore = useSettingsStore();
 
 const toggleMenu = async () => {
     settingsStore.openMenu = !settingsStore.openMenu;
-    await sleep(200);
+    await sleep(500);
     await nuxtApp.hooks.callHook('action:menu');
 };
 </script>

@@ -13,7 +13,6 @@ const controlComponentStore = useControlComponentStore();
 const characterUrl = ref('');
 const fetchedCharacter = ref();
 const showSkeleton = ref(false);
-const processing = ref(false);
 
 const downloadRemoteCharacter = async () => {
     if (characterUrl.value.trim().length === 0) {
@@ -100,15 +99,6 @@ const clearRemoteCharacter = async () => {
     characterUrl.value = '';
     fetchedCharacter.value = undefined;
 };
-
-onMounted(async () => {
-    const updateStore = async () => {
-        processing.value = controlComponentStore.processing;
-    };
-
-    controlComponentStore.$subscribe(updateStore);
-    await updateStore();
-});
 </script>
 
 <template>
@@ -138,7 +128,7 @@ onMounted(async () => {
             </div>
             <Separator />
             <div class="h-full" />
-            <div v-if="processing" class="h-full flex items-center justify-center">
+            <div v-if="controlComponentStore.processing" class="h-full flex items-center justify-center">
                 <Icon class="h-16 w-16" name="line-md:loading-loop" />
             </div>
             <div class="h-full" />
