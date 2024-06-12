@@ -1,6 +1,17 @@
+import { debounce } from 'perfect-debounce';
 import type { CharacterDetails } from '~/models/CharacterDetails';
 import GetCharactersRequest from '~/models/GetCharactersRequest';
-import GetImagesRequest from '~/models/GetImagesRequest';
+
+const setLoadingDebounced = debounce(
+    async (loading: boolean) => {
+        const applicationState = useApplicationStore();
+        if (applicationState.loadingCharacters !== loading) {
+            applicationState.loadingCharacters = loading;
+        }
+    },
+    500,
+    { leading: true }
+);
 
 export const useApplicationStore = defineStore('application', {
     state: () => {
@@ -32,6 +43,11 @@ export const useApplicationStore = defineStore('application', {
             }
 
             return state.characterInstance;
+        },
+    },
+    actions: {
+        async updateLoadingState(loading: boolean) {
+            await setLoadingDebounced(loading);
         },
     },
 });

@@ -4,6 +4,7 @@ import type { CharacterDetails } from '~/models/CharacterDetails';
 import DatabaseRequest from '~/models/DatabaseRequest';
 import { DatabaseAction } from '~/models/enums/DatabaseAction';
 
+const nuxtApp = useNuxtApp();
 const settingsStore = useSettingsStore();
 const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
@@ -17,6 +18,12 @@ if (!applicationStore.provisioned) {
 
     applicationStore.provisioned = true;
 }
+
+await characterStore.getCharacters();
+
+nuxtApp.hooks.hook('refresh:characters', async () => {
+    await processCharacters();
+});
 
 applicationStore.showCharacterWindow = false;
 </script>
@@ -33,12 +40,7 @@ applicationStore.showCharacterWindow = false;
                 <ControlBar />
                 <ScrollArea id="scrollArea" class="w-full h-full overflow-y-hidden rounded-md border">
                     <Transition>
-                        <div
-                            v-if="applicationStore.loadingCharacters"
-                            class="absolute backdrop-blur bg-background/80 transition-all w-full h-full inset-0 z-10 rounded-md flex flex-1 justify-center items-center">
-                            <Icon class="w-16 h-16 animate-spin" name="radix-icons:reload" />
-                        </div>
-                        <div v-else-if="characterStore.characterList.length === 0" class="w-full h-full py-16 flex flex-1 flex-col gap-2 justify-center items-center">
+                        <div v-if="characterStore.characterList.length === 0" class="w-full h-full py-16 flex flex-1 flex-col gap-2 justify-center items-center">
                             <h1 class="font-bold text-2xl">No characters found</h1>
                             <Icon class="w-16 h-16" name="radix-icons:question-mark-circled" />
                             <h2 class="font-bold text-xl">Upload characters to see them here</h2>

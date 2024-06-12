@@ -25,6 +25,8 @@ const contentWidth = ref(0);
 const openOrderBy = ref(false);
 const openItemsPerPage = ref(false);
 
+await characterStore.getCharacterCount();
+
 const updatePage = async (page: number) => {
     applicationStore.currentPage = page;
     applicationStore.operationEnabledIds.clear();

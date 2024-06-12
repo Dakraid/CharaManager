@@ -6,7 +6,7 @@ import type GetCharactersRequest from '~/models/GetCharactersRequest';
 import GetImagesRequest from '~/models/GetImagesRequest';
 import StatusCode from '~/models/enums/StatusCode';
 
-async function getCharacterCount() {
+async function _getCharacterCount() {
     const settingsStore = useSettingsStore();
     const response = await $fetch<ApiResponse>('/api/count', {
         method: 'GET',
@@ -16,7 +16,7 @@ async function getCharacterCount() {
     return response.Content ?? 0;
 }
 
-async function getCharacterImages(ids: number[], reduce: boolean = true) {
+async function _getCharacterImages(ids: number[], reduce: boolean = true) {
     const settingsStore = useSettingsStore();
 
     const response = await $fetch<ApiResponse>('/api/images', {
@@ -39,7 +39,7 @@ async function getCharacterImages(ids: number[], reduce: boolean = true) {
     return characterImages;
 }
 
-async function getCharacters(options: GetCharactersRequest) {
+async function _getCharacters(options: GetCharactersRequest) {
     const settingsStore = useSettingsStore();
 
     const response = await $fetch<ApiResponse>('/api/characters', {
@@ -66,7 +66,7 @@ async function getCharacters(options: GetCharactersRequest) {
     return characters;
 }
 
-async function getCharacter(characters: CharacterDetails[], id: number) {
+async function _getCharacter(characters: CharacterDetails[], id: number) {
     const settingsStore = useSettingsStore();
 
     const index = characters.findIndex((item) => item.id === id);
@@ -87,7 +87,7 @@ async function getCharacter(characters: CharacterDetails[], id: number) {
     return undefined;
 }
 
-async function deleteCharacter(options: DeleteCharacterRequest) {
+async function _deleteCharacter(options: DeleteCharacterRequest) {
     const settingsStore = useSettingsStore();
 
     return await $fetch<ApiResponse>('/api/character', {
@@ -107,29 +107,32 @@ export const useCharacterStore = defineStore('characters', {
     },
     getters: {},
     actions: {
+        async getCharacterCount() {
+            this.characterCount = await _getCharacterCount();
+        },
         async getCharacterById(id: number) {
-            return await getCharacter(this.characterList, id);
+            return await _getCharacter(this.characterList, id);
         },
         async getCharacterImages(ids: number[]) {
             const applicationStore = useApplicationStore();
-            applicationStore.loadingCharacters = true;
-            this.characterImages = await getCharacterImages(ids);
-            applicationStore.loadingCharacters = false;
+            await applicationStore.updateLoadingState(true);
+            this.characterImages = await _getCharacterImages(ids);
+            await applicationStore.updateLoadingState(false);
         },
         async getCharacters() {
             const applicationStore = useApplicationStore();
-            applicationStore.loadingCharacters = true;
-            this.characterCount = await getCharacterCount();
-            this.characterList = await getCharacters(applicationStore.characterQueryOptions);
-            this.characterImages = await getCharacterImages(this.characterList.map((char) => char.id as number));
-            applicationStore.loadingCharacters = false;
+            await applicationStore.updateLoadingState(true);
+            this.characterCount = await _getCharacterCount();
+            this.characterList = await _getCharacters(applicationStore.characterQueryOptions);
+            this.characterImages = await _getCharacterImages(this.characterList.map((char) => char.id as number));
+            await applicationStore.updateLoadingState(false);
         },
         async deleteCharacter(id: number) {
             const applicationStore = useApplicationStore();
-            applicationStore.loadingCharacters = true;
-            const response = await deleteCharacter(new DeleteCharacterRequest(id));
+            await applicationStore.updateLoadingState(true);
+            const response = await _deleteCharacter(new DeleteCharacterRequest(id));
             this.getCharacters();
-            applicationStore.loadingCharacters = false;
+            await applicationStore.updateLoadingState(false);
             return response;
         },
     },

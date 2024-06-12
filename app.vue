@@ -2,14 +2,8 @@
 import '~/assets/css/style.css';
 import { Toaster } from '~/components/ui/toast';
 
-const nuxtApp = useNuxtApp();
-const characterStore = useCharacterStore();
-
-await characterStore.getCharacters();
-
-nuxtApp.hooks.hook('refresh:characters', async () => {
-    await processCharacters();
-});
+const applicationStore = useApplicationStore();
+await applicationStore.updateLoadingState(true);
 </script>
 
 <template>
@@ -19,6 +13,9 @@ nuxtApp.hooks.hook('refresh:characters', async () => {
         <div class="h-screen w-screen flex flex-col">
             <NavigationBar />
             <Separator />
+            <Transition>
+                <CommonLoadingOverlay v-if="applicationStore.loadingCharacters" />
+            </Transition>
             <NuxtPage />
         </div>
     </div>
