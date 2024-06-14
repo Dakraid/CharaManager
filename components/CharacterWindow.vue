@@ -28,13 +28,13 @@ const getCharacterImage = async () => {
     const { data: response } = await useFetch<ApiResponse>('/api/image', {
         method: 'GET',
         headers: { 'x-api-key': settingsStore.apiKey },
-        query: { id: applicationStore.getCharacterInstance().id },
+        query: { id: applicationStore.getCharacterInstance.id },
     });
 
     if (response.value?.Status === StatusCode.OK) {
         imageContent.value = response.value.Content.content;
-        const updatedImages = characterStore.characterImages.filter((x) => x.id !== applicationStore.getCharacterInstance().id);
-        updatedImages.push({ id: applicationStore.getCharacterInstance().id, content: undefined, content_small: response.value.Content.content_small });
+        const updatedImages = characterStore.characterImages.filter((x) => x.id !== applicationStore.getCharacterInstance.id);
+        updatedImages.push({ id: applicationStore.getCharacterInstance.id, content: undefined, content_small: response.value.Content.content_small });
         characterStore.characterImages = updatedImages;
     } else {
         toast({
@@ -49,7 +49,7 @@ const processCharacterDetails = async () => {
     const { data: response } = await useFetch<ApiResponse>('/api/definition', {
         method: 'GET',
         headers: { 'x-api-key': settingsStore.apiKey },
-        query: { id: applicationStore.getCharacterInstance().id },
+        query: { id: applicationStore.getCharacterInstance.id },
     });
 
     if (response.value?.Status === StatusCode.OK) {
@@ -81,7 +81,7 @@ const saveCharacter = async () => {
     const response = await $fetch<ApiResponse>('/api/definition', {
         method: 'PUT',
         headers: { 'x-api-key': settingsStore.apiKey },
-        body: JSON.stringify(new PutDefinitionRequest(applicationStore.getCharacterInstance().id, JSON.stringify(characterData.value))),
+        body: JSON.stringify(new PutDefinitionRequest(applicationStore.getCharacterInstance.id, JSON.stringify(characterData.value))),
     });
 
     if (response.Status === StatusCode.OK) {
@@ -138,7 +138,7 @@ const submitCroppedImage = async () => {
         method: 'PATCH',
         headers: { 'x-api-key': settingsStore.apiKey },
         body: {
-            Id: applicationStore.getCharacterInstance().id,
+            Id: applicationStore.getCharacterInstance.id,
             File: encodeArrayBufferToUrlSafeBase64(await croppedImage.arrayBuffer()),
         },
     });
@@ -205,7 +205,7 @@ await processCharacterDetails();
                 <div v-else class="flex flex-row gap-2 w-full h-full">
                     <div class="flex flex-col justify-center items-center rounded-2xl border border-accent">
                         <div ref="dropZoneRef" class="rounded-2xl dropzone">
-                            <img :alt="applicationStore.getCharacterInstance().file_name" :src="imageContent" class="character-card-large rounded-2xl" />
+                            <img :alt="applicationStore.getCharacterInstance.file_name" :src="imageContent" class="character-card-large rounded-2xl" />
                         </div>
                     </div>
                     <Tabs default-value="general" class="w-full">
@@ -325,8 +325,8 @@ await processCharacterDetails();
                 </div>
                 <div v-else class="w-full flex justify-between items-center">
                     <span class="text-sm text-muted-foreground">
-                        ID: {{ applicationStore.getCharacterInstance().id }} | Filename: {{ applicationStore.getCharacterInstance().file_name }} | Last Modified at
-                        {{ applicationStore.getCharacterInstance().formatted_timestamp }}
+                        ID: {{ applicationStore.getCharacterInstance.id }} | Filename: {{ applicationStore.getCharacterInstance.file_name }} | Last Modified at
+                        {{ applicationStore.getCharacterInstance.formatted_timestamp }}
                     </span>
                     <Button id="save" type="submit" variant="secondary" class="h-16 w-16" @click="saveCharacter">
                         <span class="sr-only">Save</span>

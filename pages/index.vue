@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { debounce } from 'perfect-debounce';
 import { cn } from '~/lib/utils';
 import type { CharacterDetails } from '~/models/CharacterDetails';
 import DatabaseRequest from '~/models/DatabaseRequest';
@@ -8,6 +9,8 @@ const nuxtApp = useNuxtApp();
 const settingsStore = useSettingsStore();
 const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
+
+const contentWidth = ref(0);
 
 if (!applicationStore.provisioned) {
     await $fetch('/api/database', {
@@ -19,13 +22,42 @@ if (!applicationStore.provisioned) {
     applicationStore.provisioned = true;
 }
 
-await characterStore.getCharacters();
+const processResize = debounce(
+    async (reloadChars: boolean = true) => {
+        if (document.getElementById('main_content')?.offsetWidth !== contentWidth.value) {
+            contentWidth.value = document.getElementById('main_content')?.offsetWidth ?? 0;
+
+            if (contentWidth.value !== 0) {
+                const itemsPerRow = calculateItemsPerRow(contentWidth.value);
+                applicationStore.itemsPerPage = itemsPerRow.maxItemsPerRow * 3;
+                applicationStore.itemsPerPageOptions = itemsPerRow.newOptions;
+
+                if (reloadChars) {
+                    await nuxtApp.hooks.callHook('refresh:characters');
+                }
+            }
+        }
+    },
+    500,
+    { leading: true, trailing: false }
+);
+
+nuxtApp.hooks.hook('action:menu', async () => {
+    await processResize();
+});
 
 nuxtApp.hooks.hook('refresh:characters', async () => {
     await processCharacters();
 });
 
 applicationStore.showCharacterWindow = false;
+
+onMounted(async () => {
+    await processResize(false);
+    window.addEventListener('resize', () => processResize());
+
+    await characterStore.getCharacters();
+});
 </script>
 
 <template>

@@ -13,14 +13,9 @@ const sortOptions = [
     { value: 'id_asc', label: 'Identifier ↑' },
 ];
 
-// This isn't a constant as it will be overwritten using custom options based on the width
-let itemsPerPageOptions = [{ value: 5, label: '5' }];
-
 const settingStore = useSettingsStore();
 const characterStore = useCharacterStore();
 const applicationStore = useApplicationStore();
-
-const contentWidth = ref(0);
 
 const openOrderBy = ref(false);
 const openItemsPerPage = ref(false);
@@ -33,46 +28,12 @@ const updatePage = async (page: number) => {
     await nuxtApp.hooks.callHook('refresh:characters');
 };
 
-const onResize = async (reloadChars: boolean = true) => {
-    if (document.getElementById('main_content')?.offsetWidth !== contentWidth.value) {
-        contentWidth.value = document.getElementById('main_content')?.offsetWidth ?? 0;
-
-        if (contentWidth.value !== 0) {
-            const itemsPerRow = calculateItemsPerRow(contentWidth.value);
-            applicationStore.itemsPerPage = itemsPerRow.maxItemsPerRow * 3;
-            itemsPerPageOptions = itemsPerRow.newOptions;
-
-            if (reloadChars) {
-                await nuxtApp.hooks.callHook('refresh:characters');
-            }
-        }
-    }
-};
-
 const clearSearch = async () => {
     if (applicationStore.searchValue.length > 0) {
         applicationStore.searchValue = '';
         await nuxtApp.hooks.callHook('refresh:characters');
     }
 };
-
-const processResize = debounce(
-    async () => {
-        await onResize();
-    },
-    500,
-    { trailing: false }
-);
-
-nuxtApp.hooks.hook('action:menu', async () => {
-    await onResize();
-});
-
-onMounted(async () => {
-    await sleep(500);
-    await onResize(true);
-    window.addEventListener('resize', processResize);
-});
 </script>
 
 <template>
@@ -119,7 +80,11 @@ onMounted(async () => {
             <Popover v-model:open="openItemsPerPage">
                 <PopoverTrigger as-child>
                     <Button :aria-expanded="openItemsPerPage" class="w-[200px] justify-between" role="combobox" variant="outline">
-                        {{ itemsPerPageOptions ? itemsPerPageOptions.find((option) => option.value === applicationStore.itemsPerPage)?.label : 'Select Items Per Page...' }}
+                        {{
+                            applicationStore.itemsPerPageOptions
+                                ? applicationStore.itemsPerPageOptions.find((option) => option.value === applicationStore.itemsPerPage)?.label
+                                : 'Select Items Per Page...'
+                        }}
                         <Icon class="ml-2 h-4 w-4 shrink-0 opacity-50" name="radix-icons:caret-sort" />
                     </Button>
                 </PopoverTrigger>
@@ -128,7 +93,7 @@ onMounted(async () => {
                         <CommandList>
                             <CommandGroup>
                                 <CommandItem
-                                    v-for="option in itemsPerPageOptions"
+                                    v-for="option in applicationStore.itemsPerPageOptions"
                                     :key="option.value"
                                     :value="option.value"
                                     @select="

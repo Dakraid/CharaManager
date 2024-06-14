@@ -27,6 +27,7 @@ export const useApplicationStore = defineStore('application', {
             updatedImageId: undefined as number | undefined,
             operationEnabledIds: new Set<number>(),
             itemsPerPage: 5,
+            itemsPerPageOptions: [{ value: 5, label: '5' }],
         };
     },
     getters: {
