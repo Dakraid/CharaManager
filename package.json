@@ -52,7 +52,7 @@
         "nuxt": "^3.12.1",
         "nuxt-monaco-editor": "^1.2.9",
         "nuxt-rating": "^0.0.15",
-        "nuxt-security": "^2.0.0-beta.5",
+        "nuxt-security": "^2.0.0-rc.6",
         "perfect-debounce": "^1.0.0",
         "piscina": "^4.5.1",
         "playwright": "^1.44.1",
