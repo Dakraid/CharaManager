@@ -28,6 +28,9 @@ export default defineNuxtConfig({
         },
         minify: true,
     },
+    build: {
+        transpile: ['@pqina/pintura', '@pqina/vue-pintura', '@pqina/filepond-plugin-image-editor'],
+    },
     future: {
         typescriptBundlerResolution: true,
     },
@@ -75,7 +78,7 @@ export default defineNuxtConfig({
         componentDir: './components/ui',
     },
     security: {
-        enabled: true,
+        enabled: false,
         headers: {
             crossOriginEmbedderPolicy: 'unsafe-none',
             contentSecurityPolicy: {
@@ -123,7 +126,7 @@ export default defineNuxtConfig({
             periodicSyncForUpdates: 3600,
         },
         devOptions: {
-            enabled: false,
+            enabled: true,
             suppressWarnings: true,
             navigateFallback: '/',
             navigateFallbackAllowlist: [/^\/$/],

@@ -3,11 +3,11 @@ const settingsStore = useSettingsStore();
 </script>
 
 <template>
-    <div class="flex items-center pl-6 gap-2 justify-start">
+    <div class="flex items-center pl-6 gap-2">
         <Checkbox id="censorChars" v-model:checked="settingsStore.censorChars" />
         <label for="censorChars" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Blur and Greyscale Character Images? </label>
     </div>
-    <div class="flex items-center pl-6 gap-2 justify-start">
+    <div class="flex items-center pl-6 gap-2">
         <Checkbox id="censorNames" v-model:checked="settingsStore.censorNames" />
         <label for="censorNames" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Censor Character Names? </label>
     </div>

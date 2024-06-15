@@ -4734,6 +4734,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pqina/filepond-plugin-image-editor@npm:^9.1.1":
+  version: 9.1.1
+  resolution: "@pqina/filepond-plugin-image-editor@npm:9.1.1"
+  peerDependencies:
+    filepond: 4.x
+  checksum: 10c0/782a8c9500ee58e50b2543eb3dae112a626553020749e6aee68ef3ffa34ff28a2a06fa8167fab27e6f993e38a49de2ddfae4dfbff9b29a7e8839c59d41e67e9f
+  languageName: node
+  linkType: hard
+
+"@pqina/pintura@npm:^8.82.6":
+  version: 8.82.6
+  resolution: "@pqina/pintura@npm:8.82.6"
+  checksum: 10c0/09d5ad88c18d7b079b6a5fa1d7218db6e98987461f8227e352d38e309a7c6a69435bc59860a03389c9afb89d843e5378d203aacb0776ec3574004ef4f469c1de
+  languageName: node
+  linkType: hard
+
+"@pqina/vue-pintura@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "@pqina/vue-pintura@npm:9.0.1"
+  peerDependencies:
+    "@pqina/pintura": ^8.x
+    vue: 2.x - 3.x
+  checksum: 10c0/bc6be7e120de878e2512ce1216d1db4b80dbf5c1fdc2435f95aedb5c9f95130f711b3a0c4f1cc5a6a2c4db7da1ea3e1c26ac55ce9a58b2b41404edbd4a7f2e9d
+  languageName: node
+  linkType: hard
+
 "@radix-icons/vue@npm:^1.0.0":
   version: 1.0.0
   resolution: "@radix-icons/vue@npm:1.0.0"
@@ -7597,6 +7623,9 @@ __metadata:
     "@pinia-plugin-persistedstate/nuxt": "npm:^1.2.0"
     "@pinia/nuxt": "npm:^0.5.1"
     "@popperjs/core": "npm:^2.11.8"
+    "@pqina/filepond-plugin-image-editor": "npm:^9.1.1"
+    "@pqina/pintura": "npm:^8.82.6"
+    "@pqina/vue-pintura": "npm:^9.0.1"
     "@radix-icons/vue": "npm:^1.0.0"
     "@trivago/prettier-plugin-sort-imports": "npm:^4.3.0"
     "@types/better-sqlite3": "npm:^7.6.10"
@@ -7625,6 +7654,9 @@ __metadata:
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-prettier: "npm:^5.1.3"
     fastest-levenshtein: "npm:^1.0.16"
+    filepond: "npm:^4.31.1"
+    filepond-plugin-file-poster: "npm:^2.5.1"
+    filepond-plugin-file-validate-type: "npm:^1.2.9"
     img-diff-js: "npm:^0.5.4"
     jimp: "npm:^0.22.12"
     jimp-compact: "npm:0.16.1-2"
@@ -7660,6 +7692,7 @@ __metadata:
     vaul-vue: "npm:^0.1.2"
     vee-validate: "npm:^4.13.1"
     vue: "npm:^3.4.29"
+    vue-filepond: "npm:^7.0.4"
     vue-picture-cropper: "npm:^0.7.0"
     vue-router: "npm:^4.3.3"
     vue-sonner: "npm:^1.1.2"
@@ -10375,6 +10408,31 @@ __metadata:
   dependencies:
     minimatch: "npm:^5.0.1"
   checksum: 10c0/426b1de3944a3d153b053f1c0ebfd02dccd0308a4f9e832ad220707a6d1f1b3c9784d6cadf6b2f68f09a57565f63ebc7bcdc913ccf8012d834f472c46e596f41
+  languageName: node
+  linkType: hard
+
+"filepond-plugin-file-poster@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "filepond-plugin-file-poster@npm:2.5.1"
+  peerDependencies:
+    filepond: ">=4.x <5.x"
+  checksum: 10c0/8cadd4a4554dc63a2642e0d095698e02496c38f5f3de0fa3ec010499dfcc02c0541b454c37b3615b75ab1ade1a1f4c97490533fa0521b17fbc3095075ae60dc3
+  languageName: node
+  linkType: hard
+
+"filepond-plugin-file-validate-type@npm:^1.2.9":
+  version: 1.2.9
+  resolution: "filepond-plugin-file-validate-type@npm:1.2.9"
+  peerDependencies:
+    filepond: ">=1.x <5.x"
+  checksum: 10c0/abdccf0f432dbe097fe450627aa70e0ca8b9cea1976cc2e80e4b596d292e73fd3e4df8ee0188f282bd1d2fdbbe88327fcd2633a6f565146dda5f6f098f888385
+  languageName: node
+  linkType: hard
+
+"filepond@npm:^4.31.1":
+  version: 4.31.1
+  resolution: "filepond@npm:4.31.1"
+  checksum: 10c0/201cb5b978882d7b1929ece3c17a08db6575a6f692953b602fb48bf6bf1d0d1b3a54615712cff08d39d607c144d072d1a8b3d15f72bc3142666b756d70f76ea8
   languageName: node
   linkType: hard
 
@@ -18139,6 +18197,16 @@ __metadata:
   peerDependencies:
     eslint: ">=6.0.0"
   checksum: 10c0/79593073adbce8971565133c70a203f12f0be0f8c5e3a4063796fd56e5de64f1f3ad7f91be5a787a7a3fe751306ed22086ee8369d52725be95f452827ce670de
+  languageName: node
+  linkType: hard
+
+"vue-filepond@npm:^7.0.4":
+  version: 7.0.4
+  resolution: "vue-filepond@npm:7.0.4"
+  peerDependencies:
+    filepond: ">=4.7.4 < 5.x"
+    vue: ">=3 < 4"
+  checksum: 10c0/fbcc843b2c868e68d6878ad372af0d1e899d38f61cc4426d282650b22fa9422cfa7dfd6dcc3bc50dc28a1d750926328457e40b2d151ef34aad3350d614857988
   languageName: node
   linkType: hard
 

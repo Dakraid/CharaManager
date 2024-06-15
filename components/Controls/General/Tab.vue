@@ -127,15 +127,13 @@ const deleteCharacters = async () => {
 
 <template>
     <div class="flex flex-col md:order-2 w-full h-full max-w-sm gap-4">
+        <div v-if="controlComponentStore.processing" class="h-full flex flex-col items-center justify-center gap-4">
+            <Icon class="h-16 w-16" name="line-md:loading-loop" />
+        </div>
+        <Separator v-if="controlComponentStore.processing" />
         <ControlsGeneralFileUpload />
         <Separator />
         <ControlsGeneralOptions />
-        <Separator />
-        <div class="h-full" />
-        <div v-if="controlComponentStore.processing" class="h-full flex items-center justify-center">
-            <Icon class="h-16 w-16" name="line-md:loading-loop" />
-        </div>
-        <div class="h-full" />
         <Separator />
         <Label class="text-1xl">Reload Characters from Database</Label>
         <Button type="submit" variant="outline" @click="nuxtApp.hooks.callHook('refresh:characters')">
@@ -185,4 +183,8 @@ const deleteCharacters = async () => {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.item-grid {
+    display: grid;
+}
+</style>
