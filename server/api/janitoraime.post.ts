@@ -1,13 +1,15 @@
 import fs from 'node:fs';
 import playwright from 'playwright';
 import { addExtra } from 'playwright-extra';
+import RecaptchaPlugin from 'puppeteer-extra-plugin-recaptcha';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import ApiResponse from '~/models/ApiResponse';
 import StatusCode from '~/models/enums/StatusCode';
 
-async function setupPlaywrightChromium() {
+async function setupPlaywrightChromium(captchaSolverKey: string) {
     const chromium = addExtra(playwright.chromium);
     chromium.use(StealthPlugin());
+    chromium.use(RecaptchaPlugin({ provider: { id: '2captcha', token: captchaSolverKey } }));
     // For some reason dependency resolution fails by default, so we import the defaults here manually
     chromium.plugins.setDependencyResolution('stealth/evasions/chrome.app', StealthPlugin);
     chromium.plugins.setDependencyResolution('stealth/evasions/chrome.csi', StealthPlugin);
@@ -46,10 +48,11 @@ export default defineEventHandler(async (event) => {
     const characterFilename = body.characterUrl.split('characters/')[1];
 
     try {
-        const browser = await setupPlaywrightChromium();
+        const browser = await setupPlaywrightChromium(config.captchaSolverKey);
         const context = await browser.newContext({ acceptDownloads: true });
         const page = await context.newPage();
         await page.goto(characterUrl);
+        await sleep(3000);
         await page.click('button:has-text("Download")');
         const download = await page.waitForEvent('download');
         await download.saveAs(`./temp/${characterFilename}.png`);

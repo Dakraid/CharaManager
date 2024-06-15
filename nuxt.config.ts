@@ -39,6 +39,7 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         apiKey: '',
+        captchaSolverKey: '',
     },
     modules: [
         '@nuxt/eslint',
