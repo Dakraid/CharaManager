@@ -17,6 +17,7 @@ const imageContent = ref('');
 const imageBlob = ref();
 
 const loading = ref(true);
+const renderHtml = ref(false);
 const characterData = ref();
 const characterDump = ref('');
 
@@ -227,90 +228,109 @@ await processCharacterDetails();
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent class="h-full" value="general">
-                            <div class="flex tab-content-character flex-col gap-2">
-                                <div class="flex flex-col gap-2 flex-1">
-                                    <Label for="description">Description</Label>
-                                    <Textarea id="description" v-model="characterData.data.description" class="flex-grow" />
+                            <ScrollArea class="h-full pr-4 scrollarea-heightfix">
+                                <div class="flex tab-content-character flex-col gap-2">
+                                    <div class="flex flex-col gap-2 flex-1">
+                                        <Label for="description">Description</Label>
+                                        <Textarea id="description" v-model="characterData.data.description" class="flex-grow" />
+                                    </div>
+                                    <div class="flex flex-col gap-2 flex-1">
+                                        <Label for="first_message">First Message</Label>
+                                        <Textarea id="first_message" v-model="characterData.data.first_mes" class="flex-grow" />
+                                    </div>
+                                    <div class="flex flex-col gap-2 flex-1">
+                                        <Label for="personality">Personality</Label>
+                                        <Textarea id="personality" v-model="characterData.data.personality" class="flex-grow" />
+                                    </div>
+                                    <div class="flex flex-col gap-2 flex-1">
+                                        <Label for="scenario">Scenario</Label>
+                                        <Textarea id="scenario" v-model="characterData.data.scenario" class="flex-grow" />
+                                    </div>
                                 </div>
-                                <div class="flex flex-col gap-2 flex-1">
-                                    <Label for="first_message">First Message</Label>
-                                    <Textarea id="first_message" v-model="characterData.data.first_mes" class="flex-grow" />
-                                </div>
-                                <div class="flex flex-col gap-2 flex-1">
-                                    <Label for="personality">Personality</Label>
-                                    <Textarea id="personality" v-model="characterData.data.personality" class="flex-grow" />
-                                </div>
-                                <div class="flex flex-col gap-2 flex-1">
-                                    <Label for="scenario">Scenario</Label>
-                                    <Textarea id="scenario" v-model="characterData.data.scenario" class="flex-grow" />
-                                </div>
-                            </div>
+                            </ScrollArea>
                         </TabsContent>
                         <TabsContent class="h-full" value="alternatives">
-                            <div class="flex tab-content-character flex-col gap-2">
-                                <div class="flex justify-between items-end">
-                                    <span class="text-sm font-medium align-text-bottom leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Alt Messages</span>
-                                    <Button id="save" type="submit" variant="secondary" @click="addGreeting">
-                                        <span class="sr-only">Add Greeting</span>
-                                        <Icon class="h-6 w-6" name="radix-icons:plus" />
-                                    </Button>
+                            <ScrollArea class="h-full pr-4 scrollarea-heightfix">
+                                <div class="flex tab-content-character flex-col gap-2">
+                                    <div class="flex justify-between items-end">
+                                        <span class="text-sm font-medium align-text-bottom leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Alt Messages</span>
+                                        <Button id="save" type="submit" variant="secondary" @click="addGreeting">
+                                            <span class="sr-only">Add Greeting</span>
+                                            <Icon class="h-6 w-6" name="radix-icons:plus" />
+                                        </Button>
+                                    </div>
+                                    <div v-for="(item, index) in characterData.data.alternate_greetings" :key="item" class="flex-grow">
+                                        <Textarea v-model="characterData.data.alternate_greetings[index]" class="h-full" />
+                                    </div>
                                 </div>
-                                <div v-for="(item, index) in characterData.data.alternate_greetings" :key="item" class="flex-grow">
-                                    <Textarea v-model="characterData.data.alternate_greetings[index]" class="h-full" />
-                                </div>
-                            </div>
+                            </ScrollArea>
                         </TabsContent>
                         <TabsContent class="h-full" value="examples">
-                            <div class="flex tab-content-character flex-col gap-2">
-                                <div class="flex flex-col gap-2 flex-1">
-                                    <Label for="examples">Message Examples</Label>
-                                    <Textarea id="examples" v-model="characterData.data.mes_example" class="flex-grow" />
+                            <ScrollArea class="h-full pr-4 scrollarea-heightfix">
+                                <div class="flex tab-content-character flex-col gap-2">
+                                    <div class="flex flex-col gap-2 flex-1">
+                                        <Label for="examples">Message Examples</Label>
+                                        <Textarea id="examples" v-model="characterData.data.mes_example" class="flex-grow" />
+                                    </div>
                                 </div>
-                            </div>
+                            </ScrollArea>
                         </TabsContent>
                         <TabsContent class="h-full" value="prompts">
-                            <div class="flex tab-content-character flex-col gap-2">
-                                <div class="flex flex-col gap-2 flex-1">
-                                    <Label for="system_prompt">System Prompt</Label>
-                                    <Textarea id="system_prompt" v-model="characterData.data.system_prompt" class="flex-grow" />
+                            <ScrollArea class="h-full pr-4 scrollarea-heightfix">
+                                <div class="flex tab-content-character flex-col gap-2">
+                                    <div class="flex flex-col gap-2 flex-1">
+                                        <Label for="system_prompt">System Prompt</Label>
+                                        <Textarea id="system_prompt" v-model="characterData.data.system_prompt" class="flex-grow" />
+                                    </div>
+                                    <div class="flex flex-col gap-2 flex-1">
+                                        <Label for="post_history_instructions">Jailbreak</Label>
+                                        <Textarea id="post_history_instructions" v-model="characterData.data.post_history_instructions" class="flex-grow" />
+                                    </div>
                                 </div>
-                                <div class="flex flex-col gap-2 flex-1">
-                                    <Label for="post_history_instructions">Jailbreak</Label>
-                                    <Textarea id="post_history_instructions" v-model="characterData.data.post_history_instructions" class="flex-grow" />
-                                </div>
-                            </div>
+                            </ScrollArea>
                         </TabsContent>
                         <TabsContent class="h-full" value="creator">
-                            <div class="flex tab-content-character flex-col gap-2">
-                                <div class="flex flex-col gap-2">
-                                    <Label for="creator">Creator</Label>
-                                    <Textarea id="creator" v-model="characterData.data.creator" class="flex-grow" />
+                            <ScrollArea class="h-full pr-4 scrollarea-heightfix">
+                                <div class="flex tab-content-character flex-col gap-2">
+                                    <div class="flex flex-col gap-2">
+                                        <Label for="creator">Creator</Label>
+                                        <Textarea id="creator" v-model="characterData.data.creator" class="flex-grow" />
+                                    </div>
+                                    <div class="flex flex-col gap-2 flex-1">
+                                        <Label for="creator_notes">Creator Notes</Label>
+                                        <Textarea id="creator_notes" v-model="characterData.data.creator_notes" class="flex-grow" />
+                                    </div>
+                                    <div class="flex items-center pl-6 gap-2">
+                                        <Checkbox id="renderHtml" v-model:checked="renderHtml" />
+                                        <label for="renderHtml" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Render HTML from Notes? </label>
+                                    </div>
+                                    <div v-if="renderHtml" class="flex flex-col gap-2 flex-1 border border-accent rounded-md">
+                                        <div class="p-8" v-html="characterData.data.creator_notes"></div>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <Label for="character_version">Character Version</Label>
+                                        <Textarea id="character_version" v-model="characterData.data.character_version" class="flex-grow" />
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <Label>Tags</Label>
+                                        <TagsInput v-model="characterData.data.tags" class="flex-grow">
+                                            <TagsInputItem v-for="item in characterData.data.tags" :key="item" :value="item">
+                                                <TagsInputItemText />
+                                                <TagsInputItemDelete />
+                                            </TagsInputItem>
+                                            <TagsInputInput placeholder="Add Tag..." />
+                                        </TagsInput>
+                                    </div>
                                 </div>
-                                <div class="flex flex-col gap-2 flex-1">
-                                    <Label for="creator_notes">Creator Notes</Label>
-                                    <Textarea id="creator_notes" v-model="characterData.data.creator_notes" class="flex-grow" />
-                                </div>
-                                <div class="flex flex-col gap-2">
-                                    <Label for="character_version">Character Version</Label>
-                                    <Textarea id="character_version" v-model="characterData.data.character_version" class="flex-grow" />
-                                </div>
-                                <div class="flex flex-col gap-2">
-                                    <Label>Tags</Label>
-                                    <TagsInput v-model="characterData.data.tags" class="flex-grow">
-                                        <TagsInputItem v-for="item in characterData.data.tags" :key="item" :value="item">
-                                            <TagsInputItemText />
-                                            <TagsInputItemDelete />
-                                        </TagsInputItem>
-                                        <TagsInputInput placeholder="Add Tag..." />
-                                    </TagsInput>
-                                </div>
-                            </div>
+                            </ScrollArea>
                         </TabsContent>
                         <TabsContent class="h-full" value="json">
-                            <div class="flex tab-content-character flex-col gap-2">
-                                <Label for="dump">JSON Dump</Label>
-                                <Textarea id="dump" v-model="characterDump" class="flex-grow w-full h-full" disabled="disabled" />
-                            </div>
+                            <ScrollArea class="h-full pr-4 scrollarea-heightfix">
+                                <div class="flex tab-content-character flex-col gap-2">
+                                    <Label for="dump">JSON Dump</Label>
+                                    <Textarea id="dump" v-model="characterDump" class="flex-grow w-full h-full" disabled="disabled" />
+                                </div>
+                            </ScrollArea>
                         </TabsContent>
                     </Tabs>
                 </div>

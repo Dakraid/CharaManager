@@ -23,6 +23,7 @@ import {
     setPlugins,
 } from '@pqina/pintura';
 import '@pqina/pintura/pintura.css';
+import type { FilePondFile } from 'filepond';
 import FilePondPluginFilePoster from 'filepond-plugin-file-poster';
 import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.min.css';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
@@ -32,7 +33,7 @@ import vueFilePond from 'vue-filepond';
 import { Button } from '~/components/ui/button';
 import { toast } from '~/components/ui/toast';
 import type ApiResponse from '~/models/ApiResponse';
-import type { FileUpload } from '~/models/OLD/FileUpload';
+import FileUploadItem from '~/models/FileUploadItem';
 import StatusCode from '~/models/enums/StatusCode';
 
 const nuxtApp = useNuxtApp();
@@ -40,11 +41,19 @@ const nuxtApp = useNuxtApp();
 const settingsStore = useSettingsStore();
 const controlComponentStore = useControlComponentStore();
 
-const files = ref<FileUpload[]>([]);
+const pond = ref();
+const pondFiles = ref<FilePondFile[]>([]);
+
+const getFileContent = (file: any) =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+    });
 
 const uploadFiles = async () => {
-    controlComponentStore.processing = true;
-    if (files.value.length === 0) {
+    if (pondFiles.value.length === 0) {
         toast({
             title: 'No images selected',
             description: 'Please select images before trying to upload.',
@@ -53,15 +62,32 @@ const uploadFiles = async () => {
         return;
     }
 
-    files.value.sort(function (a, b) {
-        return b.lastModified - a.lastModified;
+    if (pondFiles.value.some((x: any) => x.status != 2)) {
+        toast({
+            title: 'Images are still being loaded.',
+            description: 'Please wait until all images are ready.',
+            variant: 'destructive',
+        });
+        return;
+    }
+
+    controlComponentStore.processing = true;
+
+    const files: FileUploadItem[] = [];
+
+    for (const file of pondFiles.value) {
+        await getFileContent(file).then((content: any) => files.push(new FileUploadItem(file.filename, file.file.lastModified, content)));
+    }
+
+    files.sort(function (a, b) {
+        return b.LastModified - a.LastModified;
     });
 
     const response = await $fetch<ApiResponse>('/api/characters', {
         method: 'PUT',
         headers: { 'x-api-key': settingsStore.apiKey },
         body: {
-            files: files.value,
+            files: files,
         },
     });
 
@@ -78,7 +104,8 @@ const uploadFiles = async () => {
         });
     }
 
-    files.value.length = 0;
+    pond.value.removeFiles();
+    pondFiles.value.length = 0;
 
     controlComponentStore.processing = false;
     await nuxtApp.hooks.callHook('refresh:characters');
@@ -87,8 +114,6 @@ const uploadFiles = async () => {
 setPlugins(plugin_crop, plugin_finetune, plugin_filter, plugin_annotate);
 
 const Filepond = vueFilePond(FilePondPluginFileValidateType, FilePondPluginImageEditor, FilePondPluginFilePoster);
-
-const pondFiles = ref([]);
 
 function onUpdateFiles(files: any) {
     pondFiles.value = files;
@@ -117,12 +142,16 @@ const myEditor = {
         imageCropAspectRatio: 2 / 3,
     },
 };
+
+function handleFileChange(files: any) {
+    pondFiles.value = files;
+}
 </script>
 
 <template>
     <Label class="text-1xl" for="file-input">Upload</Label>
     <ClientOnly>
-        <Filepond ref="pond" accepted-file-types="image/png" :allow-multiple="true" :image-editor="myEditor" :credits="false" @updatefiles="onUpdateFiles" />
+        <Filepond ref="pond" accepted-file-types="image/png" :allow-multiple="true" :image-editor="myEditor" :credits="false" @updatefiles="handleFileChange" />
     </ClientOnly>
     <Transition>
         <Button v-if="pondFiles.length > 0" type="submit" variant="secondary" @click="uploadFiles">

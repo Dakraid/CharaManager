@@ -34,22 +34,22 @@ export default defineEventHandler(async (event) => {
     const errors: string[] = [];
 
     for (const file of body.files) {
-        const hash = createHash('sha256').update(file.content).digest('hex');
+        const hash = createHash('sha256').update(file.Content).digest('hex');
         const imageHashes = await drizzleDb.select().from(character_images).where(like(character_images.hash, hash));
         const detailHashes = await drizzleDb.select().from(character_details).where(like(character_details.hash, hash));
         if (imageHashes.length > 0 || detailHashes.length > 0) {
-            fileConflicts.push(`File ${file.name} already exists.`);
+            fileConflicts.push(`File ${file.Name} already exists.`);
             continue;
         }
 
-        const timestamp = file.lastModified ? file.lastModified : dayjs().unix();
-        const character = new CharacterDetails(hash, timestamp + '_' + file.name, file.name, timestamp, dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'), 0);
+        const timestamp = file.LastModified ? file.LastModified : dayjs().unix();
+        const character = new CharacterDetails(hash, timestamp + '_' + file.Name, file.Name, timestamp, dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'), 0);
 
-        const content = JSON.parse(convertBase64PNGToString(file.content));
+        const content = JSON.parse(convertBase64PNGToString(file.Content));
         if (!content.data) {
             const converted = Cards.v1ToV2(content);
-            file.content = convertStringToBase64PNG(file.content, JSON.stringify(converted));
-            event.context.logger.info('Updated character from v1 to v2: ' + file.name);
+            file.Content = convertStringToBase64PNG(file.Content, JSON.stringify(converted));
+            event.context.logger.info('Updated character from v1 to v2: ' + file.Name);
         }
 
         let result: any;
@@ -57,18 +57,18 @@ export default defineEventHandler(async (event) => {
             result = await drizzleDb.insert(character_details).values(character).returning({ id: character_details.id }).onConflictDoNothing();
         } catch (err) {
             event.context.logger.error(err);
-            errors.push(`Failed to insert character from file ${file.name}: ${err}`);
+            errors.push(`Failed to insert character from file ${file.Name}: ${err}`);
             continue;
         }
 
         const imageApiResponse = await $fetch<ApiResponse>('/api/image', {
             method: 'PUT',
             headers: { 'x-api-key': config.apiKey },
-            body: JSON.stringify(new PutImageRequest(result[0].id, file.content)),
+            body: JSON.stringify(new PutImageRequest(result[0].id, file.Content)),
         });
 
         if (imageApiResponse.Status !== StatusCode.OK) {
-            errors.push(`Failed to process image for file ${file.name}: ${imageApiResponse.Content}`);
+            errors.push(`Failed to process image for file ${file.Name}: ${imageApiResponse.Content}`);
         }
 
         await $fetch<ApiResponse>('/api/relations', {

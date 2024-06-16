@@ -127,3 +127,7 @@ html.dark input {
     background-color: hsl(var(--background) / 0.4);
     backdrop-filter: blur(10px);
 }
+
+.scrollarea-heightfix > div > div {
+    height: 100%;
+}

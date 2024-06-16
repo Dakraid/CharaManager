@@ -27,6 +27,8 @@ jobs:
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --silent
+        env:
+          PQINA_NPM_TOKEN: ${{ secrets.PQINA_NPM_TOKEN }}
 
       - name: Run prepare
         run: yarn prepare
@@ -63,6 +65,8 @@ jobs:
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --silent
+        env:
+          PQINA_NPM_TOKEN: ${{ secrets.PQINA_NPM_TOKEN }}
 
       - name: Run prepare
         run: yarn prepare
@@ -99,6 +103,8 @@ jobs:
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --silent
+        env:
+          PQINA_NPM_TOKEN: ${{ secrets.PQINA_NPM_TOKEN }}
 
       - name: Run prepare
         run: yarn prepare
