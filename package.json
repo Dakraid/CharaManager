@@ -22,7 +22,7 @@
         "@formkit/auto-animate": "^0.8.2",
         "@nuxt/image": "^1.7.0",
         "@nuxt/kit": "^3.12.1",
-        "@nuxt/schema": "^3.12.1",
+        "@nuxt/schema": "^3.12.2",
         "@nuxtjs/critters": "^0.7.1",
         "@nuxtjs/robots": "^3.0.0",
         "@pinia/nuxt": "^0.5.1",
