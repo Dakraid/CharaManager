@@ -51,7 +51,7 @@
         "lodash": "^4.17.21",
         "magic-regexp": "^0.8.0",
         "monaco-editor": "^0.49.0",
-        "nuxt": "^3.12.1",
+        "nuxt": "^3.12.2",
         "nuxt-monaco-editor": "^1.2.9",
         "nuxt-rating": "^0.0.15",
         "nuxt-security": "^2.0.0-rc.6",
