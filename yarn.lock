@@ -7657,7 +7657,7 @@ __metadata:
     tailwindcss-animate: "npm:^1.0.7"
     typescript: "npm:^5.4.5"
     v-calendar: "npm:^3.1.2"
-    vaul-vue: "npm:^0.1.2"
+    vaul-vue: "npm:^0.2.0"
     vee-validate: "npm:^4.13.1"
     vue: "npm:^3.4.29"
     vue-picture-cropper: "npm:^0.7.0"
@@ -17753,14 +17753,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vaul-vue@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "vaul-vue@npm:0.1.2"
+"vaul-vue@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "vaul-vue@npm:0.2.0"
   dependencies:
     "@vueuse/core": "npm:^10.8.0"
     radix-vue: "npm:^1.4.9"
     vue: "npm:^3.4.5"
-  checksum: 10c0/499063f63f21c76e12a93e3d46909c5f00e8e12201bcf4c905fce6c29df1ede2fbd399e22a0420670bb94cbef3dc1f1210b39f0596865630ab06262f12f2e0a2
+  peerDependencies:
+    radix-vue: ^1.4.0
+    vue: ^3.3.0
+  checksum: 10c0/16a6f06a3490253002f6ddafd6a60a7a1f34de283add5f4cee91b28dd53903ae30693b102ea16ed350f6abe777ecb308cff833b0c1cdee330f66e766716a2a1a
   languageName: node
   linkType: hard
 
