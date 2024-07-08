@@ -4198,7 +4198,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/schema@npm:3.12.1, @nuxt/schema@npm:^3.12.1":
+"@nuxt/schema@npm:3.12.1":
   version: 3.12.1
   resolution: "@nuxt/schema@npm:3.12.1"
   dependencies:
@@ -4215,6 +4215,26 @@ __metadata:
     unimport: "npm:^3.7.2"
     untyped: "npm:^1.4.2"
   checksum: 10c0/e3fd6c558e4df47b566a4475b034e0b1420e94ccaed8829facb104f87c02098ea7b06e10867fd875b621f4e7df2cc808691973a5b8012797b5da99ae2c3118de
+  languageName: node
+  linkType: hard
+
+"@nuxt/schema@npm:^3.12.3":
+  version: 3.12.3
+  resolution: "@nuxt/schema@npm:3.12.3"
+  dependencies:
+    compatx: "npm:^0.1.8"
+    consola: "npm:^3.2.3"
+    defu: "npm:^6.1.4"
+    hookable: "npm:^5.5.3"
+    pathe: "npm:^1.1.2"
+    pkg-types: "npm:^1.1.2"
+    scule: "npm:^1.3.0"
+    std-env: "npm:^3.7.0"
+    ufo: "npm:^1.5.3"
+    uncrypto: "npm:^0.1.3"
+    unimport: "npm:^3.7.2"
+    untyped: "npm:^1.4.2"
+  checksum: 10c0/08afbd56914374da59334a23807832acb4b1772e7ce4dd97b2a6b296d629d37e7c50917ff123ecf7c32cb023ca943f1a477face0423260766d2b9b63cba96751
   languageName: node
   linkType: hard
 
@@ -7588,7 +7608,7 @@ __metadata:
     "@nuxt/eslint-config": "npm:^0.3.13"
     "@nuxt/image": "npm:^1.7.0"
     "@nuxt/kit": "npm:^3.12.1"
-    "@nuxt/schema": "npm:^3.12.1"
+    "@nuxt/schema": "npm:^3.12.3"
     "@nuxtjs/color-mode": "npm:^3.4.1"
     "@nuxtjs/critters": "npm:^0.7.1"
     "@nuxtjs/partytown": "npm:^1.5.0"
@@ -7959,6 +7979,13 @@ __metadata:
   version: 0.1.5
   resolution: "compatx@npm:0.1.5"
   checksum: 10c0/00c5a47c5844fa4acda374d746ec1c83ff31e36a08dc35e1b0294d78e9be9746b30555b0968570cbc9b55607fec948aceea352e35fe552ab00726128675aa736
+  languageName: node
+  linkType: hard
+
+"compatx@npm:^0.1.8":
+  version: 0.1.8
+  resolution: "compatx@npm:0.1.8"
+  checksum: 10c0/042b8ed40cd3041a843836dab730848c1bcea97ebdac207c9a04b4f8af116259a2147fdda0ce823cf161363b4def76f9b60019a1315cb3ea55f991f54b06c40e
   languageName: node
   linkType: hard
 
@@ -14323,6 +14350,17 @@ __metadata:
     mlly: "npm:^1.7.0"
     pathe: "npm:^1.1.2"
   checksum: 10c0/c7d167935de7207479e5829086040d70bea289f31fc1331f17c83e996a4440115c9deba2aa96de839ea66e1676d083c9ca44b33886f87bffa6b49740b67b6fcb
+  languageName: node
+  linkType: hard
+
+"pkg-types@npm:^1.1.2":
+  version: 1.1.3
+  resolution: "pkg-types@npm:1.1.3"
+  dependencies:
+    confbox: "npm:^0.1.7"
+    mlly: "npm:^1.7.1"
+    pathe: "npm:^1.1.2"
+  checksum: 10c0/4cd2c9442dd5e4ae0c61cbd8fdaa92a273939749b081f78150ce9a3f4e625cca0375607386f49f103f0720b239d02369bf181c3ea6c80cf1028a633df03706ad
   languageName: node
   linkType: hard
 
