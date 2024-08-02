@@ -17,7 +17,7 @@ const toggleMenu = async () => {
 </script>
 
 <template>
-    <div class="container h-min max-w-full flex flex-col gap-2 space-y-0 items-center justify-between py-4 lg:h-16 lg:flex-row lg:space-y-2 lg:px-24">
+    <div class="container h-min max-w-full flex flex-col gap-2 space-y-0 items-center justify-between py-4 lg:h-16 lg:flex-row lg:space-y-2 lg:px-24 z-20">
         <div class="flex items-center justify-center gap-2 w-[220px] lg:justify-start">
             <img class="h-10 w-10" src="/CharaManager.svg" alt="CharaManagerLogo" />
             <h2 class="text-xl font-semibold font-mono" style="color: #13fea2">CharaManager</h2>
