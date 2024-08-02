@@ -42,7 +42,7 @@ const downloadRemoteCharacter = async () => {
                 variant: 'destructive',
             });
         }
-    } else if (characterUrl.value.includes('janitorai.me/characters/')) {
+    } else if (characterUrl.value.includes('janitorai.me/characters/') || characterUrl.value.includes('jannyai.com/characters/')) {
         const response = await $fetch<ApiResponse>('/api/janitoraime', {
             method: 'POST',
             headers: { 'x-api-key': settingsStore.apiKey },
