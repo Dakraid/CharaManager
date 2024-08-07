@@ -18,6 +18,15 @@ const { data: response } = await useFetch<ApiResponse>('/api/relations', {
 const relations = ref<CharacterRelations[]>([]);
 relations.value = response.value?.Content.toSorted((a: CharacterRelations, b: CharacterRelations) => b.Parent - a.Parent);
 
+if (relations.value.length == 0) {
+    toast({
+        title: 'No relations available',
+        description: 'If you recently imported a card, please wait and refresh again',
+        variant: 'destructive',
+    });
+    return;
+}
+
 const total = ref(0);
 total.value = relations.value
     .map((x) => x.Children.length)
@@ -111,6 +120,13 @@ applicationStore.showCharacterWindow = false;
 </script>
 
 <template>
+    <div v-if="relations.length == 0" class="flex-col h-full overflow-y-hidden py-6 lg:px-24 items-stretch">
+        <div class="w-full h-full py-16 flex flex-1 flex-col gap-2 justify-center items-center">
+            <h1 class="font-bold text-2xl">No relations found</h1>
+            <Icon class="w-16 h-16" name="radix-icons:question-mark-circled" />
+            <h2 class="font-bold text-xl">Either no relations exists, or you imported a card so relations will have to build. If latter, wait and refresh again.</h2>
+        </div>
+    </div>
     <div class="flex-col h-full overflow-y-hidden py-6 lg:px-24 items-stretch">
         <Transition>
             <div v-if="applicationStore.showCharacterWindow" class="absolute backdrop-blur bg-background/50 transition-all w-full h-full inset-0 z-20 p-12 rounded-md overflow-hidden">
