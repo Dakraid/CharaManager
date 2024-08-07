@@ -24,7 +24,6 @@ if (relations.value.length == 0) {
         description: 'If you recently imported a card, please wait and refresh again',
         variant: 'destructive',
     });
-    return;
 }
 
 const total = ref(0);
