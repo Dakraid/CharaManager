@@ -140,6 +140,7 @@ export default defineEventHandler(async (event) => {
 
     try {
         await db.exec('PRAGMA journal_mode=WAL;');
+        await db.exec('VACUUM;');
 
         switch (body.Action) {
             case DatabaseAction.Provision:

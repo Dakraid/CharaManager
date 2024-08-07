@@ -57,6 +57,7 @@ onMounted(async () => {
     window.addEventListener('resize', () => processResize());
 
     await characterStore.getCharacters();
+    console.log(characterStore.characterList);
 });
 </script>
 

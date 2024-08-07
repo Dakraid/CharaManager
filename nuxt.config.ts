@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
+    compatibilityDate: '2024-08-07',
     app: {
         head: {
             htmlAttrs: {
@@ -75,7 +76,7 @@ export default defineNuxtConfig({
         componentDir: './components/ui',
     },
     security: {
-        enabled: true,
+        enabled: false,
         headers: {
             crossOriginEmbedderPolicy: 'unsafe-none',
             contentSecurityPolicy: {
