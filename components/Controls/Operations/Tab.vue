@@ -1,10 +1,115 @@
 <script setup lang="ts">
 import * as Cards from 'character-card-utils';
+import Grammarify from 'grammarify-ts';
 import { Button } from '~/components/ui/button';
 import { useToast } from '~/components/ui/toast';
 import type ApiResponse from '~/models/ApiResponse';
 import PutDefinitionRequest from '~/models/PutDefinitionRequest';
 import StatusCode from '~/models/enums/StatusCode';
+
+const substitutionMap = {
+    // #s
+    '2night': 'tonight',
+    '2nite': 'tonight',
+
+    // A
+    asap: 'as soon as possible',
+    asl: 'American Sign Language',
+
+    // B
+    bc: 'because',
+    bf: 'boyfriend',
+    btw: 'by the way',
+
+    // C
+    cuz: 'because',
+
+    // D
+
+    // E
+    eg: 'example',
+    els: 'else',
+
+    // F
+    f: 'female',
+    ftw: 'for the win',
+    fyi: 'for your information',
+
+    // G
+    gf: 'girlfriend',
+    gotta: 'got to',
+    gr8: 'great',
+
+    // H
+    hada: 'had a',
+    hmu: 'hit me up',
+    hr: 'hour',
+    hrs: 'hours',
+
+    // I
+    idk: "I don't know",
+    im: "I'm",
+
+    // J
+    jude: 'Jude', // how to expand this to all proper nouns??
+
+    // K
+    kinda: 'kind of',
+
+    // L
+
+    // M
+    m: 'male',
+    msg: 'message',
+
+    // N
+    nite: 'night',
+    na: 'N/A',
+    'n/a': 'N/A',
+
+    // O
+    omg: 'oh my gosh',
+
+    // P
+    pls: 'please',
+    plz: 'please',
+    ppl: 'people',
+
+    // Q
+
+    // R
+
+    // S
+
+    // T
+    tbh: 'to be honest',
+    tho: 'though',
+    thru: 'through',
+    tryna: 'trying to',
+
+    // U
+    u: 'you',
+
+    // V
+
+    // W
+    w: 'with',
+    wanna: 'want to',
+    whaat: 'what', // spellchecker library thinks this is a word
+    whaaat: 'what', // spellchecker library thinks this is a word
+    wk: 'week',
+    wks: 'weeks',
+    wtf: 'what the fuck',
+    wth: 'what the heck',
+    wya: 'where are you at',
+
+    // X
+
+    // Y
+    yknow: 'you know',
+
+    // Z
+};
 
 const { toast } = useToast();
 
@@ -165,6 +270,79 @@ const applyRegexReplace = async () => {
         }
     }
 };
+
+const applyWritingFix = async () => {
+    if (selectedProps.value.length === 0) {
+        toast({
+            title: 'Please select the fields to operate on.',
+        });
+
+        return;
+    }
+    const definitions = [];
+
+    for (const id of applicationStore.operationEnabledIds) {
+        const response = await $fetch<ApiResponse>('/api/definition', {
+            method: 'GET',
+            headers: { 'x-api-key': settingsStore.apiKey },
+            query: { id: id },
+        });
+
+        if (response.Status === StatusCode.OK) {
+            definitions.push(response.Content);
+        } else {
+            return;
+        }
+    }
+
+    for (const definition of definitions) {
+        try {
+            const parsed = JSON.parse(definition.json);
+            const character = Cards.parseToV2(parsed);
+
+            const correction = new Grammarify(substitutionMap);
+            for (const prop of selectedProps.value) {
+                if (prop === 'alternate_greetings') {
+                    if (character.data[prop] && (character.data[prop] as string[]).length > 0) {
+                        for (let greeting of character.data[prop] as string[]) {
+                            if (greeting.includes(stringReplaceOriginal.value)) {
+                                greeting = correction.clean(greeting);
+                            }
+                        }
+                    }
+                    continue;
+                }
+
+                if (character.data[prop]) {
+                    if ((character.data[prop] as string).includes(stringReplaceOriginal.value)) {
+                        (character.data[prop] as string) = correction.clean(character.data[prop] as string);
+                    }
+                }
+            }
+
+            const response = await $fetch<ApiResponse>('/api/definition', {
+                method: 'PUT',
+                headers: { 'x-api-key': settingsStore.apiKey },
+                body: JSON.stringify(new PutDefinitionRequest(definition.id as number, JSON.stringify(character))),
+            });
+
+            if (response.Status === StatusCode.OK) {
+                toast({
+                    title: response.Message,
+                    description: response.Content,
+                });
+            } else {
+                toast({
+                    title: response.Message,
+                    description: response.Content,
+                    variant: 'destructive',
+                });
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+};
 </script>
 
 <template>
@@ -193,6 +371,11 @@ const applyRegexReplace = async () => {
         <Textarea id="regex-replace" v-model="regexReplaceOriginal" class="min-h-9" type="url" placeholder="Regex to replace for..." />
         <Textarea id="regex-replace" v-model="regexReplaceReplace" class="min-h-9" type="url" placeholder="Regex to replace with..." />
         <Button type="submit" variant="secondary" @click="applyRegexReplace">
+            <span class="text-accent-foreground">Apply Operation</span>
+        </Button>
+        <Separator />
+        <Label class="text-1xl" for="regex-replace">Spelling and Grammar Correction</Label>
+        <Button type="submit" variant="secondary" @click="applyWritingFix">
             <span class="text-accent-foreground">Apply Operation</span>
         </Button>
     </div>
