@@ -1,120 +1,17 @@
 <script setup lang="ts">
 import * as Cards from 'character-card-utils';
-import Grammarify from 'grammarify-ts';
 import { Button } from '~/components/ui/button';
 import { useToast } from '~/components/ui/toast';
 import type ApiResponse from '~/models/ApiResponse';
 import PutDefinitionRequest from '~/models/PutDefinitionRequest';
 import StatusCode from '~/models/enums/StatusCode';
 
-const substitutionMap = {
-    // #s
-    '2night': 'tonight',
-    '2nite': 'tonight',
-
-    // A
-    asap: 'as soon as possible',
-    asl: 'American Sign Language',
-
-    // B
-    bc: 'because',
-    bf: 'boyfriend',
-    btw: 'by the way',
-
-    // C
-    cuz: 'because',
-
-    // D
-
-    // E
-    eg: 'example',
-    els: 'else',
-
-    // F
-    f: 'female',
-    ftw: 'for the win',
-    fyi: 'for your information',
-
-    // G
-    gf: 'girlfriend',
-    gotta: 'got to',
-    gr8: 'great',
-
-    // H
-    hada: 'had a',
-    hmu: 'hit me up',
-    hr: 'hour',
-    hrs: 'hours',
-
-    // I
-    idk: "I don't know",
-    im: "I'm",
-
-    // J
-    jude: 'Jude', // how to expand this to all proper nouns??
-
-    // K
-    kinda: 'kind of',
-
-    // L
-
-    // M
-    m: 'male',
-    msg: 'message',
-
-    // N
-    nite: 'night',
-    na: 'N/A',
-    'n/a': 'N/A',
-
-    // O
-    omg: 'oh my gosh',
-
-    // P
-    pls: 'please',
-    plz: 'please',
-    ppl: 'people',
-
-    // Q
-
-    // R
-
-    // S
-
-    // T
-    tbh: 'to be honest',
-    tho: 'though',
-    thru: 'through',
-    tryna: 'trying to',
-
-    // U
-    u: 'you',
-
-    // V
-
-    // W
-    w: 'with',
-    wanna: 'want to',
-    whaat: 'what', // spellchecker library thinks this is a word
-    whaaat: 'what', // spellchecker library thinks this is a word
-    wk: 'week',
-    wks: 'weeks',
-    wtf: 'what the fuck',
-    wth: 'what the heck',
-    wya: 'where are you at',
-
-    // X
-
-    // Y
-    yknow: 'you know',
-
-    // Z
-};
-
 const { toast } = useToast();
 
 const settingsStore = useSettingsStore();
 const applicationStore = useApplicationStore();
+
+const isProcessing = ref(false);
 
 const selectedProps = ref(['description']);
 
@@ -132,6 +29,16 @@ const applyStringReplace = async () => {
         return;
     }
 
+    if (isProcessing.value) {
+        toast({
+            title: 'Please wait for previous operation to finish.',
+        });
+
+        return;
+    }
+
+    isProcessing.value = true;
+
     const definitions = [];
 
     for (const id of applicationStore.operationEnabledIds) {
@@ -144,6 +51,7 @@ const applyStringReplace = async () => {
         if (response.Status === StatusCode.OK) {
             definitions.push(response.Content);
         } else {
+            isProcessing.value = false;
             return;
         }
     }
@@ -191,9 +99,12 @@ const applyStringReplace = async () => {
                 });
             }
         } catch (e) {
+            isProcessing.value = false;
             console.error(e);
         }
     }
+
+    isProcessing.value = false;
 };
 
 const applyRegexReplace = async () => {
@@ -204,6 +115,16 @@ const applyRegexReplace = async () => {
 
         return;
     }
+
+    if (isProcessing.value) {
+        toast({
+            title: 'Please wait for previous operation to finish.',
+        });
+
+        return;
+    }
+
+    isProcessing.value = true;
 
     const definitions = [];
 
@@ -217,6 +138,7 @@ const applyRegexReplace = async () => {
         if (response.Status === StatusCode.OK) {
             definitions.push(response.Content);
         } else {
+            isProcessing.value = false;
             return;
         }
     }
@@ -266,9 +188,12 @@ const applyRegexReplace = async () => {
                 });
             }
         } catch (e) {
+            isProcessing.value = false;
             console.error(e);
         }
     }
+
+    isProcessing.value = false;
 };
 
 const applyWritingFix = async () => {
@@ -279,6 +204,17 @@ const applyWritingFix = async () => {
 
         return;
     }
+
+    if (isProcessing.value) {
+        toast({
+            title: 'Please wait for previous operation to finish.',
+        });
+
+        return;
+    }
+
+    isProcessing.value = true;
+
     const definitions = [];
 
     for (const id of applicationStore.operationEnabledIds) {
@@ -291,6 +227,7 @@ const applyWritingFix = async () => {
         if (response.Status === StatusCode.OK) {
             definitions.push(response.Content);
         } else {
+            isProcessing.value = false;
             return;
         }
     }
@@ -300,13 +237,18 @@ const applyWritingFix = async () => {
             const parsed = JSON.parse(definition.json);
             const character = Cards.parseToV2(parsed);
 
-            const correction = new Grammarify(substitutionMap);
             for (const prop of selectedProps.value) {
                 if (prop === 'alternate_greetings') {
                     if (character.data[prop] && (character.data[prop] as string[]).length > 0) {
                         for (let greeting of character.data[prop] as string[]) {
-                            if (greeting.includes(stringReplaceOriginal.value)) {
-                                greeting = correction.clean(greeting);
+                            const response = await $fetch<ApiResponse>('/api/writing', {
+                                method: 'POST',
+                                headers: { 'x-api-key': settingsStore.apiKey },
+                                body: { text: greeting },
+                            });
+
+                            if (response.Status == StatusCode.OK) {
+                                greeting = response.Message;
                             }
                         }
                     }
@@ -314,8 +256,14 @@ const applyWritingFix = async () => {
                 }
 
                 if (character.data[prop]) {
-                    if ((character.data[prop] as string).includes(stringReplaceOriginal.value)) {
-                        (character.data[prop] as string) = correction.clean(character.data[prop] as string);
+                    const response = await $fetch<ApiResponse>('/api/writing', {
+                        method: 'POST',
+                        headers: { 'x-api-key': settingsStore.apiKey },
+                        body: { text: character.data[prop] as string },
+                    });
+
+                    if (response.Status == StatusCode.OK) {
+                        (character.data[prop] as string) = response.Message;
                     }
                 }
             }
@@ -339,9 +287,12 @@ const applyWritingFix = async () => {
                 });
             }
         } catch (e) {
+            isProcessing.value = false;
             console.error(e);
         }
     }
+
+    isProcessing.value = false;
 };
 </script>
 
@@ -378,6 +329,11 @@ const applyWritingFix = async () => {
         <Button type="submit" variant="secondary" @click="applyWritingFix">
             <span class="text-accent-foreground">Apply Operation</span>
         </Button>
+        <div class="h-full" />
+        <div v-if="isProcessing" class="h-full flex items-center justify-center">
+            <Icon class="h-16 w-16" name="line-md:loading-loop" />
+        </div>
+        <div class="h-full" />
     </div>
 </template>
 
