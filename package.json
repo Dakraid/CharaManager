@@ -92,7 +92,7 @@
         "@vue/compiler-sfc": "^3.4.37",
         "dayjs-nuxt": "^2.1.9",
         "drizzle-kit": "^0.24.0",
-        "eslint": "^9.8.0",
+        "eslint": "^9.9.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-prettier": "^5.2.1",
         "jimp": "^0.22.12",
