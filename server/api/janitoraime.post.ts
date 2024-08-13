@@ -53,10 +53,13 @@ export default defineEventHandler(async (event) => {
         const browser = await setupPlaywrightChromium(config.captchaSolverKey);
         const context = await browser.newContext({ acceptDownloads: true });
         const page = await context.newPage();
+
         await page.goto(characterUrl);
         await page.waitForURL(characterUrl);
+        const downloadPromise = page.waitForEvent('download');
+        await page.waitForSelector('button:has-text("Download")');
         await page.click('button:has-text("Download")');
-        const download = await page.waitForEvent('download');
+        const download = await downloadPromise;
         await download.saveAs(`./temp/${characterFilename}.png`);
         await browser.close();
     } catch (err) {

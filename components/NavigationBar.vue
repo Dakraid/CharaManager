@@ -14,6 +14,10 @@ const toggleMenu = async () => {
     await sleep(500);
     await nuxtApp.hooks.callHook('action:menu');
 };
+
+const doRefresh = async () => {
+    await nuxtApp.hooks.callHook('refresh:characters');
+};
 </script>
 
 <template>
@@ -63,9 +67,13 @@ const toggleMenu = async () => {
             </ClientOnly>
         </div>
         <div class="flex justify-center gap-4 w-[220px] lg:justify-end">
+            <Button variant="outline" size="icon">
+                <Icon class="size-1" name="radix-icons:symbol" />
+                <span class="sr-only">Refresh</span>
+            </Button>
             <Popover>
                 <PopoverTrigger as-child>
-                    <Button variant="outline">
+                    <Button variant="outline" @click="doRefresh">
                         <span class="sr-only">Set API Key</span>
                         <Icon class="h-6 w-6" name="radix-icons:lock-open-1" />
                     </Button>
