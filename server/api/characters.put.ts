@@ -48,6 +48,12 @@ export default defineEventHandler(async (event) => {
         const content = JSON.parse(convertBase64PNGToString(file.content));
         if (!content.data) {
             const converted = Cards.v1ToV2(content);
+
+            if (body.personalityToCreatorNotes) {
+                converted.data.creator_notes = converted.data.personality;
+                converted.data.personality = '';
+            }
+
             file.content = convertStringToBase64PNG(file.content, JSON.stringify(converted));
             event.context.logger.info('Updated character from v1 to v2: ' + file.name);
         }

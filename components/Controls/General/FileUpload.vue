@@ -12,6 +12,7 @@ const controlComponentStore = useControlComponentStore();
 
 const files = ref<FileUpload[]>([]);
 const fileInput = ref<HTMLInputElement>();
+const personalityToCreatorNotes = ref<boolean>(false);
 
 const onFileChange = async (e: any) => {
     const fileList = e.target.files || e.dataTransfer.files;
@@ -54,6 +55,7 @@ const uploadFiles = async () => {
         headers: { 'x-api-key': settingsStore.apiKey },
         body: {
             files: files.value,
+            personalityToCreatorNotes: personalityToCreatorNotes.value,
         },
     });
 
@@ -85,6 +87,10 @@ const uploadFiles = async () => {
 <template>
     <Label class="text-1xl" for="file-input">Upload</Label>
     <Input id="file-input" ref="fileInput" class="min-h-9" accept="image/png" multiple name="files[]" type="file" @change="onFileChange" />
+    <div class="flex items-center pl-6 gap-2">
+        <Checkbox id="renderHtml" v-model:checked="personalityToCreatorNotes" />
+        <label for="renderHtml" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Import Personality as Creator Notes? </label>
+    </div>
     <Transition>
         <Button v-if="files.length > 0" type="submit" variant="secondary" @click="uploadFiles">
             <span class="sr-only">Upload File(s)</span>

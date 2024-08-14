@@ -59,6 +59,7 @@ export default defineEventHandler(async (event) => {
         const downloadPromise = page.waitForEvent('download');
         await page.waitForSelector('button:has-text("Download")');
         await page.click('button:has-text("Download")');
+        await page.click('button:has-text("Download")');
         const download = await downloadPromise;
         await download.saveAs(`./temp/${characterFilename}.png`);
         await browser.close();

@@ -13,6 +13,7 @@ const controlComponentStore = useControlComponentStore();
 const characterUrl = ref('');
 const fetchedCharacter = ref();
 const showSkeleton = ref(false);
+const personalityToCreatorNotes = ref<boolean>(false);
 
 const downloadRemoteCharacter = async () => {
     if (characterUrl.value.trim().length === 0) {
@@ -71,6 +72,7 @@ const saveRemoteCharacter = async () => {
             headers: { 'x-api-key': settingsStore.apiKey },
             body: {
                 files: [fetchedCharacter.value],
+                personalityToCreatorNotes: personalityToCreatorNotes.value,
             },
         });
 
@@ -117,6 +119,10 @@ const clearRemoteCharacter = async () => {
             <div v-else-if="fetchedCharacter" class="flex flex-col items-center gap-4">
                 <span>{{ fetchedCharacter.name }}</span>
                 <img :src="fetchedCharacter.content" :alt="fetchedCharacter.name" class="character-card-chub rounded-2xl" />
+                <div class="flex items-center pl-6 gap-2">
+                    <Checkbox id="renderHtml" v-model:checked="personalityToCreatorNotes" />
+                    <label for="renderHtml" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Import Personality as Creator Notes? </label>
+                </div>
                 <div class="flex w-full gap-4">
                     <Button type="submit" variant="secondary" class="w-full" @click="saveRemoteCharacter">
                         <span>Save</span>
