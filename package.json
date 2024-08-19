@@ -24,7 +24,7 @@
         "@nuxt/kit": "^3.12.4",
         "@nuxt/schema": "^3.12.4",
         "@nuxtjs/critters": "^0.7.2",
-        "@nuxtjs/robots": "^4.0.2",
+        "@nuxtjs/robots": "^4.1.0",
         "@pinia/nuxt": "^0.5.3",
         "@popperjs/core": "^2.11.8",
         "@radix-icons/vue": "^1.0.0",
