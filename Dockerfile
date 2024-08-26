@@ -6,12 +6,19 @@ ARG PORT=3000
 
 ENV NODE_ENV=production
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    hunspell \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /src
 
 # Build
 FROM base as build
 
 COPY --link package.json yarn.lock ./
+
 RUN corepack enable
 RUN yarn --frozen-lockfile --silent
 
