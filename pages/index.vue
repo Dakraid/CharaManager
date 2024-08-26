@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { debounce } from 'perfect-debounce';
 import { cn } from '~/lib/utils';
-import type { CharacterDetails } from '~/models/CharacterDetails';
 import DatabaseRequest from '~/models/DatabaseRequest';
 import { DatabaseAction } from '~/models/enums/DatabaseAction';
 
+const { isMobile } = useDevice();
 const nuxtApp = useNuxtApp();
 const settingsStore = useSettingsStore();
 const characterStore = useCharacterStore();
@@ -24,16 +24,18 @@ if (!applicationStore.provisioned) {
 
 const processResize = debounce(
     async (reloadChars: boolean = true) => {
-        if (document.getElementById('main_content')?.offsetWidth !== contentWidth.value) {
-            contentWidth.value = document.getElementById('main_content')?.offsetWidth ?? 0;
+        if (!isMobile) {
+            if (document.getElementById('main_content')?.offsetWidth !== contentWidth.value) {
+                contentWidth.value = document.getElementById('main_content')?.offsetWidth ?? 0;
 
-            if (contentWidth.value !== 0) {
-                const itemsPerRow = calculateItemsPerRow(contentWidth.value);
-                applicationStore.itemsPerPage = itemsPerRow.maxItemsPerRow * 3;
-                applicationStore.itemsPerPageOptions = itemsPerRow.newOptions;
+                if (contentWidth.value !== 0) {
+                    const itemsPerRow = calculateItemsPerRow(contentWidth.value);
+                    applicationStore.itemsPerPage = itemsPerRow.maxItemsPerRow * 3;
+                    applicationStore.itemsPerPageOptions = itemsPerRow.newOptions;
 
-                if (reloadChars) {
-                    await nuxtApp.hooks.callHook('refresh:characters');
+                    if (reloadChars) {
+                        await nuxtApp.hooks.callHook('refresh:characters');
+                    }
                 }
             }
         }
@@ -67,7 +69,10 @@ onMounted(async () => {
                 <CharacterWindow />
             </div>
         </Transition>
-        <div :class="cn('h-full py-6 lg:px-6 items-stretch gap-6 transition-all 2xl:overflow-hidden', !settingsStore.openMenu ? 'character-container openMenu' : 'character-container')">
+        <div
+            :class="
+                cn('h-full py-6 lg:px-6 items-stretch mx-2 lg:mx-0 gap-0 lg:gap-6 transition-all 2xl:overflow-hidden', !settingsStore.openMenu ? 'character-container openMenu' : 'character-container')
+            ">
             <div id="main_content" class="flex flex-col h-full gap-2 order-1 mt-0 border-0 p-0 items-stretch 2xl:overflow-hidden">
                 <ControlBar />
                 <ScrollArea id="scrollArea" class="w-full h-full overflow-y-hidden rounded-md border">
@@ -77,14 +82,14 @@ onMounted(async () => {
                             <Icon class="w-16 h-16" name="radix-icons:question-mark-circled" />
                             <h2 class="font-bold text-xl">Upload characters to see them here</h2>
                         </div>
-                        <div v-else class="flex flex-wrap gap-2 justify-between h-full overflow-hidden p-8">
+                        <div v-else class="flex flex-wrap gap-2 justify-center lg:justify-between h-full overflow-hidden p-8">
                             <CharacterCard v-for="character in characterStore.characterList" :key="character.id" :character="character" />
                         </div>
                     </Transition>
                 </ScrollArea>
             </div>
             <Transition>
-                <ControlsPanel v-if="!settingsStore.openMenu" class="order-2" />
+                <ControlsPanel v-if="!settingsStore.openMenu" class="absolute lg:static order-2 bg-background" />
             </Transition>
         </div>
     </div>

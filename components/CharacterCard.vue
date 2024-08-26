@@ -11,6 +11,7 @@ const props = defineProps<{
 }>();
 
 const { toast } = useToast();
+const { isMobile } = useDevice();
 
 const settingsStore = useSettingsStore();
 const characterStore = useCharacterStore();
@@ -25,6 +26,15 @@ const updateCharacter = async () => {
 characterStore.$subscribe(updateCharacter);
 
 const showCharacter = async () => {
+    if (isMobile) {
+        toast({
+            title: 'Action not supported.',
+            description: 'Editing characters and viewing details is currently not supported on mobile.',
+        });
+
+        return;
+    }
+
     applicationStore.characterInstance = props.character;
     applicationStore.showCharacterWindow = true;
 };

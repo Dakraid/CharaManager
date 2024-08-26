@@ -126,7 +126,7 @@ const deleteCharacters = async () => {
 </script>
 
 <template>
-    <div class="flex flex-col md:order-2 w-full h-full max-w-sm gap-4">
+    <div class="flex flex-col md:order-2 w-full h-full max-w-full lg:max-w-sm gap-4">
         <ControlsGeneralFileUpload />
         <Separator />
         <ControlsGeneralOptions />

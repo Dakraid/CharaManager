@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-    <Tabs default-value="general" class="flex flex-col h-full w-full max-w-sm py-1px">
+    <Tabs default-value="general" class="flex flex-col h-full w-full mobile-width lg:max-w-sm py-1px mx-auto">
         <TabsList class="grid w-full grid-cols-3">
             <TabsTrigger value="general"> General </TabsTrigger>
             <TabsTrigger value="download"> Download </TabsTrigger>

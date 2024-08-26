@@ -297,7 +297,7 @@ const applyWritingFix = async () => {
 </script>
 
 <template>
-    <div class="flex flex-col md:order-2 w-full h-full max-w-sm gap-4">
+    <div class="flex flex-col md:order-2 w-full h-full max-w-full lg:max-w-sm gap-4">
         <Label class="text-1xl">Operate on:</Label>
         <ToggleGroup v-model="selectedProps" type="multiple" variant="outline" class="grid grid-cols-2">
             <ToggleGroupItem value="name"> Name </ToggleGroupItem>

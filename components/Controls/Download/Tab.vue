@@ -105,7 +105,7 @@ const clearRemoteCharacter = async () => {
 
 <template>
     <ScrollArea class="h-full w-full">
-        <div class="flex flex-col md:order-2 w-full h-full max-w-sm gap-4">
+        <div class="flex flex-col md:order-2 w-full h-full max-w-full lg:max-w-sm gap-4">
             <Label class="text-1xl" for="char-url">Character Download</Label>
             <Input id="char-url" v-model="characterUrl" class="min-h-9" type="url" placeholder="https://..." />
             <Button type="submit" variant="secondary" @click="downloadRemoteCharacter">
