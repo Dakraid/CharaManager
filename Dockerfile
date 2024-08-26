@@ -6,33 +6,18 @@ ARG PORT=3000
 
 ENV NODE_ENV=production
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    curl \
-    hunspell \
-    && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /src
-
-# Build
-FROM base as build
-
-COPY --link package.json yarn.lock ./
-
-RUN corepack enable
-RUN yarn --frozen-lockfile --silent
-
-COPY --link . .
-
-RUN yarn prepare
-RUN yarn build
 
 # Run
 FROM base
 
 ENV PORT=$PORT
 
-COPY --from=build /src/.output /src/.output
-RUN yarn playwright install --with-deps
+COPY ./.output /src/.output
+COPY ./package.json /src/package.json
+COPY ./yarn.lock /src/yarn.lock
+
+RUN corepack enable
+RUN npx playwright install --with-deps chromium
 
 CMD [ "node", ".output/server/index.mjs" ]
