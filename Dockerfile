@@ -26,5 +26,6 @@ FROM base
 ENV PORT=$PORT
 
 COPY --from=build /src/.output /src/.output
+RUN yarn playwright install --with-deps
 
 CMD [ "node", ".output/server/index.mjs" ]
