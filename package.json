@@ -78,7 +78,7 @@
         "winston": "^3.14.2"
     },
     "devDependencies": {
-        "@nuxt/eslint": "^0.5.2",
+        "@nuxt/eslint": "^0.5.5",
         "@nuxt/eslint-config": "^0.5.2",
         "@nuxtjs/color-mode": "^3.4.4",
         "@nuxtjs/partytown": "^1.5.0",
