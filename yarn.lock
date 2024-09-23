@@ -4377,7 +4377,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/kit@npm:3.13.0, @nuxt/kit@npm:^3.13.0, @nuxt/kit@npm:^3.7.3":
+"@nuxt/kit@npm:3.13.0, @nuxt/kit@npm:^3.13.0":
   version: 3.13.0
   resolution: "@nuxt/kit@npm:3.13.0"
   dependencies:
@@ -4591,13 +4591,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxtjs/device@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "@nuxtjs/device@npm:3.1.1"
+"@nuxtjs/device@npm:^3.2.4":
+  version: 3.2.4
+  resolution: "@nuxtjs/device@npm:3.2.4"
   dependencies:
-    "@nuxt/kit": "npm:^3.7.3"
-    defu: "npm:^6.1.2"
-  checksum: 10c0/bf02b1b8f5055f14e9a2b53ea06687cbd2a3d161980394205642f9a8923ed46e7675258fcbd9ebd1b6f88e0eba5485ab77daa5db0a4cd9223fbb35060c9c1260
+    defu: "npm:^6.1.4"
+  checksum: 10c0/847cced2b4d65a9d2c77f6c933312b5eca0d02e355c0ce1b105a5a6c05125c1cc7ad52a73c0c066ae235dd85f2a3d28543f964e5cc48a44dd7994cc2250e54a2
   languageName: node
   linkType: hard
 
@@ -7941,7 +7940,7 @@ __metadata:
     "@nuxt/schema": "npm:^3.13.0"
     "@nuxtjs/color-mode": "npm:^3.4.4"
     "@nuxtjs/critters": "npm:^0.7.2"
-    "@nuxtjs/device": "npm:^3.1.1"
+    "@nuxtjs/device": "npm:^3.2.4"
     "@nuxtjs/partytown": "npm:^1.5.0"
     "@nuxtjs/robots": "npm:^4.1.3"
     "@nuxtjs/tailwindcss": "npm:^6.12.1"
@@ -9313,7 +9312,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"defu@npm:^6.1.1, defu@npm:^6.1.2, defu@npm:^6.1.3, defu@npm:^6.1.4":
+"defu@npm:^6.1.1, defu@npm:^6.1.3, defu@npm:^6.1.4":
   version: 6.1.4
   resolution: "defu@npm:6.1.4"
   checksum: 10c0/2d6cc366262dc0cb8096e429368e44052fdf43ed48e53ad84cc7c9407f890301aa5fcb80d0995abaaf842b3949f154d060be4160f7a46cb2bc2f7726c81526f5
