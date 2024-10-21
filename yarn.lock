@@ -4188,6 +4188,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nuxt/devtools-kit@npm:^1.4.2, @nuxt/devtools-kit@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "@nuxt/devtools-kit@npm:1.6.0"
+  dependencies:
+    "@nuxt/kit": "npm:^3.13.2"
+    "@nuxt/schema": "npm:^3.13.2"
+    execa: "npm:^7.2.0"
+  peerDependencies:
+    vite: "*"
+  checksum: 10c0/4cb4ee53223ad147e08719822b4412fca80a518fd289e08b78e1a46b730d96fdd89b45332a150bcc2a9b7fde7a0305f62d243dd69fda8093870b1321a8540954
+  languageName: node
+  linkType: hard
+
 "@nuxt/devtools-wizard@npm:1.3.14":
   version: 1.3.14
   resolution: "@nuxt/devtools-wizard@npm:1.3.14"
@@ -4431,6 +4444,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nuxt/kit@npm:^3.13.1, @nuxt/kit@npm:^3.13.2":
+  version: 3.13.2
+  resolution: "@nuxt/kit@npm:3.13.2"
+  dependencies:
+    "@nuxt/schema": "npm:3.13.2"
+    c12: "npm:^1.11.2"
+    consola: "npm:^3.2.3"
+    defu: "npm:^6.1.4"
+    destr: "npm:^2.0.3"
+    globby: "npm:^14.0.2"
+    hash-sum: "npm:^2.0.0"
+    ignore: "npm:^5.3.2"
+    jiti: "npm:^1.21.6"
+    klona: "npm:^2.0.6"
+    knitwork: "npm:^1.1.0"
+    mlly: "npm:^1.7.1"
+    pathe: "npm:^1.1.2"
+    pkg-types: "npm:^1.2.0"
+    scule: "npm:^1.3.0"
+    semver: "npm:^7.6.3"
+    ufo: "npm:^1.5.4"
+    unctx: "npm:^2.3.1"
+    unimport: "npm:^3.12.0"
+    untyped: "npm:^1.4.2"
+  checksum: 10c0/4e805838197dbfe4cbe914a225f39e8362679835b14c0a7a14c95a84a751a28fed74885c601d0fdbc40cb966e89100b3528c05534836cdf06f81d59aad5cbd64
+  languageName: node
+  linkType: hard
+
 "@nuxt/schema@npm:3.11.2, @nuxt/schema@npm:^3.11.2":
   version: 3.11.2
   resolution: "@nuxt/schema@npm:3.11.2"
@@ -4487,6 +4528,26 @@ __metadata:
     unimport: "npm:^3.11.0"
     untyped: "npm:^1.4.2"
   checksum: 10c0/e2748930886e3f4f9d30f909769e8a98bd7aaf35f353da8006fa141b3125af37dff15ec582b7bf0eb4a6433f27712091e1b94ca547f32c157fbd0cbd6ad21c97
+  languageName: node
+  linkType: hard
+
+"@nuxt/schema@npm:3.13.2, @nuxt/schema@npm:^3.13.1, @nuxt/schema@npm:^3.13.2":
+  version: 3.13.2
+  resolution: "@nuxt/schema@npm:3.13.2"
+  dependencies:
+    compatx: "npm:^0.1.8"
+    consola: "npm:^3.2.3"
+    defu: "npm:^6.1.4"
+    hookable: "npm:^5.5.3"
+    pathe: "npm:^1.1.2"
+    pkg-types: "npm:^1.2.0"
+    scule: "npm:^1.3.0"
+    std-env: "npm:^3.7.0"
+    ufo: "npm:^1.5.4"
+    uncrypto: "npm:^0.1.3"
+    unimport: "npm:^3.12.0"
+    untyped: "npm:^1.4.2"
+  checksum: 10c0/a8adfc2020e6f1cac6a556fda14ba8949f5d5b08395172ed177df831524982d6d6b20542dcbc6e6d0cbdc43803d34ec507821eeb824f5e3a3fd5a65c2f31822b
   languageName: node
   linkType: hard
 
@@ -4614,22 +4675,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxtjs/robots@npm:^4.1.3":
-  version: 4.1.3
-  resolution: "@nuxtjs/robots@npm:4.1.3"
+"@nuxtjs/robots@npm:^4.1.9":
+  version: 4.1.9
+  resolution: "@nuxtjs/robots@npm:4.1.9"
   dependencies:
-    "@nuxt/devtools-kit": "npm:^1.3.9"
-    "@nuxt/kit": "npm:^3.12.4"
+    "@nuxt/devtools-kit": "npm:^1.6.0"
+    "@nuxt/kit": "npm:^3.13.2"
     consola: "npm:^3.2.3"
     defu: "npm:^6.1.4"
-    nuxt-site-config: "npm:^2.2.15"
-    nuxt-site-config-kit: "npm:^2.2.15"
+    nuxt-site-config: "npm:^2.2.18"
+    nuxt-site-config-kit: "npm:^2.2.18"
     pathe: "npm:^1.1.2"
-    pkg-types: "npm:^1.1.3"
-    sirv: "npm:^2.0.4"
+    pkg-types: "npm:^1.2.1"
+    sirv: "npm:^3.0.0"
     std-env: "npm:^3.7.0"
     ufo: "npm:^1.5.4"
-  checksum: 10c0/f59debd23f3bd6398a686529ab8d4579901ae5d5b42322e8ce8d64f0054b6803a7b252131f2c9bf7d54bea22cec7ccadc485a12eb10ffda1a249e310df45d389
+  checksum: 10c0/67c387a7ea5faa3eb19c89532fe0be6d0dcb89cdba1765cd95be9b195bd5ac17370ebf0103221ad39796bf7fa72b7ba67abe5a65663c7804c899cfa1accce39c
   languageName: node
   linkType: hard
 
@@ -5043,6 +5104,22 @@ __metadata:
     rollup:
       optional: true
   checksum: 10c0/c7bed15711f942d6fdd3470fef4105b73991f99a478605e13d41888963330a6f9e32be37e6ddb13f012bc7673ff5e54f06f59fd47109436c1c513986a8a7612d
+  languageName: node
+  linkType: hard
+
+"@rollup/pluginutils@npm:^5.1.2":
+  version: 5.1.2
+  resolution: "@rollup/pluginutils@npm:5.1.2"
+  dependencies:
+    "@types/estree": "npm:^1.0.0"
+    estree-walker: "npm:^2.0.2"
+    picomatch: "npm:^2.3.1"
+  peerDependencies:
+    rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+  peerDependenciesMeta:
+    rollup:
+      optional: true
+  checksum: 10c0/30f4a98e91a8699b6666b64ecdc665439bd53dddbe964bbeca56da81ff889cfde3a3e059144b80c5a2d9b48aa158df18a45e9a847a33b757d3e8336b278b8836
   languageName: node
   linkType: hard
 
@@ -7786,6 +7863,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"c12@npm:^1.11.2":
+  version: 1.11.2
+  resolution: "c12@npm:1.11.2"
+  dependencies:
+    chokidar: "npm:^3.6.0"
+    confbox: "npm:^0.1.7"
+    defu: "npm:^6.1.4"
+    dotenv: "npm:^16.4.5"
+    giget: "npm:^1.2.3"
+    jiti: "npm:^1.21.6"
+    mlly: "npm:^1.7.1"
+    ohash: "npm:^1.1.3"
+    pathe: "npm:^1.1.2"
+    perfect-debounce: "npm:^1.0.0"
+    pkg-types: "npm:^1.2.0"
+    rc9: "npm:^2.1.2"
+  peerDependencies:
+    magicast: ^0.3.4
+  peerDependenciesMeta:
+    magicast:
+      optional: true
+  checksum: 10c0/6c805e563b92109d7c4b7f7526b0fcf91c71ff50a30c316c3f77ccd3a8da8135db343ca9d8720b3ce0472ff1ee451edb8decef6e136a3b3af1ec2ec72b647a60
+  languageName: node
+  linkType: hard
+
 "cac@npm:^6.7.14":
   version: 6.7.14
   resolution: "cac@npm:6.7.14"
@@ -7943,7 +8045,7 @@ __metadata:
     "@nuxtjs/critters": "npm:^0.7.2"
     "@nuxtjs/device": "npm:^3.1.1"
     "@nuxtjs/partytown": "npm:^1.5.0"
-    "@nuxtjs/robots": "npm:^4.1.3"
+    "@nuxtjs/robots": "npm:^4.1.9"
     "@nuxtjs/tailwindcss": "npm:^6.12.1"
     "@pinia-plugin-persistedstate/nuxt": "npm:^1.2.1"
     "@pinia/nuxt": "npm:^0.5.4"
@@ -8338,6 +8440,13 @@ __metadata:
   version: 0.1.7
   resolution: "confbox@npm:0.1.7"
   checksum: 10c0/18b40c2f652196a833f3f1a5db2326a8a579cd14eacabfe637e4fc8cb9b68d7cf296139a38c5e7c688ce5041bf46f9adce05932d43fde44cf7e012840b5da111
+  languageName: node
+  linkType: hard
+
+"confbox@npm:^0.1.8":
+  version: 0.1.8
+  resolution: "confbox@npm:0.1.8"
+  checksum: 10c0/fc2c68d97cb54d885b10b63e45bd8da83a8a71459d3ecf1825143dd4c7f9f1b696b3283e07d9d12a144c1301c2ebc7842380bdf0014e55acc4ae1c9550102418
   languageName: node
   linkType: hard
 
@@ -13626,6 +13735,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mlly@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "mlly@npm:1.7.2"
+  dependencies:
+    acorn: "npm:^8.12.1"
+    pathe: "npm:^1.1.2"
+    pkg-types: "npm:^1.2.0"
+    ufo: "npm:^1.5.4"
+  checksum: 10c0/e5a990b9d895477f3d3dfceec9797e41d6f029ce3b1b2dcf787d4b7500b4caff4b3cdc0ae5cb82c14b469b85209fe3d7368286415c0ca5415b163219fc6b5f21
+  languageName: node
+  linkType: hard
+
 "monaco-editor@npm:^0.51.0":
   version: 0.51.0
   resolution: "monaco-editor@npm:0.51.0"
@@ -14108,34 +14229,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nuxt-site-config-kit@npm:2.2.15, nuxt-site-config-kit@npm:^2.2.15":
-  version: 2.2.15
-  resolution: "nuxt-site-config-kit@npm:2.2.15"
+"nuxt-site-config-kit@npm:2.2.18, nuxt-site-config-kit@npm:^2.2.18":
+  version: 2.2.18
+  resolution: "nuxt-site-config-kit@npm:2.2.18"
   dependencies:
-    "@nuxt/kit": "npm:^3.12.3"
-    "@nuxt/schema": "npm:^3.12.3"
-    pkg-types: "npm:^1.1.3"
-    site-config-stack: "npm:2.2.15"
+    "@nuxt/kit": "npm:^3.13.1"
+    "@nuxt/schema": "npm:^3.13.1"
+    pkg-types: "npm:^1.2.0"
+    site-config-stack: "npm:2.2.18"
     std-env: "npm:^3.7.0"
-    ufo: "npm:^1.5.3"
-  checksum: 10c0/47026eca51cbfa3c88ade304803299d20ad5a5ac876a8d0e88bcaf2debef6240d876dec0c547af9800aa1fa2faa8d376c9916c269ae4dbb8750844c889ec2d42
+    ufo: "npm:^1.5.4"
+  checksum: 10c0/601c96deea5b2dbfa9985600e6be0a170f18e1daaed4f2a6cee4dd14bf02d9a07bf5db51d9c83621be32bd1ef5577ad7712140715e0cd472f9c82608c6a18e27
   languageName: node
   linkType: hard
 
-"nuxt-site-config@npm:^2.2.15":
-  version: 2.2.15
-  resolution: "nuxt-site-config@npm:2.2.15"
+"nuxt-site-config@npm:^2.2.18":
+  version: 2.2.18
+  resolution: "nuxt-site-config@npm:2.2.18"
   dependencies:
-    "@nuxt/devtools-kit": "npm:^1.3.9"
-    "@nuxt/kit": "npm:^3.12.3"
-    "@nuxt/schema": "npm:^3.12.3"
-    nuxt-site-config-kit: "npm:2.2.15"
+    "@nuxt/devtools-kit": "npm:^1.4.2"
+    "@nuxt/kit": "npm:^3.13.1"
+    "@nuxt/schema": "npm:^3.13.1"
+    nuxt-site-config-kit: "npm:2.2.18"
     pathe: "npm:^1.1.2"
-    pkg-types: "npm:^1.1.3"
+    pkg-types: "npm:^1.2.0"
     sirv: "npm:^2.0.4"
-    site-config-stack: "npm:2.2.15"
-    ufo: "npm:^1.5.3"
-  checksum: 10c0/a893d1fbc888fff6c27ca6f286d59b16a6ea3e6100bb61de22649595dabbb5977080a97f89e39058d0f3ac034bf35f69afe7bee4f825138075fb3ded728f7695
+    site-config-stack: "npm:2.2.18"
+    ufo: "npm:^1.5.4"
+  checksum: 10c0/e1936a111360872e5fbffe1fc1b92812bcb914094533bfcac7c5170b9557c14ffbb3d6c12271d77216be9c35c5399a83b58b4359d3de93b073c927fd15252b24
   languageName: node
   linkType: hard
 
@@ -14865,6 +14986,17 @@ __metadata:
     mlly: "npm:^1.7.1"
     pathe: "npm:^1.1.2"
   checksum: 10c0/111cf6ad4235438821ea195a0d70570b1bd36a71d094d258349027c9c304dea8b4f9669c9f7ce813f9a48a02942fb0d7fe9809127dbe7bb4b18a8de71583a081
+  languageName: node
+  linkType: hard
+
+"pkg-types@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "pkg-types@npm:1.2.1"
+  dependencies:
+    confbox: "npm:^0.1.8"
+    mlly: "npm:^1.7.2"
+    pathe: "npm:^1.1.2"
+  checksum: 10c0/4aef765c039e3ec3ca55171bb8ad776cf060d894c45ddf92b9d680b3fdb1817c8d1c428f74ea6aae144493fa1d6a97df6b8caec6dc31e418f1ce1f728d38014e
   languageName: node
   linkType: hard
 
@@ -16767,6 +16899,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sirv@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "sirv@npm:3.0.0"
+  dependencies:
+    "@polka/url": "npm:^1.0.0-next.24"
+    mrmime: "npm:^2.0.0"
+    totalist: "npm:^3.0.0"
+  checksum: 10c0/282c52ee5a93cafa297096ad31aa6c3004a21d4c93abe728b701e51e4329acb887f6e92f07696225414fd6bb4a7782fd64a42d0b6b6467ae0f66bd3fde90b865
+  languageName: node
+  linkType: hard
+
 "sisteransi@npm:^1.0.5":
   version: 1.0.5
   resolution: "sisteransi@npm:1.0.5"
@@ -16774,14 +16917,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"site-config-stack@npm:2.2.15":
-  version: 2.2.15
-  resolution: "site-config-stack@npm:2.2.15"
+"site-config-stack@npm:2.2.18":
+  version: 2.2.18
+  resolution: "site-config-stack@npm:2.2.18"
   dependencies:
-    ufo: "npm:^1.5.3"
+    ufo: "npm:^1.5.4"
   peerDependencies:
     vue: ^3
-  checksum: 10c0/6636f0d63ec59fbe357ceafd90c97a25dac0a099220636d734550791184fa0b25418f2ef538f106e8ab5d77b6e7ee4501eff35df96379ced4d8fcd8adf309b68
+  checksum: 10c0/725db51b2ccd5cd9cd25047b5b696d3689d04e7aa6695b2781c363f005c014b482694c2949182f5617de7e13ffdc25bbfa05e9f3e44b138ac9fe10143eb8b3c3
   languageName: node
   linkType: hard
 
@@ -18177,6 +18320,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"unimport@npm:^3.12.0":
+  version: 3.13.1
+  resolution: "unimport@npm:3.13.1"
+  dependencies:
+    "@rollup/pluginutils": "npm:^5.1.2"
+    acorn: "npm:^8.12.1"
+    escape-string-regexp: "npm:^5.0.0"
+    estree-walker: "npm:^3.0.3"
+    fast-glob: "npm:^3.3.2"
+    local-pkg: "npm:^0.5.0"
+    magic-string: "npm:^0.30.11"
+    mlly: "npm:^1.7.1"
+    pathe: "npm:^1.1.2"
+    pkg-types: "npm:^1.2.0"
+    scule: "npm:^1.3.0"
+    strip-literal: "npm:^2.1.0"
+    unplugin: "npm:^1.14.1"
+  checksum: 10c0/100ff0c7eef68a7422e34ce9881afef7abe58460cbdd607d00b28de4d6ed48c7187289b3b7e54db546fd511d4a458e9d7c4d8be02d026d682b93f9a5e3c85aea
+  languageName: node
+  linkType: hard
+
 "unimport@npm:^3.7.1":
   version: 3.7.1
   resolution: "unimport@npm:3.7.1"
@@ -18348,6 +18512,21 @@ __metadata:
     webpack-sources: "npm:^3.2.3"
     webpack-virtual-modules: "npm:^0.6.2"
   checksum: 10c0/1ebdca5437adcf83f53ef715f336b9e5b85d671c40769c9fc4f3412e59c825c16bb56fb4e706b21991175db6addbc5fce10c8e2f67fb0387703431a8a1601c0d
+  languageName: node
+  linkType: hard
+
+"unplugin@npm:^1.14.1":
+  version: 1.14.1
+  resolution: "unplugin@npm:1.14.1"
+  dependencies:
+    acorn: "npm:^8.12.1"
+    webpack-virtual-modules: "npm:^0.6.2"
+  peerDependencies:
+    webpack-sources: ^3
+  peerDependenciesMeta:
+    webpack-sources:
+      optional: true
+  checksum: 10c0/a74342b8f0cbbdc7b1da1f78f1898c0c915e3f67b22281fcd61a5495a585f4a1fd0fc270a7e59643a41c138c94c852cb69ea17af72965fb15f86f18ee76c2ed1
   languageName: node
   linkType: hard
 
