@@ -1,3 +1,8 @@
+# NOTICE
+This repository has been archived in favor of the upcoming V2 rework of this application.
+
+V2 is a complete rewrite from scratch and improves on every facette of this app. Smoother UI, mobile support, better stability and performance, more features (i.e. embeddings, lorebooks,...), user login, and more.
+
 # CharaManager
 
 CharaManager is a web application made to manage and maintain your collection of TavernV2 cards (used by SillyTavern, ChubAi, JanitorAi, and more)
